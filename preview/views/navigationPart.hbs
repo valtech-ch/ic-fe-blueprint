@@ -1,0 +1,7 @@
+<ul class="menu-list"> 
+    {{#each children}}
+        <li><a {{#if active}}class="is-active"{{/if}} href="{{url}}">{{title}}</a>
+            {{> navigationPart}}
+        </li>
+    {{/each}}
+</ul>

@@ -3,6 +3,8 @@
 const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   mode: 'development',
@@ -15,7 +17,8 @@ module.exports = {
     hot: true,
     watchOptions: {
       poll: true
-    }
+    },
+    writeToDisk: true
   },
 
   module: {
@@ -36,12 +39,20 @@ module.exports = {
   },
 
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new webpack.HotModuleReplacementPlugin(),
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
       inject: true
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: 'src/components/**/*.hbs',
+        to: 'views',
+        flatten: true
+      }
+    ])
   ]
 }

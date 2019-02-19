@@ -1,20 +1,197 @@
 var path = require('path');
-var express = require('express')
 var fs = require('fs');
 var Finder = require('fs-finder');
+var express = require('express')
+var exphbs  = require('express-handlebars');
+
+const pathToPartials = './preview/views/'
+const pathToComponentViews = './dist/views/'
+const pathToComponents = './src/components'
+const indexViewName = "index.hbs";
 
 var app = express();
-
-app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
-  res.render(indexViewName, getViewData(
-    req.params.type, 
-    req.params.module, 
-    req.params.component,
-    req.params.viewModel,
-    true
-  ));
+var hbs = exphbs.create({
+  extname: '.hbs',
+  partialsDir: pathToPartials
 });
 
+app.engine('.hbs', hbs.engine);
+app.set('view engine', '.hbs'); 
+app.set('views', pathToPartials);
+
+app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
+  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, true, function(viewModel){
+    res.render(indexViewName, viewModel)
+  })
+});
+
+app.get('/:type?/:module?/:component?/:viewModel?', function(req, res){
+  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, false, function(viewModel){
+    res.render(indexViewName, viewModel)
+  })
+});
+
+app.listen(3001);
+
+function getViewData(type, modul, component, viewModelName, isPlain, callback){
+  var viewModel = getViewModel(type, modul, component, viewModelName)
+
+
+  getComponent(type, modul, component, viewModel, function(result){
+    var navigation = {}
+    navigation.children = getNavTree(1, type, modul, component, viewModelName)
+
+    return callback({
+      isPlain: isPlain,
+      //isOverview: component === undefined && type !== "pages" ? true : false,
+      component: result,
+      //page: getPage(type, modul),
+      //documentation: getDocumentation(type, modul, component),
+      //viewModel: vm ? syntaxHighlight(JSON.stringify(vm, null, 4)) : null,
+      navigation: navigation,
+      modelSelection: getViewModelSelection(type, modul, component, viewModelName)
+    });
+  })
+}
+
+function getComponent(type, modul, component, viewModel, callback){
+  if(!(type && modul && component && viewModel)){
+    return callback(null);
+  }
+
+  hbs.render(pathToComponentViews + component + ".hbs", viewModel).then((renderedHtml) => {
+    return callback({
+      name: component,
+      viewModel: viewModel,
+      view: renderedHtml
+    });
+  });
+}
+
+function getViewModel(type, modul, component, viewModel){
+  if(!(type && modul && component))
+    return null;
+
+  var mock = require('./src/components/' + type + "/" + modul + "/mock/" + component + ".js");
+  if(!viewModel)
+    viewModel = 'default'
+
+  return mock.models[viewModel];
+}
+
+function getViewModelSelection(type, modul, component, viewModelName){
+  if(!(type && modul && component))
+    return null;
+    
+  var mock = require('./src/components/' + type + "/" + modul + "/mock/" + component + ".js");
+  if(mock == null)
+    return null;
+  
+  var modelSelection = []
+  for (var key in mock.models) {
+    if (mock.models.hasOwnProperty(key)) {
+      modelSelection.push({
+        title: key.charAt(0).toUpperCase() + key.slice(1),
+        url: '/' + type + '/' + modul + '/' + component + '/' + key,
+        active: viewModelName === key
+      })
+    }
+  }
+
+  return modelSelection;
+}
+
+function getNavTree(level, type, modul, component, vModel){
+  //stop of recursion
+  if(level > 3)
+    return null;
+
+  //build folder path to get elements
+  var navPath = pathToComponents;
+  if(level > 1 && type){
+    navPath = navPath + '/' + type;
+
+    if(level === 3 && modul){
+      navPath = navPath + '/' + modul;
+    }
+  }
+
+  //get navigation elements
+  var navElements = fs.readdirSync(navPath);
+  navElements = navElements.filter((navElement) => {
+    if(level < 3)
+      return navElement.indexOf('.') === -1;
+
+    if(level === 3)
+      return navElement.indexOf('.') !== -1;
+
+    return true;
+  });
+
+  navElements = navElements.map((navElement) => {
+    //build name
+    var name = navElement;
+    if(name.indexOf('.') !== -1)
+      name = name.substr(0, name.indexOf('.'));
+
+    //Get url when clicking nav element
+    var url = '/';
+    if(level > 1 && type)
+      url = url + type + '/';
+    if(level > 2 && modul)
+      url = url + modul + '/';
+
+    url = url + name;
+
+    //Check if is active nav element
+    var active = false
+    if(level === 3 && component){
+      if(component.toLowerCase() === name.toLowerCase())
+        active = true
+    }
+    else if(level === 2 && modul){
+      if(modul.toLowerCase() === name.toLowerCase())
+        active = true
+    }
+    else if(level === 1 && type){
+      if(type.toLowerCase() === name.toLowerCase())
+        active = true
+    }
+
+    var nextType = type;
+    if(level == 1)
+      nextType = name;
+
+    return {
+      title: name.charAt(0).toUpperCase() + name.slice(1),
+      url: url.toLowerCase(),
+      plainUrl: level >= 3 ? '/plain' + url : null,
+      active: active,
+      children: active || level == 1 ? getNavTree(level+1, nextType, modul, component, vModel) : null,
+      level: level
+    }
+  });
+
+  //add pages selection to navtree
+  if(level === 1)
+  {
+    navElements.push({
+      title: 'pages',
+      url: '/pages',
+      plainUrl: null,
+      active: type === 'pages',
+      navTreeElements: getPages(modul)
+    })
+  }
+  
+  return navElements;
+}
+
+function getPages(modul){
+  return []
+}
+
+/*
 var srcPath = path.resolve(__dirname, './src');
 var compPath = srcPath + '/components';
 var componentViews = path.resolve(__dirname, './public/views/components');
@@ -31,25 +208,6 @@ app.locals.basedir = app.get('views');
 
 app.use('/public', express.static('public'));
 
-app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
-  res.render(indexViewName, getViewData(
-    req.params.type, 
-    req.params.module, 
-    req.params.component,
-    req.params.viewModel,
-    true
-  ));
-});
-
-app.get('/:type?/:module?/:component?/:viewModel?', function(req, res){
-  res.render(indexViewName, getViewData(
-    req.params.type, 
-    req.params.module, 
-    req.params.component,
-    req.params.viewModel
-  ));
-});
-
 function getViewData(type, modul, component, vModel, isPlain = false){
   var vm = getViewModel(type, modul, component, vModel)
 
@@ -64,6 +222,27 @@ function getViewData(type, modul, component, vModel, isPlain = false){
   }
 
   return viewModel;
+}
+
+function getViewModel(type, modul, component, viewModel){
+  if(!(type && modul && component))
+    return null;
+
+  var data = undefined;
+  var vmPath = compPath + '/' + type + '/' + modul + '/mock'
+
+  if(viewModel)
+    data = getJsonByPath(`${vmPath}/${viewModel}.json`);
+
+  if(data === undefined || data.error)
+    data = getJsonByPath(`${vmPath}/${component}.json`);
+
+  if(data === undefined || data.error)
+    data = getJsonByPath(`${vmPath}/default.json`);
+
+  data = processPartialModels(data);
+
+  return data;
 }
 
 function getNavTree(level, type, modul, component, vModel){
@@ -247,26 +426,7 @@ function getPage(type, page){
   }
 }
 
-function getViewModel(type, modul, component, viewModel){
-  if(!(type && modul && component))
-    return null;
 
-  var data = undefined;
-  var vmPath = compPath + '/' + type + '/' + modul + '/mock'
-
-  if(viewModel)
-    data = getJsonByPath(`${vmPath}/${viewModel}.json`);
-
-  if(data === undefined || data.error)
-    data = getJsonByPath(`${vmPath}/${component}.json`);
-
-  if(data === undefined || data.error)
-    data = getJsonByPath(`${vmPath}/default.json`);
-
-  data = processPartialModels(data);
-
-  return data;
-}
 
 function processPartialModels(data){
   for (var k in data){
@@ -407,3 +567,4 @@ function syntaxHighlight(json) {
     return '<span class="' + cls + '">' + match + '</span>';
   });
 }
+*/
