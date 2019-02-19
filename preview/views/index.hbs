@@ -13,16 +13,34 @@
             {{/with}}
         </div>
         <div class="column">
+
             {{#with modelSelection}}
                 {{> modelSelection}}
             {{/with}}
-            </br>
-            {{#with component}}
-                {{view}}
-            {{/with}}
+
+            <div class="tabs">
+                <ul>
+                    <li {{#if isViewTabActive}} class="is-active" {{/if}}><a href="{{currentUrl}}?activeTab=view">View</a></li>
+                    <li {{#if isModelTabActive}} class="is-active" {{/if}}><a href="{{currentUrl}}?activeTab=model">Model</a></li>
+                </ul>
+            </div>
+            <div class="tabs-content">
+                <div {{#if isModelTabActive}} class="is-hidden" {{/if}}>
+                    <div class="app">
+                        {{#with component}}
+                            {{view}}
+                        {{/with}}
+                    </div>
+                </div>
+                <div class="vmBox{{#if isViewTabActive}} is-hidden{{/if}}">
+                    {{#if viewModel}}
+                        {{{viewModel}}}
+                    {{/if}}
+                </div>
+            </div>
         </div>
     </div>
-    <script type="text/javascript" src="http://localhost:8081/main.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/main.js"></script>
   </body>
 </html>
 

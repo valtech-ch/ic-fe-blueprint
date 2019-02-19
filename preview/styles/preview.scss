@@ -1,0 +1,45 @@
+html,
+body{
+    height: 100vh
+}
+.menu{
+    min-width: 250px;
+    background: $grey-light;
+    height: 100vh;
+    padding: 20px;
+}
+.menu-element .menu-element{
+    padding-left: 20px
+}
+
+.modelSelection{
+    padding: 20px 0;
+}
+
+.vmBox {
+    margin: 20px 0;
+    .vmLine{
+      padding-left: 20px;
+      display: inline-block;
+
+      .vmString { 
+          color: desaturate($primary, 80%); 
+      }
+
+      .vmNumber { 
+        color: desaturate($primary, 80%); 
+      }
+
+      .vmBoolean { 
+        color: desaturate($primary, 80%); 
+      }
+
+      .vmNull { 
+        color: desaturate($primary, 80%); 
+      }
+
+      .vmKey { 
+        color: $primary; 
+      }
+    }
+}

@@ -32,13 +32,3 @@ $input-shadow: none;
 @import "../node_modules/bulma/sass/components/_all.sass";
 @import "../node_modules/bulma/sass/grid/_all.sass";
 @import "../node_modules/bulma/sass/layout/_all.sass";
-
-.full-width {
-    width: 100%;
-}
-
-.center-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}

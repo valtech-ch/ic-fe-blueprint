@@ -8,6 +8,7 @@ const pathToPartials = './preview/views/'
 const pathToComponentViews = './dist/views/'
 const pathToComponents = './src/components'
 const indexViewName = "index.hbs";
+const plainViewName = "plain.hbs";
 
 var app = express();
 var hbs = exphbs.create({
@@ -20,41 +21,52 @@ app.set('view engine', '.hbs');
 app.set('views', pathToPartials);
 
 app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
-  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, true, function(viewModel){
-    res.render(indexViewName, viewModel)
+  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, req.query.activeTab, true, function(viewModel){
+    res.render(plainViewName, viewModel)
   })
 });
 
 app.get('/:type?/:module?/:component?/:viewModel?', function(req, res){
-  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, false, function(viewModel){
+  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, req.query.activeTab, false, function(viewModel){
     res.render(indexViewName, viewModel)
   })
 });
 
 app.listen(3001);
 
-function getViewData(type, modul, component, viewModelName, isPlain, callback){
+function getViewData(type, modul, component, viewModelName, activeTab, isPlain, callback){
   var viewModel = getViewModel(type, modul, component, viewModelName)
+  
+  var baseUrl = '/'
+  if(type != null)
+    baseUrl += type + '/'
+  if(modul != null)
+    baseUrl += modul + '/'
+  if(component != null)
+    baseUrl += component + '/'
 
+  var currentUrl = baseUrl;
+  if(viewModelName != null)
+    currentUrl += viewModelName
 
-  getComponent(type, modul, component, viewModel, function(result){
-    var navigation = {}
-    navigation.children = getNavTree(1, type, modul, component, viewModelName)
-
+  getComponent(type, modul, component, viewModel, activeTab, function(result){
     return callback({
       isPlain: isPlain,
+      isViewTabActive: activeTab == "view" || activeTab == null,
+      isModelTabActive: activeTab == "model",
+      currentUrl: currentUrl,
       //isOverview: component === undefined && type !== "pages" ? true : false,
       component: result,
       //page: getPage(type, modul),
       //documentation: getDocumentation(type, modul, component),
-      //viewModel: vm ? syntaxHighlight(JSON.stringify(vm, null, 4)) : null,
-      navigation: navigation,
-      modelSelection: getViewModelSelection(type, modul, component, viewModelName)
+      viewModel: viewModel ? syntaxHighlight(JSON.stringify(viewModel, null, 4)) : null,
+      navigation: getNavTree(1, type, modul, component, viewModelName),
+      modelSelection: getViewModelSelection(type, modul, component, viewModelName, baseUrl, activeTab)
     });
   })
 }
 
-function getComponent(type, modul, component, viewModel, callback){
+function getComponent(type, modul, component, viewModel, activeTab, callback){
   if(!(type && modul && component && viewModel)){
     return callback(null);
   }
@@ -79,7 +91,7 @@ function getViewModel(type, modul, component, viewModel){
   return mock.models[viewModel];
 }
 
-function getViewModelSelection(type, modul, component, viewModelName){
+function getViewModelSelection(type, modul, component, viewModelName, url, activeTab){
   if(!(type && modul && component))
     return null;
     
@@ -92,7 +104,7 @@ function getViewModelSelection(type, modul, component, viewModelName){
     if (mock.models.hasOwnProperty(key)) {
       modelSelection.push({
         title: key.charAt(0).toUpperCase() + key.slice(1),
-        url: '/' + type + '/' + modul + '/' + component + '/' + key,
+        url: url + key + '?activeTab=' + activeTab,
         active: viewModelName === key
       })
     }
@@ -165,7 +177,7 @@ function getNavTree(level, type, modul, component, vModel){
     return {
       title: name.charAt(0).toUpperCase() + name.slice(1),
       url: url.toLowerCase(),
-      plainUrl: level >= 3 ? '/plain' + url : null,
+      plainUrl: level >= 3 ? '/plain' + url.toLowerCase() : null,
       active: active,
       children: active || level == 1 ? getNavTree(level+1, nextType, modul, component, vModel) : null,
       level: level
@@ -189,6 +201,33 @@ function getNavTree(level, type, modul, component, vModel){
 
 function getPages(modul){
   return []
+}
+
+function syntaxHighlight(json) {
+  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  json = json.replace(/{\n/g, "{</br><span class='vmLine'>")
+  json = json.replace(/\[\n/g, "[</br><span class='vmLine'>")
+  json = json.replace(/,\n/g, ",</span></br><span class='vmLine'>");
+  json = json.replace(/\n\s*},/g, "</span></br>},</br>")
+  json = json.replace(/\n\s*}/g, "</span></br>}</br>")
+  json = json.replace(/\n\s*],/g, "</span></br>],</br>")
+  json = json.replace(/\n\s*]/g, "</span></br>]</br>")
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+    var cls = 'vmNumber';
+    if (/^"/.test(match)) {
+      if (/:$/.test(match)) {
+        cls = 'vmKey';
+      } else {
+        cls = 'vmString';
+      }
+    } else if (/true|false/.test(match)) {
+      cls = 'vmBoolean';
+    } else if (/null/.test(match)) {
+      cls = 'vmNull';
+    }
+    
+    return '<span class="' + cls + '">' + match + '</span>';
+  });
 }
 
 /*

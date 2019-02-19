@@ -2,7 +2,6 @@
 
 const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
@@ -10,7 +9,7 @@ module.exports = {
   mode: 'development',
 
   entry: [
-    './src/app.js'
+    './preview/app.js'
   ],
 
   devServer: {
@@ -42,11 +41,6 @@ module.exports = {
     new CleanWebpackPlugin(['dist']),
     new webpack.HotModuleReplacementPlugin(),
     new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
-    }),
     new CopyWebpackPlugin([
       {
         from: 'src/components/**/*.hbs',

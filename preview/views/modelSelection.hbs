@@ -1,19 +1,21 @@
-<div class="dropdown is-hoverable">
-  <div class="dropdown-trigger">
-    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
-      <span>Available view models</span>
-      <span class="icon is-small">
-        <i class="fas fa-angle-down" aria-hidden="true"></i>
-      </span>
-    </button>
-  </div>
-  <div class="dropdown-menu" id="dropdown-menu4" role="menu">
-    <div class="dropdown-content">
-      {{#each this}}
-        <a href="{{url}}" class="dropdown-item">
-          {{title}}
-        </a>
-      {{/each}}
+<div class="modelSelection">
+  <div class="dropdown is-hoverable">
+    <div class="dropdown-trigger">
+      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+        <span>Available view models</span>
+        <span class="icon is-small">
+          <i class="fas fa-angle-down" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div>
+    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+      <div class="dropdown-content">
+        {{#each this}}
+          <a href="{{url}}" class="dropdown-item{{#if active}} is-active{{/if}}">
+            {{title}}
+          </a>
+        {{/each}}
+      </div>
     </div>
   </div>
 </div>

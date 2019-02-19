@@ -1,6 +1,12 @@
-<ul class="menu-list"> 
+<ul class="menu-part"> 
     {{#each children}}
-        <li><a {{#if active}}class="is-active"{{/if}} href="{{url}}">{{title}}</a>
+        <li class="menu-element">
+            <a href="{{url}}">{{title}}</a>
+            {{#if plainUrl}}
+                <a href="{{plainUrl}}">
+                    <span class="icon is-small"><i class="fas fa-file"></i></span>
+                </a>
+            {{/if}}
             {{> navigationPart}}
         </li>
     {{/each}}

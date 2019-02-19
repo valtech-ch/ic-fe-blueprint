@@ -3,6 +3,8 @@ import App from './App.vue'
 
 import './app.scss'
 
+import './scripts/font-awesome'
+
 const vues = document.querySelectorAll(".test");
 Array.prototype.forEach.call(vues, (el, index) => new Vue({
   el, 

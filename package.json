@@ -1,12 +1,13 @@
 {
-  "name": "ic-cms-fe-blueprint",
+  "name": "ic-fe-blueprint",
   "version": "1.0.0",
   "description": "blueprint frontend repository for IC CMS projects",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently --kill-others \"npm run dev-client\" \"npm run dev-server\"",
-    "dev-client": "webpack-dev-server --config build/webpack.config.dev.js",
+    "dev": "concurrently --kill-others \"yarn run dev-client\" \"yarn run dev-server\"",
+    "dev-client": "webpack-dev-server --config build/webpack.config.dev.js --port 8080",
     "dev-server": "nodemon ./server",
+    "clean-dist": "rm -rf dist/*",
     "build": "webpack --config build/webpack.config.dev.js"
   },
   "author": "Adrian Stauffer <adrian.stauffer@infocentric.ch>",
@@ -19,9 +20,9 @@
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^3.0.1",
     "fs": "^0.0.1-security",
     "fs-finder": "^1.8.1",
-    "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.9",
     "path": "^0.12.7",
@@ -35,6 +36,10 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/free-regular-svg-icons": "^5.7.2",
+    "@fortawesome/free-solid-svg-icons": "^5.7.2",    
+    "@fortawesome/free-brands-svg-icons": "^5.7.2",
     "bulma": "^0.7.2",
     "vue": "^2.5.22"
   }
