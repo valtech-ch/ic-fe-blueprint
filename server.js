@@ -20,6 +20,8 @@ app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs'); 
 app.set('views', pathToPartials);
 
+app.use('/assets', express.static('preview/assets'));
+
 app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
   getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, req.query.activeTab, true, function(viewModel){
     res.render(plainViewName, viewModel)
@@ -70,7 +72,7 @@ function getComponent(type, modul, component, viewModel, activeTab, callback){
   if(!(type && modul && component && viewModel)){
     return callback(null);
   }
-
+  
   hbs.render(pathToComponentViews + component + ".hbs", viewModel).then((renderedHtml) => {
     return callback({
       name: component,

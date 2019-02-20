@@ -4,7 +4,8 @@
   "description": "blueprint frontend repository for IC CMS projects",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently --kill-others \"yarn run dev-client\" \"yarn run dev-server\"",
+    "dev": "run-s clean-dist dev-both",
+    "dev-both": "run-p dev-client dev-server",
     "dev-client": "webpack-dev-server --config build/webpack.config.dev.js --port 8080",
     "dev-server": "nodemon ./server",
     "clean-dist": "rm -rf dist/*",
@@ -25,6 +26,7 @@
     "fs-finder": "^1.8.1",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.9",
+    "npm-run-all": "^4.1.5",
     "path": "^0.12.7",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
@@ -37,9 +39,9 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
-    "@fortawesome/free-regular-svg-icons": "^5.7.2",
-    "@fortawesome/free-solid-svg-icons": "^5.7.2",    
     "@fortawesome/free-brands-svg-icons": "^5.7.2",
+    "@fortawesome/free-regular-svg-icons": "^5.7.2",
+    "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "bulma": "^0.7.2",
     "vue": "^2.5.22"
   }

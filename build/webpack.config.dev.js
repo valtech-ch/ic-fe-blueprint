@@ -46,6 +46,10 @@ module.exports = {
         from: 'src/components/**/*.hbs',
         to: 'views',
         flatten: true
+      },
+      {
+        from: 'preview/assets',
+        to: 'assets'
       }
     ])
   ]

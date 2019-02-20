@@ -18,12 +18,14 @@
                 {{> modelSelection}}
             {{/with}}
 
-            <div class="tabs">
-                <ul>
-                    <li {{#if isViewTabActive}} class="is-active" {{/if}}><a href="{{currentUrl}}?activeTab=view">View</a></li>
-                    <li {{#if isModelTabActive}} class="is-active" {{/if}}><a href="{{currentUrl}}?activeTab=model">Model</a></li>
-                </ul>
-            </div>
+            {{#if component}}
+                <div class="tabs">
+                    <ul>
+                        <li {{#if isViewTabActive}} class="is-active" {{/if}}><a href="{{currentUrl}}?activeTab=view">View</a></li>
+                        <li {{#if isModelTabActive}} class="is-active" {{/if}}><a href="{{currentUrl}}?activeTab=model">Model</a></li>
+                    </ul>
+                </div>
+            {{/if}}
             <div class="tabs-content">
                 <div {{#if isModelTabActive}} class="is-hidden" {{/if}}>
                     <div class="app">
