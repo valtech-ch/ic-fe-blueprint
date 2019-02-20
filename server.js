@@ -31,7 +31,6 @@ app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
 
 app.get('/:type?/:module?/:component?/:viewModel?', function(req, res){
   getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, req.query.activeTab, false, function(viewModel){
-    //console.log(viewModel)
     res.render(indexViewName, viewModel)
   })
 });
@@ -261,9 +260,7 @@ function getDocumentation(type, modul, component){
 
 function getMarkdownByPath(mdPath){
   try {
-    console.log(fs.readFileSync(mdPath, 'utf8'))
     var markdownHtml = marked(fs.readFileSync(mdPath, 'utf8'));
-    console.log(markdownHtml)
     markdownHtml = markdownHtml.replace(/<h1/g, "<h1 class='title is-size-3'");
     markdownHtml = markdownHtml.replace(/<h2/g, "<h2 class='title is-size-4'");
     markdownHtml = markdownHtml.replace(/<h3/g, "<h3 class='title is-size-5'");
