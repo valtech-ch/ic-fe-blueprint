@@ -3,6 +3,7 @@ var fs = require('fs');
 var Finder = require('fs-finder');
 var express = require('express')
 var exphbs  = require('express-handlebars');
+var marked = require('marked');
 
 const pathToPartials = './preview/views/'
 const pathToComponentViews = './dist/views/'
@@ -30,6 +31,7 @@ app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
 
 app.get('/:type?/:module?/:component?/:viewModel?', function(req, res){
   getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, req.query.activeTab, false, function(viewModel){
+    //console.log(viewModel)
     res.render(indexViewName, viewModel)
   })
 });
@@ -56,11 +58,11 @@ function getViewData(type, modul, component, viewModelName, activeTab, isPlain, 
       isPlain: isPlain,
       isViewTabActive: activeTab == "view" || activeTab == null,
       isModelTabActive: activeTab == "model",
+      isDocumentationTabActive: activeTab == "documentation" || component == null,
       currentUrl: currentUrl,
-      //isOverview: component === undefined && type !== "pages" ? true : false,
       component: result,
       //page: getPage(type, modul),
-      //documentation: getDocumentation(type, modul, component),
+      documentation: getDocumentation(type, modul, component),
       viewModel: viewModel ? syntaxHighlight(JSON.stringify(viewModel, null, 4)) : null,
       navigation: getNavTree(1, type, modul, component, viewModelName),
       modelSelection: getViewModelSelection(type, modul, component, viewModelName, baseUrl, activeTab)
@@ -102,11 +104,14 @@ function getViewModelSelection(type, modul, component, viewModelName, url, activ
     return null;
   
   var modelSelection = []
+  var queryString = ''
+  if(activeTab != null)
+    queryString = '?activeTab=' + activeTab
   for (var key in mock.models) {
     if (mock.models.hasOwnProperty(key)) {
       modelSelection.push({
         title: key.charAt(0).toUpperCase() + key.slice(1),
-        url: url + key + '?activeTab=' + activeTab,
+        url: url + key + queryString,
         active: viewModelName === key
       })
     }
@@ -126,7 +131,7 @@ function getNavTree(level, type, modul, component, vModel){
     navPath = navPath + '/' + type;
 
     if(level === 3 && modul){
-      navPath = navPath + '/' + modul;
+      navPath = navPath + '/' + modul + '/views';
     }
   }
 
@@ -230,6 +235,50 @@ function syntaxHighlight(json) {
     
     return '<span class="' + cls + '">' + match + '</span>';
   });
+}
+
+function getDocumentation(type, modul, component){
+  var data = {};
+  var docPath = pathToComponents + '/';
+
+  if(type === 'pages'){
+    return null;
+  }else{
+    if(type)
+      docPath = docPath + type + '/';
+
+    if(modul)
+      docPath = docPath + modul + '/';
+
+    if(component)
+      docPath = docPath + 'doc/' + component + '.md';
+    else
+      docPath = docPath + 'README.md';
+  }
+
+  return getMarkdownByPath(docPath);
+}
+
+function getMarkdownByPath(mdPath){
+  try {
+    console.log(fs.readFileSync(mdPath, 'utf8'))
+    var markdownHtml = marked(fs.readFileSync(mdPath, 'utf8'));
+    console.log(markdownHtml)
+    markdownHtml = markdownHtml.replace(/<h1/g, "<h1 class='title is-size-3'");
+    markdownHtml = markdownHtml.replace(/<h2/g, "<h2 class='title is-size-4'");
+    markdownHtml = markdownHtml.replace(/<h3/g, "<h3 class='title is-size-5'");
+    markdownHtml = markdownHtml.replace(/<h4/g, "<h4 class='title is-size-6'");
+    markdownHtml = markdownHtml.replace(/<h5/g, "<h5 class='title is-size-6'");
+    markdownHtml = markdownHtml.replace(/<h6/g, "<h6 class='title is-size-6'");
+    return markdownHtml;
+  } catch (e) {
+    return { 
+      error: {
+        message: "Error in getMarkdownByPath(mdPath)",
+        exception: e
+      }
+    };
+  }
 }
 
 /*
