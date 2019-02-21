@@ -23,71 +23,71 @@ app.set('views', pathToPartials);
 
 app.use('/assets', express.static('preview/assets'));
 
-app.get('/plain/:type?/:module?/:component?/:viewModel?', function(req, res){
-  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, req.query.activeTab, true, function(viewModel){
+app.get('/plain/:type?/:component?/:view?/:viewModel?', function(req, res){
+  getViewData(req.params.type, req.params.component, req.params.view, req.params.viewModel, req.query.activeTab, true, function(viewModel){
     res.render(plainViewName, viewModel)
   })
 });
 
-app.get('/:type?/:module?/:component?/:viewModel?', function(req, res){
-  getViewData(req.params.type, req.params.module, req.params.component, req.params.viewModel, req.query.activeTab, false, function(viewModel){
+app.get('/:type?/:component?/:view?/:viewModel?', function(req, res){
+  getViewData(req.params.type, req.params.component, req.params.view, req.params.viewModel, req.query.activeTab, false, function(viewModel){
     res.render(indexViewName, viewModel)
   })
 });
 
 app.listen(3001);
 
-function getViewData(type, modul, component, viewModelName, activeTab, isPlain, callback){
-  var viewModel = getViewModel(type, modul, component, viewModelName)
+function getViewData(type, component, view, viewModelName, activeTab, isPlain, callback){
+  var viewModel = getViewModel(type, component, view, viewModelName)
   
   var baseUrl = '/'
   if(type != null)
     baseUrl += type + '/'
-  if(modul != null)
-    baseUrl += modul + '/'
   if(component != null)
     baseUrl += component + '/'
+  if(view != null)
+    baseUrl += view + '/'
 
   var currentUrl = baseUrl;
   if(viewModelName != null)
     currentUrl += viewModelName
 
-  getComponent(type, modul, component, viewModel, activeTab, function(result){
+  getComponent(type, component, view, viewModel, activeTab, function(result){
     return callback({
       isPlain: isPlain,
       isViewTabActive: activeTab == "view" || activeTab == null,
       isModelTabActive: activeTab == "model",
-      isDocumentationTabActive: activeTab == "documentation" || component == null,
+      isDocumentationTabActive: activeTab == "documentation" || view == null,
       currentUrl: currentUrl,
       component: result,
       //page: getPage(type, modul),
-      documentation: getDocumentation(type, modul, component),
+      documentation: getDocumentation(type, component, view),
       viewModel: viewModel ? syntaxHighlight(JSON.stringify(viewModel, null, 4)) : null,
-      navigation: getNavTree(1, type, modul, component, viewModelName),
-      modelSelection: getViewModelSelection(type, modul, component, viewModelName, baseUrl, activeTab)
+      navigation: getNavTree(1, type, component, view, viewModelName),
+      modelSelection: getViewModelSelection(type, component, view, viewModelName, baseUrl, activeTab)
     });
   })
 }
 
-function getComponent(type, modul, component, viewModel, activeTab, callback){
-  if(!(type && modul && component && viewModel)){
+function getComponent(type, component, view, viewModel, activeTab, callback){
+  if(!(type && component && view && viewModel)){
     return callback(null);
   }
   
-  hbs.render(pathToComponentViews + component + ".hbs", viewModel).then((renderedHtml) => {
+  hbs.render(pathToComponentViews + view + ".hbs", viewModel).then((renderedHtml) => {
     return callback({
-      name: component,
+      name: view,
       viewModel: viewModel,
       view: renderedHtml
     });
   });
 }
 
-function getViewModel(type, modul, component, viewModel){
-  if(!(type && modul && component))
+function getViewModel(type, component, view, viewModel){
+  if(!(type && component && view))
     return null;
 
-  var mock = require('./src/components/' + type + "/" + modul + "/mock/" + component + ".js");
+  var mock = require('./src/components/' + type + "/" + component + "/mock/" + view + ".js");
   if(!viewModel)
     viewModel = 'default'
 
@@ -119,7 +119,7 @@ function getViewModelSelection(type, modul, component, viewModelName, url, activ
   return modelSelection;
 }
 
-function getNavTree(level, type, modul, component, vModel){
+function getNavTree(level, type, component, view, vModel){
   //stop of recursion
   if(level > 3)
     return null;
@@ -129,8 +129,8 @@ function getNavTree(level, type, modul, component, vModel){
   if(level > 1 && type){
     navPath = navPath + '/' + type;
 
-    if(level === 3 && modul){
-      navPath = navPath + '/' + modul + '/views';
+    if(level === 3 && component){
+      navPath = navPath + '/' + component + '/views';
     }
   }
 
@@ -156,19 +156,19 @@ function getNavTree(level, type, modul, component, vModel){
     var url = '/';
     if(level > 1 && type)
       url = url + type + '/';
-    if(level > 2 && modul)
-      url = url + modul + '/';
+    if(level > 2 && component)
+      url = url + component + '/';
 
     url = url + name;
 
     //Check if is active nav element
     var active = false
-    if(level === 3 && component){
-      if(component.toLowerCase() === name.toLowerCase())
+    if(level === 3 && view){
+      if(view.toLowerCase() === name.toLowerCase())
         active = true
     }
-    else if(level === 2 && modul){
-      if(modul.toLowerCase() === name.toLowerCase())
+    else if(level === 2 && component){
+      if(component.toLowerCase() === name.toLowerCase())
         active = true
     }
     else if(level === 1 && type){
@@ -185,7 +185,7 @@ function getNavTree(level, type, modul, component, vModel){
       url: url.toLowerCase(),
       plainUrl: level >= 3 ? '/plain' + url.toLowerCase() : null,
       active: active,
-      children: active || level == 1 ? getNavTree(level+1, nextType, modul, component, vModel) : null,
+      children: active || level == 1 ? getNavTree(level+1, nextType, component, view, vModel) : null,
       level: level
     }
   });
@@ -198,7 +198,7 @@ function getNavTree(level, type, modul, component, vModel){
       url: '/pages',
       plainUrl: null,
       active: type === 'pages',
-      navTreeElements: getPages(modul)
+      navTreeElements: getPages(component)
     })
   }
   
@@ -236,7 +236,7 @@ function syntaxHighlight(json) {
   });
 }
 
-function getDocumentation(type, modul, component){
+function getDocumentation(type, component, view){
   var data = {};
   var docPath = pathToComponents + '/';
 
@@ -246,11 +246,11 @@ function getDocumentation(type, modul, component){
     if(type)
       docPath = docPath + type + '/';
 
-    if(modul)
-      docPath = docPath + modul + '/';
-
     if(component)
-      docPath = docPath + 'doc/' + component + '.md';
+      docPath = docPath + component + '/';
+
+    if(view)
+      docPath = docPath + 'doc/' + view + '.md';
     else
       docPath = docPath + 'README.md';
   }

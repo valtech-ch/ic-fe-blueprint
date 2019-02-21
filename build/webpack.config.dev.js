@@ -50,6 +50,10 @@ module.exports = {
       {
         from: 'preview/assets',
         to: 'assets'
+      },
+      {
+        from: 'src/assets',
+        to: 'assets'
       }
     ])
   ]
