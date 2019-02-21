@@ -30,11 +30,9 @@
             {{/if}}
             <div class="tabs-content">
                 <div {{#if isViewTabActive}}{{else}}class="is-hidden"{{/if}}>
-                    <div class="app">
-                        {{#with component}}
-                            {{{view}}}
-                        {{/with}}
-                    </div>
+                    {{#with component}}
+                        {{{view}}}
+                    {{/with}}
                 </div>
                 <div class="vmBox{{#if isModelTabActive}}{{else}} is-hidden{{/if}}">
                     {{#if viewModel}}

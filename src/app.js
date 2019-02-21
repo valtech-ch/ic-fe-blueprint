@@ -2,4 +2,6 @@ import './app.scss'
 
 import './scripts/font-awesome'
 
-import './components/atoms/text/Heading.vue'
+import './scripts/_atoms.js';
+import './scripts/_molecules.js';
+import './scripts/_organisms.js';
