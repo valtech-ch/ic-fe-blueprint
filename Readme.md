@@ -7,3 +7,10 @@ When changes on those are needed it should be made in discussion with the mainta
 * ./preview
 * ./server.js
 * ./.babelrc
+
+## Setup
+yarn install
+
+## Start dev server
+The demo frontend is available at http://localhost:3001 after you did run the command below:
+yarn dev
