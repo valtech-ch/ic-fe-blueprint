@@ -4,9 +4,14 @@ import express from 'express'
 import cors from 'cors'
 import marked from 'marked'
 
+//TODO: pass view script parameters
+const srcDir = '/../ic-components'
+
+//TODO dynamically resolve when blueprint is in npm package
+let pathToComponents = path.resolve(`${__dirname}${srcDir}/components`)
+
 const pathToPartials = './preview/views/'
 const pathToComponentViews = './dist/views/'
-const pathToComponents = '/../ic-components/components'
 const indexViewName = "index.hbs";
 const plainViewName = "plain.hbs";
 
@@ -15,26 +20,11 @@ export default (app, http) => {
   app.use(express.json())
 
   app.get('/structure', async (req, res) => {
-    res.json({
-      atoms: {
-        text: [
-          'heading',
-        ]
-      },
-      molecules: {
-
-      },
-      organisms: {
-
-      },
-      pages: [
-        'demo',
-      ]
-    })
+    res.json(getNavTree(1))
   })
 
   app.get('/:type/:component/:view', (req, res) => {
-    const componentPath = path.resolve(`${__dirname}${pathToComponents}/${req.params.type}/${req.params.component}`)
+    const componentPath = `${pathToComponents}/${req.params.type}/${req.params.component}`
 
     const model = require(`${componentPath}/mock/${req.params.view}.js`)
     const doc = fs.readFileSync(`${componentPath}/doc/${req.params.view}.md`, {
@@ -53,7 +43,7 @@ function getDocumentation(type, component, view){
     return null;
 
   var data = {};
-  var docPath = path.resolve(`${__dirname}${pathToComponents}`)
+  var docPath = pathToComponents
 
   if(type === 'pages'){
     return null;
@@ -91,4 +81,93 @@ function getMarkdownByPath(mdPath){
       }
     };
   }
+}
+
+function getNavTree(level, type, component, view){
+  //stop of recursion
+  if(level > 3)
+    return null;
+
+  //build folder path to get elements
+  var navPath = pathToComponents;
+  if(level > 1 && type){
+    navPath = navPath + '/' + type;
+
+    if(level === 3 && component){
+      navPath = navPath + '/' + component + '/views';
+    }
+  }
+
+  //get navigation elements
+  var navElements = fs.readdirSync(navPath);
+  navElements = navElements.filter((navElement) => {
+    if(level < 3)
+      return navElement.indexOf('.') === -1;
+
+    if(level === 3)
+      return navElement.indexOf('.') !== -1;
+
+    return true;
+  });
+
+  navElements = navElements.map((navElement) => {
+    //build name
+    var name = navElement;
+    if(name.indexOf('.') !== -1)
+      name = name.substr(0, name.indexOf('.'));
+
+    //Get url when clicking nav element
+    var url = '/';
+    if(level > 1 && type)
+      url = url + type + '/';
+    if(level > 2 && component)
+      url = url + component + '/';
+
+    url = url + name;
+
+    //Check if is active nav element
+    var active = false
+    if(level === 3 && view){
+      if(view.toLowerCase() === name.toLowerCase())
+        active = true
+    }
+    else if(level === 2 && component){
+      if(component.toLowerCase() === name.toLowerCase())
+        active = true
+    }
+    else if(level === 1 && type){
+      if(type.toLowerCase() === name.toLowerCase())
+        active = true
+    }
+
+    var nextType = type;
+    if(level == 1){
+      nextType = name;
+    }
+
+    var nextComponent = component;
+    if(level == 2){
+      nextComponent = name
+    }
+    
+    return {
+      title: name,
+      children: getNavTree(level+1, nextType, nextComponent, view)
+    }
+  });
+
+  //add pages selection to navtree
+  if(level === 1)
+  {
+    navElements.push({
+      title: 'pages',
+      children: getPages(component)
+    })
+  }
+  
+  return navElements;
+}
+
+function getPages(modul){
+  return []
 }
