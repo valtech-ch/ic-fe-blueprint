@@ -24,13 +24,15 @@ export default (app, http) => {
   })
 
   app.get('/:type/:component/:view', (req, res) => {
-    const componentPath = `${pathToComponents}/${req.params.type}/${req.params.component}`
+    let type = req.params.type
+    let component = req.params.component
+    let view = req.params.view
 
-    const model = require(`${componentPath}/mock/${req.params.view}.js`)
-    const doc = fs.readFileSync(`${componentPath}/doc/${req.params.view}.md`, {
-      encoding: 'utf-8'
-    })
+    const componentPath = `${pathToComponents}/${type}/${component}`
 
+    const model = require(`${componentPath}/mock/${view}.js`)
+    const view = require(`${componentPath}/view/${view}.hbs`)
+    
     res.json({
       models: model.models,
       doc: getDocumentation(req.params.type, req.params.component, req.params.view),
