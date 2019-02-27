@@ -2,7 +2,7 @@
   <div id="app" class="columns">
     <div class="column is-narrow">
       <aside class="menu">
-        <img class="menu-image" :src="logo">
+        <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
 
         <template v-for="type in navigation">
           <p
@@ -29,7 +29,9 @@
       </aside>
     </div>
     <div class="column">
-      <router-view :data="selected" />
+      <router-view
+        :selected="selected"
+        :data="navigation" />
     </div>
   </div>
 </template>
@@ -98,21 +100,31 @@ $input-border-color: transparent;
 $input-shadow: none;
 
 // Import only what you need from Bulma
-@import "../node_modules/bulma/sass/utilities/_all.sass";
-@import "../node_modules/bulma/sass/base/_all.sass";
-@import "../node_modules/bulma/sass/elements/_all.sass";
-@import "../node_modules/bulma/sass/components/_all.sass";
-@import "../node_modules/bulma/sass/grid/_all.sass";
-@import "../node_modules/bulma/sass/layout/_all.sass";
+@import "bulma/sass/utilities/_all.sass";
+@import "bulma/sass/base/_all.sass";
+@import "bulma/sass/elements/_all.sass";
+@import "bulma/sass/components/_all.sass";
+@import "bulma/sass/grid/_all.sass";
+@import "bulma/sass/layout/_all.sass";
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
 
 html, body {
-  height: 100vh
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
 }
 
 .menu {
   min-width: 250px;
   background: $grey-light;
-  height: 100vh;
+  height: 100%;
   padding: 20px;
 
   &-image {
@@ -133,42 +145,5 @@ html, body {
 
 .menu-element .menu-element{
   padding-left: 20px;
-}
-
-.modelSelection {
-  padding: 20px 0;
-}
-
-.vmBox {
-  margin: 20px 0;
-
-  .vmLine {
-    padding-left: 20px;
-    display: inline-block;
-
-    .vmString {
-      color: desaturate($primary, 80%);
-    }
-
-    .vmNumber {
-      color: desaturate($primary, 80%);
-    }
-
-    .vmBoolean {
-      color: desaturate($primary, 80%);
-    }
-
-    .vmNull {
-      color: desaturate($primary, 80%);
-    }
-
-    .vmKey {
-      color: $primary;
-    }
-  }
-}
-
-.documentation {
-  padding-top: 20px;
 }
 </style>

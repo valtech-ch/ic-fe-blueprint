@@ -32,7 +32,7 @@ export default {
   name: 'ComponentOverview',
 
   props: {
-    data: Object
+    selected: Object
   },
 
   data () {
@@ -43,7 +43,7 @@ export default {
 
   computed: {
     components () {
-      let data = this.data.children.filter(i => i.title === this.$route.params.component).pop().children
+      let data = this.selected.children.filter(i => i.title === this.$route.params.component).pop().children
 
       if (this.filter) {
         data = data.filter(item => item.title.includes(this.filter))

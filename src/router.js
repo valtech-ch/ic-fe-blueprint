@@ -8,16 +8,25 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      path: '',
+      component: () => import('@/components/Overview')
+    },
+
+    {
       path: '/pages/:page',
-      component: () => import('./ComponentDemo')
+      component: () => import('@/components/ComponentDemo')
     },
     {
       path: '/:type/:component',
-      component: () => import('./ComponentOverview')
+      component: () => import('@/components/ComponentOverview')
     },
     {
       path: '/:type/:component/:view/:tab/:model',
-      component: () => import('./ComponentView')
+      component: () => import('@/components/ComponentView')
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })

@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <div class="container">
+    <div>
       <h1 class="title">{{ $route.params.view }}</h1>
 
       <div class="modelSelection">
@@ -124,7 +124,12 @@ export default {
 </script>
 
 <style scoped>
-.dropdown-item {
-  text-transform: capitalize;
-}
+
+  .modelSelection {
+    padding: 20px 0;
+  }
+
+  .dropdown-item {
+    text-transform: capitalize;
+  }
 </style>

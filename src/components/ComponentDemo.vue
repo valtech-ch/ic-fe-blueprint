@@ -14,7 +14,7 @@ export default {
 
   mounted () {
     const componentName = this.$route.params.page[0].toUpperCase() + this.$route.params.page.slice(1)
-    this.component = () => import(`../ic-components/pages/${componentName}.vue`)
+    this.component = () => import(`@/../ic-components/pages/${componentName}.vue`)
   }
 }
 </script>
