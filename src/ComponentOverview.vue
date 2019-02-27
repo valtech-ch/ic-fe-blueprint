@@ -17,10 +17,10 @@
 
       <router-link
         v-for="component in components"
-        :to="`/${$route.params.type}/${$route.params.component}/${component}/view/default`"
-        :key="component"
+        :to="`/${$route.params.type}/${$route.params.component}/${component.title}/view/default`"
+        :key="component.title"
         class="panel-block">
-        {{ component }}
+        {{ component.title }}
       </router-link>
     </nav>
 
@@ -43,12 +43,10 @@ export default {
 
   computed: {
     components () {
-      let data = this.data[this.$route.params.component]
+      let data = this.data.children.filter(i => i.title === this.$route.params.component).pop().children
 
       if (this.filter) {
-        data = data.filter(item => {
-          return item.includes(this.filter)
-        })
+        data = data.filter(item => item.title.includes(this.filter))
       }
 
       return data

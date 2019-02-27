@@ -61,7 +61,7 @@
         </template>
 
         <template v-else-if="activeTab === 'raw'">
-          Raw
+          <div v-html="data.raw" />
         </template>
       </div>
     </div>

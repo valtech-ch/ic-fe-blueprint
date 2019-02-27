@@ -24,18 +24,18 @@ export default (app, http) => {
   })
 
   app.get('/:type/:component/:view', (req, res) => {
-    let type = req.params.type
-    let component = req.params.component
-    let view = req.params.view
+    const {type, component, view} = req.params
 
     const componentPath = `${pathToComponents}/${type}/${component}`
 
-    const model = require(`${componentPath}/mock/${view}.js`)
-    const view = require(`${componentPath}/view/${view}.hbs`)
+    const models = require(`${componentPath}/mock/${view}.js`).models
+    const raw = 'raw template' // require(`${componentPath}/view/${view}.hbs`)
+    const doc = getDocumentation(req.params.type, req.params.component, req.params.view)
     
     res.json({
-      models: model.models,
-      doc: getDocumentation(req.params.type, req.params.component, req.params.view),
+      models,
+      doc,
+      raw: 'raw template'
     })
   })
 }

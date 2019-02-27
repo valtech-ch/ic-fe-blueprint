@@ -4,37 +4,32 @@
       <aside class="menu">
         <img class="menu-image" :src="logo">
 
-        <template v-for="(item, type) in navigation">
-          <p class="menu-label" :key="type">{{ type }}</p>
+        <template v-for="type in navigation">
+          <p
+            class="menu-label"
+            :key="type.title">{{ type.title }}</p>
 
-          <ul v-if="Array.isArray(elements)" class="menu-part" v-for="(elements, component) in item" :key="component">
+          <ul
+            v-for="component in type.children"
+            :key="component.title">
             <li class="menu-element">
-              <router-link :to="`/${type}/${component}`">{{ component }}</router-link>
+              <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
+
               <ul class="menu-part">
                 <li
                   class="menu-element"
-                  v-for="element in elements"
-                  :key="element">
-                  <router-link :to="`/${type}/${component}/${element}/view/default`">{{ element }}</router-link>
+                  v-for="element in component.children"
+                  :key="element.title">
+                  <router-link :to="`/${type.title}/${component.title}/${element.title}/view/default`">{{ element.title }}</router-link>
                 </li>
               </ul>
-            </li>
-          </ul>
-
-          <ul v-else class="menu-part" :key="`${type}_${item}`">
-            <li class="menu-element">
-              <ul class="menu-part">
-                <li class="menu-element">
-                  <router-link :to="`/${type}/${elements}`">{{ elements }}</router-link>
-                </li>
-            </ul>
             </li>
           </ul>
         </template>
       </aside>
     </div>
     <div class="column">
-      <router-view :data="navigation[$route.params.type]" />
+      <router-view :data="selected" />
     </div>
   </div>
 </template>
@@ -58,6 +53,16 @@ export default {
       .then(res => {
         this.navigation = res
       })
+  },
+
+  computed: {
+    selected () {
+      if (Array.isArray(this.navigation)) {
+        return this.navigation.filter(i => i.title === this.$route.params.type).pop()
+      } else {
+        return {}
+      }
+    }
   }
 }
 </script>
