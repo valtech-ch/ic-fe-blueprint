@@ -1,0 +1,6 @@
+{
+  "pathToPartials": "./preview/views/",
+  "pathToComponentViews": "./dist/views/",
+  "indexViewName": "index.hbs",
+  "plainViewName": "plain.hbs"
+}

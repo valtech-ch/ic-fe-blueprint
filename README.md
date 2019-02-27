@@ -6,8 +6,9 @@ yarn install
 ```
 
 ### Compiles and hot-reloads for development
+### starts an express-server on port 3000 and webpack on 8080
 ```
-yarn run serve
+yarn run dev
 ```
 
 ### Compiles and minifies for production
@@ -24,6 +25,3 @@ yarn run test
 ```
 yarn run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

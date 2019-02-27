@@ -4,6 +4,7 @@ import express from 'express'
 import cors from 'cors'
 import marked from 'marked'
 import hbs from 'handlebars'
+import config from './config'
 
 //TODO: pass view script parameters
 const srcDir = '/../ic-components'
@@ -11,11 +12,6 @@ const srcDir = '/../ic-components'
 //TODO dynamically resolve when blueprint is in npm package
 let pathToTextViews = path.resolve(`${__dirname}${srcDir}/components/atoms/text/views`)
 let pathToComponents = path.resolve(`${__dirname}${srcDir}/components`)
-
-const pathToPartials = './preview/views/'
-const pathToComponentViews = './dist/views/'
-const indexViewName = "index.hbs";
-const plainViewName = "plain.hbs";
 
 registerPartials()
 
@@ -32,15 +28,14 @@ export default (app, http) => {
   app.get('/:type/:component/:view?/:viewModel?', (req, res) => {
     const {type, component, view, viewModel} = req.params
 
-    let componentPath = `${pathToComponents}/${type}/${component}`
+    const componentPath = `${pathToComponents}/${type}/${component}`
 
     const mock = require(`${componentPath}/mock/${view}.js`)
-    const raw = 'raw template' // require(`${componentPath}/view/${view}.hbs`)
     const doc = getDocumentation(type, component, view)
 
-    let viewModelName = viewModel ? viewModel : "default"
-    let vm = mock.models[viewModelName]
-    let template = fs.readFileSync(`${componentPath}/views/${view}.hbs`, {
+    const viewModelName = viewModel ? viewModel : 'default'
+    const vm = mock.models[viewModelName]
+    const template = fs.readFileSync(`${componentPath}/views/${view}.hbs`, {
       encoding: 'utf-8'
     })
 

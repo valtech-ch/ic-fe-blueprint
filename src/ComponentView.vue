@@ -85,16 +85,18 @@ export default {
     }
   },
 
-  mounted () {
-    const componentName = this.rParams.view[0].toUpperCase() + this.rParams.view.slice(1)
+  methods: {
+    loadData (type, component, view) {
+      const componentName = view[0].toUpperCase() + view.slice(1)
 
-    this.component = () => import(`@/../ic-components/components/${this.rParams.type}/${this.rParams.component}/vue/${componentName}.vue`)
+      this.component = () => import(`@/../ic-components/components/${type}/${component}/vue/${componentName}.vue`)
 
-    fetch('http://localhost:3000/atoms/text/heading')
-      .then(res => res.json())
-      .then(res => {
-        this.data = res
-      })
+      fetch(`http://localhost:3000/${type}/${component}/${view}`)
+        .then(res => res.json())
+        .then(res => {
+          this.data = res
+        })
+    }
   },
 
   computed: {
@@ -111,6 +113,10 @@ export default {
     },
 
     rParams () {
+      const { type, component, view } = this.$route.params
+
+      this.loadData(type, component, view)
+
       return { ...this.$route.params }
     }
   }
