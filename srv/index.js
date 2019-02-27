@@ -3,11 +3,13 @@ import path from 'path'
 import express from 'express'
 import cors from 'cors'
 import marked from 'marked'
+import hbs from 'handlebars'
 
 //TODO: pass view script parameters
 const srcDir = '/../ic-components'
 
 //TODO dynamically resolve when blueprint is in npm package
+let pathToTextViews = path.resolve(`${__dirname}${srcDir}/components/atoms/text/views`)
 let pathToComponents = path.resolve(`${__dirname}${srcDir}/components`)
 
 const pathToPartials = './preview/views/'
@@ -15,29 +17,59 @@ const pathToComponentViews = './dist/views/'
 const indexViewName = "index.hbs";
 const plainViewName = "plain.hbs";
 
+registerPartials()
+
 export default (app, http) => {
   app.use(cors())
   app.use(express.json())
+  
+  app.set('view engine', '.hbs'); 
 
   app.get('/structure', async (req, res) => {
     res.json(getNavTree(1))
   })
 
-  app.get('/:type/:component/:view', (req, res) => {
-    const {type, component, view} = req.params
+  app.get('/:type/:component/:view?/:viewModel?', (req, res) => {
+    const {type, component, view, viewModel} = req.params
 
-    const componentPath = `${pathToComponents}/${type}/${component}`
+    let componentPath = `${pathToComponents}/${type}/${component}`
 
-    const models = require(`${componentPath}/mock/${view}.js`).models
+    const mock = require(`${componentPath}/mock/${view}.js`)
     const raw = 'raw template' // require(`${componentPath}/view/${view}.hbs`)
-    const doc = getDocumentation(req.params.type, req.params.component, req.params.view)
-    
+    const doc = getDocumentation(type, component, view)
+
+    let viewModelName = viewModel ? viewModel : "default"
+    let vm = mock.models[viewModelName]
+    let template = fs.readFileSync(`${componentPath}/views/${view}.hbs`, {
+      encoding: 'utf-8'
+    })
+
     res.json({
-      models,
+      models: mock.models,
       doc,
-      raw: 'raw template'
+      raw: getView(template, vm),
+      html: template
     })
   })
+}
+
+function registerPartials(){
+  var filenames = fs.readdirSync(pathToTextViews);
+
+  filenames.forEach(function (filename) {
+    var matches = /^([^.]+).hbs$/.exec(filename);
+    if (!matches) {
+      return;
+    }
+    var name = matches[1];
+    var template = fs.readFileSync(pathToTextViews + '/' + filename, 'utf8');
+    hbs.registerPartial(name, template);
+  });
+}
+
+function getView(html, viewModel){
+  let template = hbs.compile(html)
+  return template(viewModel)
 }
 
 function getDocumentation(type, component, view){
