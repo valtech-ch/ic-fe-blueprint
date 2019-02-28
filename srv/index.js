@@ -55,11 +55,13 @@ function processViewHit (req, res) {
     const template = fs.readFileSync(`${componentPath}/views/${view}.hbs`, {
       encoding: 'utf-8'
     })
+    const hbsOnly = !fs.existsSync(`${componentPath}/vue/${view}.vue`)
 
     response.models = mock.models
     response.doc = doc
     response.raw = getView(template, vm)
     response.html = template
+    response.hbsOnly = hbsOnly
   }
 
   res.json(response)
