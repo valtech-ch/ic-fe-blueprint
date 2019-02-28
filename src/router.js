@@ -14,7 +14,8 @@ export default new Router({
     {
       path: '/pages/:page',
       component: () => import('@/components/ComponentDemo')
-    },{
+    },
+    {
       path: '/:type',
       component: () => import('@/components/Overview')
     },
