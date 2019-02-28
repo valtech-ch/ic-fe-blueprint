@@ -25,13 +25,30 @@ export default (app, http) => {
     res.json(getNavTree(1))
   })
 
-  app.get('/:type/:component/:view?/:viewModel?', (req, res) => {
-    const {type, component, view, viewModel} = req.params
+  app.get('/:type/:component?/:view?/:viewModel?', processViewHit)
+}
 
-    const componentPath = `${pathToComponents}/${type}/${component}`
+function processViewHit (req, res) {
+  const { type, component, view, viewModel } = req.params
+  const response = {}
+
+  let componentPath = `${pathToComponents}`
+
+  if (!component) {
+    componentPath += `/${type}`
+
+    response.doc = getDocumentation(componentPath)
+
+  } else if (!view) {
+    componentPath += `/${type}/${component}`
+
+    response.doc = getDocumentation(componentPath)
+
+  } else {
+    componentPath += `/${type}/${component}/`
 
     const mock = require(`${componentPath}/mock/${view}.js`)
-    const doc = getDocumentation(type, component, view)
+    const doc = getDocumentation(componentPath, `/doc/${view}.md`)
 
     const viewModelName = viewModel ? viewModel : 'default'
     const vm = mock.models[viewModelName]
@@ -39,13 +56,13 @@ export default (app, http) => {
       encoding: 'utf-8'
     })
 
-    res.json({
-      models: mock.models,
-      doc,
-      raw: getView(template, vm),
-      html: template
-    })
-  })
+    response.model = mock.models
+    response.doc = doc
+    response.raw = getView(template, vm)
+    response.html = template
+  }
+
+  res.json(response)
 }
 
 function registerPartials(){
@@ -67,29 +84,19 @@ function getView(html, viewModel){
   return template(viewModel)
 }
 
-function getDocumentation(type, component, view){
-  if(!type || !component)
-    return null;
+function getDocumentation(componentPath, viewName = 'README.md'){
+  let pathToDoc = componentPath
 
-  var data = {};
-  var docPath = pathToComponents
+  pathToDoc += `/${viewName}`
 
-  if(type === 'pages'){
-    return null;
-  }else{
-    if(type)
-      docPath = docPath + '/' + type + '/';
-
-    if(component)
-      docPath = docPath + component + '/';
-
-    if(view)
-      docPath = docPath + 'doc/' + view + '.md';
-    else
-      docPath = docPath + 'README.md';
+  let doc
+  if (fs.existsSync(pathToDoc)) {
+    doc = getMarkdownByPath(pathToDoc)
+  } else {
+    doc = '<p>DOCUMENATION IS MISSING!</p>'
   }
 
-  return getMarkdownByPath(docPath);
+  return doc
 }
 
 function getMarkdownByPath(mdPath){
