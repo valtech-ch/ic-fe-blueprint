@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "run-s clean-dist dev-both",
+    "dev": "run-s dev-both",
     "dev-both": "run-p express serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
