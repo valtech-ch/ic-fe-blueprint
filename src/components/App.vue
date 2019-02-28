@@ -5,10 +5,11 @@
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
 
         <template v-for="type in navigation">
-          <p
-            class="menu-label"
-            :key="type.title">{{ type.title }}</p>
-
+          <router-link :key="type.title" :to="`/${type.title}`">
+            <p
+              class="menu-label"
+              :key="type.title">{{ type.title }}</p>
+          </router-link>
           <ul
             v-for="component in type.children"
             :key="component.title">
@@ -133,6 +134,8 @@ html, body {
   }
 
   &-element {
+    padding-left: 20px;
+
     a {
       text-transform: capitalize;
     }
