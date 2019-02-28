@@ -38,12 +38,14 @@ export default (app, http) => {
     const template = fs.readFileSync(`${componentPath}/views/${view}.hbs`, {
       encoding: 'utf-8'
     })
+    const hbsOnly = !fs.existsSync(`${componentPath}/vue/${view}.vue`)
 
     res.json({
       models: mock.models,
       doc,
       raw: getView(template, vm),
-      html: template
+      html: template,
+      hbsOnly
     })
   })
 }
