@@ -1,7 +1,12 @@
 <template>
   <div>
     <h1 class="title">Overview</h1>
-    <p>This could be some intro-text.</p>
+
+    <div
+      class="content"
+      v-if="response && response.doc">
+      <vue-markdown :source="response.doc" />
+    </div>
 
     <div class="componentFilter">
       <input
@@ -20,7 +25,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in items" :key="item.type">
+        <tr v-for="item in items">
           <td width="40%">
             <router-link :to="`/${item.type}/${item.component}/${item.view}/view/default`">{{ item.view }}</router-link>
           </td>
@@ -34,8 +39,14 @@
 </template>
 
 <script>
+import VueMarkdown from 'vue-markdown'
+
 export default {
   name: 'Overview',
+
+  components: {
+    VueMarkdown
+  },
 
   props: {
     data: {
@@ -45,7 +56,29 @@ export default {
 
   data () {
     return {
-      filter: null
+      filter: null,
+      response: null
+    }
+  },
+
+  mounted () {
+    this.loadData()
+  },
+
+  methods: {
+    loadData () {
+      const { type, component, view } = this.$route.params
+      let target = `http://localhost:3000`
+
+      if (type) target += `/${type}`
+      if (component) target += `/${component}`
+      if (view) target += `/${view}`
+
+      fetch(target)
+        .then(res => res.json())
+        .then(res => {
+          this.response = res
+        })
     }
   },
 
@@ -69,6 +102,12 @@ export default {
       }
 
       return data
+    }
+  },
+
+  watch: {
+    '$route' (to, from) {
+      this.loadData()
     }
   }
 }
