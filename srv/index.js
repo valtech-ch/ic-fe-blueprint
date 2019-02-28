@@ -57,7 +57,7 @@ function processViewHit (req, res) {
     })
     const hbsOnly = !fs.existsSync(`${componentPath}/vue/${view}.vue`)
 
-    response.model = mock.models
+    response.models = mock.models
     response.doc = doc
     response.raw = getView(template, vm)
     response.html = template

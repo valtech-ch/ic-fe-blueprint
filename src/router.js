@@ -16,12 +16,8 @@ export default new Router({
       component: () => import('@/components/ComponentDemo')
     },
     {
-      path: '/:type',
+      path: '/:type/:component?',
       component: () => import('@/components/Overview')
-    },
-    {
-      path: '/:type/:component',
-      component: () => import('@/components/ComponentOverview')
     },
     {
       path: '/:type/:component/:view/:tab/:model',
