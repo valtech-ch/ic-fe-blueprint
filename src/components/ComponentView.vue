@@ -47,6 +47,8 @@
         </ul>
       </div>
 
+      <pre>{{ component }}: {{ data }}</pre>
+
       <div class="tabs-content">
         <template v-if="activeTab === 'view'">
           <component :is="component" v-bind="models[model]" />

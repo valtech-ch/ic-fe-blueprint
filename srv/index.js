@@ -56,7 +56,7 @@ function processViewHit (req, res) {
       encoding: 'utf-8'
     })
 
-    response.model = mock.models
+    response.models = mock.models
     response.doc = doc
     response.raw = getView(template, vm)
     response.html = template
