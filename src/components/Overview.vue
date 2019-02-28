@@ -74,11 +74,14 @@ export default {
       if (component) target += `/${component}`
       if (view) target += `/${view}`
 
-      fetch(target)
-        .then(res => res.json())
-        .then(res => {
-          this.response = res
-        })
+      if (type || component || view) {
+        fetch(target)
+          .then(res => res.json())
+          .then(res => {
+            this.response = res
+          })
+      }
+
     }
   },
 
