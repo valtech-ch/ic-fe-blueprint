@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1 class="title">Overview</h1>
+    <h1 class="title">{{ selected != null ? selected.title : name }}</h1>
+    <p>This could be some intro-text.</p>
 
     <div
       class="content"
@@ -49,6 +50,7 @@ export default {
   },
 
   props: {
+    selected: Object,
     data: {
       type: Array
     }
@@ -88,17 +90,34 @@ export default {
   computed: {
     items () {
       let data = []
-      this.data.forEach(type => {
-        type.children.forEach(component => {
-          component.children.forEach(view => {
-            data.push({
-              type: type.title,
-              component: component.title,
-              view: view.title
+
+      if (this.selected != null){
+        this.selected.children.forEach(component => {
+          if (component.children){
+            component.children.forEach(view => {
+              data.push({
+                type: this.selected.title,
+                component: component.title,
+                view: view.title
+              })
+            })
+          }
+        })
+      } else {
+        this.data.forEach(type => {
+          type.children.forEach(component => {
+            component.children.forEach(view => {
+              data.push({
+                type: type.title,
+                component: component.title,
+                view: view.title
+               })
             })
           })
         })
-      })
+      }
+
+      console.log(data)
 
       if (this.filter) {
         data = data.filter(item => item.view.toLowerCase().includes(this.filter.toLowerCase()))
