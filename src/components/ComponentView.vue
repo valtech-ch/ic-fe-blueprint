@@ -30,7 +30,7 @@
         <ul>
           <li :class="{'is-active': activeTab === 'view'}">
             <router-link
-              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/view/${model}`">View</router-link>
+              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/view/${model}`">Demo</router-link>
           </li>
           <li :class="{'is-active': activeTab === 'model'}">
             <router-link
@@ -40,14 +40,16 @@
             <router-link
               :to="`/${rParams.type}/${rParams.component}/${rParams.view}/documentation/${model}`">Documentation</router-link>
           </li>
+          <li :class="{'is-active': activeTab === 'usage'}">
+            <router-link
+              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/usage/${model}`">Usage</router-link>
+          </li>
           <li :class="{'is-active': activeTab === 'raw'}">
             <router-link
               :to="`/${rParams.type}/${rParams.component}/${rParams.view}/raw/${model}`">Raw</router-link>
           </li>
         </ul>
       </div>
-
-      <pre>{{ component }}: {{ data }}</pre>
 
       <div class="tabs-content">
         <template v-if="activeTab === 'view'">
@@ -62,6 +64,26 @@
           <vue-markdown :source="data.doc" />
         </template>
 
+        <template v-else-if="activeTab === 'usage'">
+          <pre class="usage" v-if="data.html">{{ data.html }}
+            <button
+              class="button button1"
+              type="button"
+              v-clipboard:success="onCopy"
+              v-clipboard:copy="data.html"
+              :class="{ 'is-success': copied1 }">Copy!</button>
+          </pre>
+          <hr>
+          <pre class="usage" v-if="data.raw">{{ data.raw }}
+            <button
+              class="button button2"
+              type="button"
+              v-clipboard:success="onCopy"
+              v-clipboard:copy="data.raw"
+              :class="{ 'is-success': copied2 }">Copy!</button>
+          </pre>
+        </template>
+
         <template v-else-if="activeTab === 'raw'">
           <div v-html="data.raw" />
         </template>
@@ -71,7 +93,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import VueMarkdown from 'vue-markdown'
+import VueClipboard from 'vue-clipboard2'
+
+Vue.use(VueClipboard)
 
 export default {
   name: 'ComponentView',
@@ -83,7 +109,9 @@ export default {
   data () {
     return {
       component: null,
-      data: {}
+      data: {},
+      copied1: false,
+      copied2: false
     }
   },
 
@@ -98,6 +126,14 @@ export default {
         .then(res => {
           this.data = res
         })
+    },
+
+    onCopy (event) {
+      const pos = (event.trigger.classList.contains('button1')) ? 1 : 2
+      this[`copied${pos}`] = true
+      window.setTimeout(() => {
+        this[`copied${pos}`] = false
+      }, 2500)
     }
   },
 
@@ -125,7 +161,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .usage {
+    position: relative;
+
+    button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+  }
+
 
   .modelSelection {
     padding: 20px 0;
