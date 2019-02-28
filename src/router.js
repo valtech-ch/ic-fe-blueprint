@@ -11,10 +11,12 @@ export default new Router({
       path: '',
       component: () => import('@/components/Overview')
     },
-
     {
       path: '/pages/:page',
       component: () => import('@/components/ComponentDemo')
+    },{
+      path: '/:type',
+      component: () => import('@/components/Overview')
     },
     {
       path: '/:type/:component',
