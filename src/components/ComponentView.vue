@@ -95,9 +95,8 @@ export default {
       fetch(`http://localhost:3000/${type}/${component}/${view}`)
         .then(res => res.json())
         .then(res => {
-          
           this.data = res
-          this.component = res.hbsOnly 
+          this.component = res.hbsOnly
             ? () => false
             : () => import(`@/../ic-components/components/${type}/${component}/vue/${componentName}.vue`)
         })
