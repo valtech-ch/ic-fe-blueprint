@@ -20,10 +20,6 @@ export default new Router({
       component: () => import('@/components/Overview')
     },
     {
-      path: '/plain/:type/:component/:view/:tab/:model',
-      component: () => import('@/components/ComponentView')
-    },
-    {
       path: '/:type/:component/:view/:tab/:model',
       component: () => import('@/components/ComponentView')
     },

@@ -60,97 +60,17 @@ function processViewHit (req, res) {
       encoding: 'utf-8'
     })
 
+    const hbsOnly = !fs.existsSync(`${componentPath}/vue/${view}.vue`)
+
     response.models = mock.models
     response.doc = doc
     response.raw = getView(template, vm)
     response.html = template
+    response.hbsOnly = hbsOnly
   }
 
   res.json(response)
 }
-
-function getViewData(type, component, view, viewModelName, activeTab, isPlain, callback){
-  var viewModel = getViewModel(type, component, view, viewModelName)
-
-  var baseUrl = '/'
-  if(type != null)
-    baseUrl += type + '/'
-  if(component != null)
-    baseUrl += component + '/'
-  if(view != null)
-    baseUrl += view + '/'
-
-  var currentUrl = baseUrl;
-  if(viewModelName != null)
-    currentUrl += viewModelName
-
-  getComponent(type, component, view, viewModel, activeTab, function(result){
-    return callback({
-      isPlain: isPlain,
-      isViewTabActive: activeTab == "view" || activeTab == null,
-      isModelTabActive: activeTab == "model",
-      isDocumentationTabActive: activeTab == "documentation" || view == null,
-      currentUrl: currentUrl,
-      component: result,
-      //page: getPage(type, modul),
-      documentation: getDocumentation(type, component, view),
-      viewModel: viewModel ? syntaxHighlight(JSON.stringify(viewModel, null, 4)) : null,
-      navigation: getNavTree(1, type, component, view, viewModelName),
-      modelSelection: getViewModelSelection(type, component, view, viewModelName, baseUrl, activeTab)
-    });
-  })
-}
-
-function getComponent(type, component, view, viewModel, activeTab, callback){
-  if(!(type && component && view && viewModel)){
-    return callback(null);
-  }
-
-  hbs.render(pathToComponentViews + view + ".hbs", viewModel).then((renderedHtml) => {
-    return callback({
-      name: view,
-      viewModel: viewModel,
-      view: renderedHtml
-    });
-  });
-}
-
-function getViewModel(type, component, view, viewModel){
-  if(!(type && component && view))
-    return null;
-
-  var mock = require('./src/components/' + type + "/" + component + "/mock/" + view + ".js");
-  if(!viewModel)
-    viewModel = 'default'
-
-  return mock.models[viewModel];
-}
-
-function getViewModelSelection(type, modul, component, viewModelName, url, activeTab){
-  if(!(type && modul && component))
-    return null;
-
-  var mock = require('./src/components/' + type + "/" + modul + "/mock/" + component + ".js");
-  if(mock == null)
-    return null;
-
-  var modelSelection = []
-  var queryString = ''
-  if(activeTab != null)
-    queryString = '?activeTab=' + activeTab
-  for (var key in mock.models) {
-    if (mock.models.hasOwnProperty(key)) {
-      modelSelection.push({
-        title: key.charAt(0).toUpperCase() + key.slice(1),
-        url: url + key + queryString,
-        active: viewModelName === key
-      })
-    }
-  }
-
-  return modelSelection;
-}
-
 
 function registerPartials(){
   var filenames = fs.readdirSync(pathToTextViews);
@@ -165,7 +85,6 @@ function registerPartials(){
     hbs.registerPartial(name, template);
   });
 }
-
 
 function getView(html, viewModel){
   let template = hbs.compile(html)

@@ -46,13 +46,14 @@
           </li>
           <li :class="{'is-active': activeTab === 'raw'}">
             <router-link
-              :to="`/plain/${rParams.type}/${rParams.component}/${rParams.view}/raw/${model}`">Raw</router-link>
+              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/raw/${model}`">Raw</router-link>
           </li>
         </ul>
       </div>
 
       <div class="tabs-content">
         <template v-if="activeTab === 'view'">
+          <div :isNot="component" v-html="data.raw" />
           <component :is="component" v-bind="models[model]" />
         </template>
 
@@ -119,12 +120,13 @@ export default {
     loadData (type, component, view) {
       const componentName = view[0].toUpperCase() + view.slice(1)
 
-      this.component = () => import(`@/../ic-components/components/${type}/${component}/vue/${componentName}.vue`)
-
       fetch(`http://localhost:3000/${type}/${component}/${view}`)
         .then(res => res.json())
         .then(res => {
           this.data = res
+          this.component = res.hbsOnly
+            ? () => false
+            : () => import(`@/../ic-components/components/${type}/${component}/vue/${componentName}.vue`)
         })
     },
 
