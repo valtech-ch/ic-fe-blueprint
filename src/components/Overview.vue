@@ -4,6 +4,7 @@
       <div
         class="content"
         v-if="response && response.doc">
+        <h1 class="title">{{ pageTitle }}</h1>
         <vue-markdown :source="response.doc" />
       </div>
 
@@ -68,20 +69,17 @@ export default {
 
   methods: {
     loadData () {
-      const { type, component, view } = this.$route.params
+      const { type, component } = this.$route.params
       let target = `http://localhost:3000`
 
       if (type) target += `/${type}`
       if (component) target += `/${component}`
-      if (view) target += `/${view}`
 
-      if (type || component || view) {
-        fetch(target)
-          .then(res => res.json())
-          .then(res => {
-            this.response = res
-          })
-      }
+      fetch(target)
+        .then(res => res.json())
+        .then(res => {
+          this.response = res
+        })
     }
   },
 
@@ -128,8 +126,6 @@ export default {
       if (view) pageTitle = view
       if (type) pageTitle = type
       if (component) pageTitle = component
-
-      if (!pageTitle) pageTitle = 'Overview'
 
       return pageTitle
     }

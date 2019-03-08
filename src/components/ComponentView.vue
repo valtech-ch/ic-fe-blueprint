@@ -117,10 +117,10 @@ export default {
   },
 
   methods: {
-    loadData (type, component, view) {
+    loadData (type, component, view, viewModel) {
       const componentName = view[0].toUpperCase() + view.slice(1)
 
-      fetch(`http://localhost:3000/${type}/${component}/${view}`)
+      fetch(`http://localhost:3000/${type}/${component}/${view}/${viewModel}`)
         .then(res => res.json())
         .then(res => {
           this.data = res
@@ -153,9 +153,9 @@ export default {
     },
 
     rParams () {
-      const { type, component, view } = this.$route.params
+      const { type, component, view, model } = this.$route.params
 
-      this.loadData(type, component, view)
+      this.loadData(type, component, view, model)
 
       return { ...this.$route.params }
     }
@@ -173,7 +173,6 @@ export default {
       right: 5px;
     }
   }
-
 
   .modelSelection {
     padding: 20px 0;

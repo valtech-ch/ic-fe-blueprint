@@ -51,7 +51,7 @@ export default {
   },
 
   mounted () {
-    fetch('http://localhost:3000/structure')
+    fetch('http://localhost:3000/navigation')
       .then(res => res.json())
       .then(res => {
         this.navigation = res

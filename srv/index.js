@@ -11,6 +11,7 @@ const srcDir = '/../ic-components'
 
 //TODO dynamically resolve when blueprint is in npm package
 let pathToComponents = path.resolve(`${__dirname}${srcDir}/components`)
+let pathToSrc = path.resolve(`${__dirname}${srcDir}`)
 
 registerPartials(pathToComponents)
 
@@ -20,11 +21,11 @@ export default (app, http) => {
   
   app.set('view engine', '.hbs'); 
 
-  app.get('/structure', async (req, res) => {
+  app.get('/navigation', async (req, res) => {
     res.json(getNavTree(1))
   })
 
-  app.get('/:type/:component?/:view?/:viewModel?', processViewHit)
+  app.get('/:type?/:component?/:view?/:viewModel?', processViewHit)
 }
 
 function processViewHit (req, res) {
@@ -33,14 +34,19 @@ function processViewHit (req, res) {
 
   let componentPath = `${pathToComponents}`
 
-  if (!component) {
+  if(!type){
+    response.doc = getDocumentation(componentPath)
+  }
+  else if(type === 'pages'){
+    let componentPath = `${pathToSrc}/${type}`
+    response.doc = getDocumentation(componentPath)
+  }
+  else if (!component) {
     componentPath += `/${type}`
-
     response.doc = getDocumentation(componentPath)
 
   } else if (!view) {
     componentPath += `/${type}/${component}`
-
     response.doc = getDocumentation(componentPath)
 
   } else {
