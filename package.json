@@ -1,7 +1,9 @@
 {
   "name": "ic-fe-blueprint",
   "version": "0.1.0",
-  "private": true,
+  "bin": {
+    "run-ic-blueprint": "bin/index.js"
+  },
   "scripts": {
     "dev": "run-s clean-dist dev-both",
     "dev-both": "run-p express serve",
