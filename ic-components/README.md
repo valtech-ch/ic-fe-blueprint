@@ -1,0 +1,1 @@
+# Infocentric Frontend Blueprint

@@ -10,10 +10,9 @@ import config from './config'
 const srcDir = '/../ic-components'
 
 //TODO dynamically resolve when blueprint is in npm package
-let pathToTextViews = path.resolve(`${__dirname}${srcDir}/components/atoms/text/views`)
 let pathToComponents = path.resolve(`${__dirname}${srcDir}/components`)
 
-registerPartials()
+registerPartials(pathToComponents)
 
 export default (app, http) => {
   app.use(cors())
@@ -67,17 +66,21 @@ function processViewHit (req, res) {
   res.json(response)
 }
 
-function registerPartials(){
-  var filenames = fs.readdirSync(pathToTextViews);
+function registerPartials(directory){
+  var files = fs.readdirSync(directory);
 
-  filenames.forEach(function (filename) {
-    var matches = /^([^.]+).hbs$/.exec(filename);
-    if (!matches) {
-      return;
+  files.forEach(function (file) {
+    if (fs.statSync(directory + '/' + file).isDirectory()) {
+      registerPartials(directory + '/' + file);
     }
-    var name = matches[1];
-    var template = fs.readFileSync(pathToTextViews + '/' + filename, 'utf8');
-    hbs.registerPartial(name, template);
+    else {
+      var matches = /^([^.]+).hbs$/.exec(file);
+      if (matches) {
+        var name = matches[1];
+        var template = fs.readFileSync(directory + '/' + file, 'utf8');
+        hbs.registerPartial(name, template);
+      }
+    }
   });
 }
 

@@ -1,9 +1,6 @@
 <template>
   <section class="section">
     <div>
-      <h1 class="title">{{ pageTitle }}</h1>
-      <p>This could be some intro-text.</p>
-
       <div
         class="content"
         v-if="response && response.doc">
