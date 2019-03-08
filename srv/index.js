@@ -72,17 +72,25 @@ function processViewHit (req, res) {
   res.json(response)
 }
 
-function registerPartials(directory){
+function registerPartials(directory, type, component){
   var files = fs.readdirSync(directory);
 
   files.forEach(function (file) {
+    var nextComponent = component
+    if(file == 'atoms' || file == 'components' || file == 'organisms') {
+      type = file;
+    }
+    else if(!file.includes('.') && file != 'views') {
+      nextComponent = file
+    }
+
     if (fs.statSync(directory + '/' + file).isDirectory()) {
-      registerPartials(directory + '/' + file);
+      registerPartials(directory + '/' + file, type, nextComponent);
     }
     else {
       var matches = /^([^.]+).hbs$/.exec(file);
       if (matches) {
-        var name = matches[1];
+        var name = `${type}/${component}/${matches[1]}`
         var template = fs.readFileSync(directory + '/' + file, 'utf8');
         hbs.registerPartial(name, template);
       }

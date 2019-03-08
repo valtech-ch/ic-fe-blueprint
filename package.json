@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "run-s clean-dist dev-both",
     "dev-both": "run-p express serve",
+    "express": "vue-cli-service express:watch",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "express": "vue-cli-service express:watch",
     "express:run": "vue-cli-service express:run",
     "clean-dist": "rimraf ./dist"
   },
