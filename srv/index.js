@@ -104,7 +104,7 @@ function getDocumentation(componentPath, viewName = 'README.md'){
   if (fs.existsSync(pathToDoc)) {
     doc = getMarkdownByPath(pathToDoc)
   } else {
-    doc = '<p>DOCUMENATION IS MISSING!</p>'
+    doc = '<div class="notification is-warning">Documentation is missing!</div>'
   }
 
   return doc

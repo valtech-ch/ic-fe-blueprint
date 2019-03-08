@@ -1,4 +1,3 @@
-# Atom - Text - Heading
 The heading component is used to display a heading
 
 ## Fields

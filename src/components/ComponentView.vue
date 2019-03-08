@@ -7,7 +7,7 @@
         <div class="dropdown is-hoverable">
           <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="modelsDropdown">
-              <span>Selected View-Model: {{ model }}</span>
+              <span>Current data: {{ modelDisplay }}</span>
               <span class="icon is-small">
                 <svg class="svg-inline--fa fa-angle-down fa-w-10" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path></svg>
               </span>
@@ -62,27 +62,33 @@
         </template>
 
         <template v-else-if="activeTab === 'documentation'">
-          <vue-markdown :source="data.doc" />
+          <div class="content">
+            <vue-markdown :source="data.doc" />
+          </div>
         </template>
 
         <template v-else-if="activeTab === 'usage'">
-          <pre class="usage" v-if="data.html">{{ data.html }}
-            <button
-              class="button button1"
-              type="button"
-              v-clipboard:success="onCopy"
-              v-clipboard:copy="data.html"
-              :class="{ 'is-success': copied1 }">Copy!</button>
-          </pre>
-          <hr>
-          <pre class="usage" v-if="data.raw">{{ data.raw }}
-            <button
-              class="button button2"
-              type="button"
-              v-clipboard:success="onCopy"
-              v-clipboard:copy="data.raw"
-              :class="{ 'is-success': copied2 }">Copy!</button>
-          </pre>
+          <div class="content">
+            <h2>Template</h2>
+            <pre class="usage" v-if="data.html">{{ data.html }}
+              <button
+                class="button button1"
+                type="button"
+                v-clipboard:success="onCopy"
+                v-clipboard:copy="data.html"
+                :class="{ 'is-success': copied1 }">Copy!</button>
+            </pre>
+            <hr>
+            <h2>Html</h2>
+            <pre class="usage" v-if="data.raw">{{ data.raw }}
+              <button
+                class="button button2"
+                type="button"
+                v-clipboard:success="onCopy"
+                v-clipboard:copy="data.raw"
+                :class="{ 'is-success': copied2 }">Copy!</button>
+            </pre>
+          </div>
         </template>
 
         <template v-else-if="activeTab === 'raw'">
@@ -144,6 +150,11 @@ export default {
       return this.$route.params.model
     },
 
+    modelDisplay () {
+      const { model } = this.$route.params
+      return model.charAt(0).toUpperCase() + model.slice(1)
+    },
+
     models () {
       return this.data.models || {}
     },
@@ -160,9 +171,9 @@ export default {
       return { ...this.$route.params }
     },
 
-    pageTitle() {
+    pageTitle () {
       const { view } = this.$route.params
-      return view.charAt(0).toUpperCase() + view.slice(1);
+      return view.charAt(0).toUpperCase() + view.slice(1)
     }
   }
 }
