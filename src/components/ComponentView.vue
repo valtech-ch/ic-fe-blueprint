@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <div>
-      <h1 class="title">{{ $route.params.view }}</h1>
+      <h1 class="title">{{ pageTitle }}</h1>
 
       <div class="modelSelection">
         <div class="dropdown is-hoverable">
@@ -158,6 +158,11 @@ export default {
       this.loadData(type, component, view, model)
 
       return { ...this.$route.params }
+    },
+
+    pageTitle() {
+      const { view } = this.$route.params
+      return view.charAt(0).toUpperCase() + view.slice(1);
     }
   }
 }
