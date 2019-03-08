@@ -5,6 +5,7 @@ import cors from 'cors'
 import marked from 'marked'
 import hbs from 'handlebars'
 import config from './config'
+import exphbs from 'express-handlebars'
 
 //TODO: pass view script parameters
 const srcDir = '/../ic-components'
@@ -19,17 +20,35 @@ export default (app, http) => {
   app.use(cors())
   app.use(express.json())
   
+  app.engine('.hbs', exphbs({extname: '.hbs'}));
   app.set('view engine', '.hbs'); 
+  app.set('views', path.join(__dirname, '../public'));
 
   app.get('/navigation', async (req, res) => {
     res.json(getNavTree(1))
   })
 
   app.get('/:type?/:component?/:view?/:viewModel?', processViewHit)
+  app.get('/plain/:type?/:component?/:view?/:viewModel?', processPlainView)
 }
 
 function processViewHit (req, res) {
   const { type, component, view, viewModel } = req.params
+  res.json(buildViewModel(type, component, view, viewModel))
+}
+
+function processPlainView (req, res) {
+  const { type, component, view, viewModel } = req.params
+  let plainViewModel = buildViewModel(type, component, view, viewModel)
+  let plainView = buildPlainView(plainViewModel)
+  res.render('index.hbs', plainViewModel)
+}
+
+function buildPlainView(){
+
+}
+
+function buildViewModel(type, component, view, viewModel){
   const response = {}
 
   let componentPath = `${pathToComponents}`
@@ -69,7 +88,7 @@ function processViewHit (req, res) {
     response.hbsOnly = hbsOnly
   }
 
-  res.json(response)
+  return response
 }
 
 function registerPartials(directory, type, component){

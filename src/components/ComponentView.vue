@@ -45,8 +45,7 @@
               :to="`/${rParams.type}/${rParams.component}/${rParams.view}/usage/${model}`">Usage</router-link>
           </li>
           <li :class="{'is-active': activeTab === 'raw'}">
-            <router-link
-              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/raw/${model}`">Raw</router-link>
+            <a target="_blank" :href="rawUrl">Raw</a>
           </li>
         </ul>
       </div>
@@ -174,6 +173,11 @@ export default {
     pageTitle () {
       const { view } = this.$route.params
       return view.charAt(0).toUpperCase() + view.slice(1)
+    },
+
+    rawUrl () {
+      const { type, component, view, model } = this.$route.params
+      return `//localhost:3000/plain/${type}/${component}/${view}/${model}`
     }
   }
 }
