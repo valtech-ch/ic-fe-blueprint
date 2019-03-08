@@ -29,8 +29,12 @@
             <td width="40%">
               <router-link :to="`/${item.type}/${item.component}/${item.view}/view/default`">{{ item.view }}</router-link>
             </td>
-            <td width="30%">{{ item.type }}</td>
-            <td width="30%">{{ item.component }}</td>
+            <td width="30%">
+              <router-link :to="`/${item.type}`">{{ item.type }}</router-link>
+            </td>
+            <td width="30%">
+              <router-link :to="`/${item.type}/${item.component}`">{{ item.component }}</router-link>
+            </td>
           </tr>
         </tbody>
       </table>
