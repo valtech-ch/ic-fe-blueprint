@@ -125,7 +125,7 @@ export default {
     loadData (type, component, view, viewModel) {
       const componentName = view[0].toUpperCase() + view.slice(1)
 
-      fetch(`http://localhost:3000/${type}/${component}/${view}/${viewModel}`)
+      fetch(`http://localhost:3000/preview/${type}/${component}/${view}/${viewModel}`)
         .then(res => res.json())
         .then(res => {
           this.data = res

@@ -13,6 +13,7 @@ const srcDir = '/../ic-components'
 //TODO dynamically resolve when blueprint is in npm package
 let pathToComponents = path.resolve(`${__dirname}${srcDir}/components`)
 let pathToSrc = path.resolve(`${__dirname}${srcDir}`)
+let pathToRoot = path.resolve(`${__dirname}/../`)
 
 registerPartials(pathToComponents)
 
@@ -25,11 +26,13 @@ app.engine('.hbs', exphbs({extname: '.hbs'}));
 app.set('view engine', '.hbs'); 
 app.set('views', path.join(__dirname, '../public'));
 
+app.use('/', express.static(`${pathToRoot}/dist`));
+
 app.get('/navigation', async (req, res) => {
   res.json(getNavTree(1))
 })
 
-app.get('/:type?/:component?/:view?/:viewModel?', processViewHit)
+app.get('/preview/:type?/:component?/:view?/:viewModel?', processViewHit)
 app.get('/plain/:type?/:component?/:view?/:viewModel?', processPlainView)
 
 app.listen(process.env.PORT || 3000);

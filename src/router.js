@@ -12,10 +12,6 @@ export default new Router({
       component: () => import('@/components/Overview')
     },
     {
-      path: '/pages/:page',
-      component: () => import('@/components/ComponentDemo')
-    },
-    {
       path: '/:type/:component?',
       component: () => import('@/components/Overview')
     },
