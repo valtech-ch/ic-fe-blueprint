@@ -16,21 +16,23 @@ let pathToSrc = path.resolve(`${__dirname}${srcDir}`)
 
 registerPartials(pathToComponents)
 
-export default (app, http) => {
-  app.use(cors())
-  app.use(express.json())
-  
-  app.engine('.hbs', exphbs({extname: '.hbs'}));
-  app.set('view engine', '.hbs'); 
-  app.set('views', path.join(__dirname, '../public'));
+let app = express();
 
-  app.get('/navigation', async (req, res) => {
-    res.json(getNavTree(1))
-  })
+app.use(cors())
+app.use(express.json())
 
-  app.get('/:type?/:component?/:view?/:viewModel?', processViewHit)
-  app.get('/plain/:type?/:component?/:view?/:viewModel?', processPlainView)
-}
+app.engine('.hbs', exphbs({extname: '.hbs'}));
+app.set('view engine', '.hbs'); 
+app.set('views', path.join(__dirname, '../public'));
+
+app.get('/navigation', async (req, res) => {
+  res.json(getNavTree(1))
+})
+
+app.get('/:type?/:component?/:view?/:viewModel?', processViewHit)
+app.get('/plain/:type?/:component?/:view?/:viewModel?', processPlainView)
+
+app.listen(process.env.PORT || 3000);
 
 function processViewHit (req, res) {
   const { type, component, view, viewModel } = req.params
