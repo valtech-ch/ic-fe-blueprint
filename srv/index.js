@@ -1,11 +1,11 @@
-import fs from 'fs'
-import path from 'path'
-import express from 'express'
-import cors from 'cors'
-import marked from 'marked'
-import hbs from 'handlebars'
-import config from './config'
-import exphbs from 'express-handlebars'
+const fs = require('fs')
+const path = require('path')
+const express = require('express')
+const cors = require('cors')
+const marked = require('marked')
+const hbs = require('handlebars')
+const config = require('./config')
+const exphbs = require('express-handlebars')
 
 //TODO: pass view script parameters
 const srcDir = '/../ic-components'
