@@ -101,7 +101,7 @@ function registerPartials(directory, type, component){
 
   files.forEach(function (file) {
     var nextComponent = component
-    if(file == 'atoms' || file == 'components' || file == 'organisms') {
+    if(file == 'atoms' || file == 'organisms' || file == 'molecules') {
       type = file;
     }
     else if(!file.includes('.') && file != 'views') {
