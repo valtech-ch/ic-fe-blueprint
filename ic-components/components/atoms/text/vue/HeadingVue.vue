@@ -12,7 +12,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   h1 {
     font-size: 2rem;
     font-weight: bold;

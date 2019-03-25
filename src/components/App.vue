@@ -2,7 +2,7 @@
   <div id="app" class="columns">
     <div class="column is-narrow">
       <aside class="menu">
-        <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
+        <router-link :to="'/'"><img class="menu-image" src="/assets/logo.svg"></router-link>
 
         <template v-for="type in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
@@ -29,7 +29,7 @@
         </template>
       </aside>
     </div>
-    <div class="column">
+    <div class="column preview-content">
       <router-view
         :selected="selected"
         :data="navigation" />
@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import logo from '@/assets/logo.svg'
-
 export default {
   name: 'App',
 
@@ -51,7 +49,7 @@ export default {
   },
 
   mounted () {
-    fetch('http://localhost:3000/navigation')
+    fetch('/navigation')
       .then(res => res.json())
       .then(res => {
         this.navigation = res
@@ -118,8 +116,8 @@ html, body {
 }
 
 #app {
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
 }
 
 .menu {
@@ -127,6 +125,7 @@ html, body {
   background: $grey-light;
   height: 100%;
   padding: 20px;
+  overflow: scroll;
 
   &-image {
     width: 50%;
@@ -148,5 +147,10 @@ html, body {
 
 .menu-element .menu-element{
   padding-left: 20px;
+}
+
+.preview-content{
+  height: 100%;
+  overflow: scroll;
 }
 </style>

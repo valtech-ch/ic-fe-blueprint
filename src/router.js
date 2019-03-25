@@ -9,15 +9,15 @@ export default new Router({
   routes: [
     {
       path: '',
-      component: () => import('@/components/Overview')
+      component: () => import('./components/Overview.vue')
     },
     {
       path: '/:type/:component?',
-      component: () => import('@/components/Overview')
+      component: () => import('./components/Overview.vue')
     },
     {
       path: '/:type/:component/:view/:tab/:model',
-      component: () => import('@/components/ComponentView')
+      component: () => import('./components/ComponentView.vue')
     },
     {
       path: '*',

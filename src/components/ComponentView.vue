@@ -125,13 +125,13 @@ export default {
     loadData (type, component, view, viewModel) {
       const componentName = view[0].toUpperCase() + view.slice(1)
 
-      fetch(`http://localhost:3000/preview/${type}/${component}/${view}/${viewModel}`)
+      fetch(`/preview/${type}/${component}/${view}/${viewModel}`)
         .then(res => res.json())
         .then(res => {
           this.data = res
           this.component = res.hbsOnly
             ? () => false
-            : () => import(`@/../ic-components/components/${type}/${component}/vue/${componentName}.vue`)
+            : () => import(`../../ic-components/components/${type}/${component}/vue/${componentName}.vue`)
         })
     },
 
@@ -177,7 +177,7 @@ export default {
 
     rawUrl () {
       const { type, component, view, model } = this.$route.params
-      return `//localhost:3000/plain/${type}/${component}/${view}/${model}`
+      return `/plain/${type}/${component}/${view}/${model}`
     }
   }
 }

@@ -34,6 +34,11 @@ app.get('/navigation', async (req, res) => {
 
 app.get('/preview/:type?/:component?/:view?/:viewModel?', processViewHit)
 app.get('/plain/:type?/:component?/:view?/:viewModel?', processPlainView)
+app.get('/page/:pageName?', processPageView)
+
+app.get('*', async (req, res) => {
+  res.sendFile(path.resolve(`${__dirname}/../dist/index.html`))
+});
 
 app.listen(process.env.PORT || 3000);
 
@@ -45,12 +50,41 @@ function processViewHit (req, res) {
 function processPlainView (req, res) {
   const { type, component, view, viewModel } = req.params
   let plainViewModel = buildViewModel(type, component, view, viewModel)
-  let plainView = buildPlainView(plainViewModel)
   res.render('index.hbs', plainViewModel)
 }
 
-function buildPlainView(){
+function processPageView (req, res) {
+  const { pageName } = req.params
+  let pageViewModel = buildPageViewModel(pageName)
+  res.render('index.hbs', pageViewModel)
+}
 
+function buildPageViewModel(pageName){
+  const mock = require(`${pathToSrc}/pages/${pageName}.js`)
+  if(!mock)
+    return null
+  
+  let view = ""
+  mock.components.forEach(function(component){
+    view = view + buildPartialPage(component)
+  })
+
+  return view;
+}
+
+function buildPartialPage(component){
+  const split = component.view.split('/')
+  if(split.length < 3)
+    return ""
+  
+  if(!component.model)
+    return ""
+
+  const viewModel = buildViewModel(split[0], split[1], split[2], component.model)
+  if(!viewModel)
+    return ""
+
+  return viewModel.raw
 }
 
 function buildViewModel(type, component, view, viewModel){

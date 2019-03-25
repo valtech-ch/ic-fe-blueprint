@@ -74,7 +74,7 @@ export default {
   methods: {
     loadData () {
       const { type, component } = this.$route.params
-      let target = `http://localhost:3000`
+      let target = `/preview`
 
       if (type) target += `/${type}`
       if (component) target += `/${component}`
