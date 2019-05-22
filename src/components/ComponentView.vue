@@ -120,7 +120,7 @@ export default {
     loadData (type, component, view) {
       const componentName = view[0].toUpperCase() + view.slice(1)
 
-      fetch(`http://localhost:3000/${type}/${component}/${view}`)
+      fetch(`/api/${type}/${component}/${view}`)
         .then(res => res.json())
         .then(res => {
           this.data = res
@@ -173,7 +173,6 @@ export default {
       right: 5px;
     }
   }
-
 
   .modelSelection {
     padding: 20px 0;

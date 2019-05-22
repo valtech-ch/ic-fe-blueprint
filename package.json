@@ -3,19 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "run-s clean-dist dev-both",
-    "dev-both": "run-p express serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "express": "vue-cli-service express:watch",
-    "express:run": "vue-cli-service express:run",
     "clean-dist": "rimraf ./dist"
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "bulma": "^0.7.4",
-    "cors": "^2.8.5",
     "raw-loader": "^1.0.0",
     "vue": "^2.6.6",
     "vue-clipboard2": "^0.3.0",
@@ -33,11 +28,9 @@
     "fibers": "^3.1.1",
     "handlebars": "^4.1.0",
     "marked": "^0.6.1",
-    "npm-run-all": "^4.1.5",
     "rimraf": "^2.6.3",
     "sass": "^1.16.0",
     "sass-loader": "^7.1.0",
-    "vue-cli-plugin-express": "^1.0.0",
     "vue-template-compiler": "^2.5.21"
   },
   "eslintConfig": {
@@ -62,6 +55,6 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not ie <= 8"
+    "not ie <= 10"
   ]
 }

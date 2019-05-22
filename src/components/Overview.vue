@@ -69,7 +69,7 @@ export default {
   methods: {
     loadData () {
       const { type, component, view } = this.$route.params
-      let target = `http://localhost:3000`
+      let target = '/api'
 
       if (type) target += `/${type}`
       if (component) target += `/${component}`

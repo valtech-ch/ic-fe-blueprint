@@ -1,4 +1,5 @@
 {
+  "components": "../ic-components/components",
   "pathToPartials": "./preview/views/",
   "pathToComponentViews": "./dist/views/",
   "indexViewName": "index.hbs",
