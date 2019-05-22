@@ -18,21 +18,11 @@ module.exports = {
         if (fs.existsSync(`${_path}/${type}/vue`)) {
           const files = fs.readdirSync(`${_path}/${type}/vue`)
           files.forEach(file => {
-            const contents = fs.readFileSync(`${_path}/${type}/vue/${file}`).toString()
-
-            const namePos = contents.indexOf('name: ')
-            if (namePos !== -1) {
-              const nameLine = contents.substring(namePos, contents.indexOf('\n', namePos))
-              const moduleName = nameLine.substring(
-                nameLine.indexOf('\'') + 1,
-                nameLine.indexOf('\'', nameLine.indexOf('\'') + 1)
-              )
-
-              data.push({
-                path: `${_path}/${type}/vue/${file}`,
-                name: moduleName
-              })
-            }
+            const fileNoExt = file.substr(0, file.length - 4)
+            data.push({
+              path: `${_path}/${type}/vue/${file}`,
+              name: fileNoExt
+            })
           })
         }
       })
