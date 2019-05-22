@@ -2,7 +2,11 @@ const path = require('path')
 const express = require('express')
 const router = express.Router({ mergeParams: true })
 const config = require('./config.json')
-const service = require('./service')(path.resolve(__dirname, config.components))
+const minimist = require('minimist')
+const args = minimist(process.argv)
+console.log(args)
+const componentsPath = args.basePath || path.resolve(__dirname, config.components)
+const service = require('./service')(componentsPath)
 
 router.get('', function (req, res, next) {
   res.send({ running: true })
