@@ -1,5 +1,6 @@
 {
   "components": "../ic-components/components",
+  "componentsImportFile": "../dist/allComponents.js",
   "pathToPartials": "./preview/views/",
   "pathToComponentViews": "./dist/views/",
   "indexViewName": "index.hbs",

@@ -124,9 +124,7 @@ export default {
         .then(res => res.json())
         .then(res => {
           this.data = res
-          this.component = res.hbsOnly
-            ? () => false
-            : () => import(`@/../ic-components/components/${type}/${component}/vue/${componentName}.vue`)
+          this.component = res.hbsOnly ? false : componentName
         })
     },
 

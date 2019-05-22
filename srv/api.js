@@ -5,7 +5,7 @@ const config = require('./config.json')
 const minimist = require('minimist')
 const args = minimist(process.argv)
 console.log('Received arguments:', args)
-const componentsPath = path.resolve(args.basePath) || path.resolve(__dirname, config.components)
+const componentsPath = args.componentsPath ? path.resolve(args.componentsPath) : path.resolve(__dirname, config.components)
 console.log('Your components are in:', componentsPath)
 const service = require('./service')(componentsPath)
 

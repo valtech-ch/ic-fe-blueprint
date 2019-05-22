@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Heading from '@/../ic-components/components/atoms/text/vue/HeadingVue'
+import Heading from '@components/atoms/text/vue/HeadingVue'
 
 export default {
   name: 'Demo',
