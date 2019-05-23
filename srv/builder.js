@@ -1,4 +1,5 @@
 const fs = require('fs')
+const mkdirp = require('mkdirp')
 
 module.exports = {
 
@@ -34,6 +35,8 @@ module.exports = {
       internalString += `Vue.component('${module.name}', ${module.name})\n`
     })
 
+    const destArr = dest.split('/').slice(0, -1).join('/')
+    mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString)
   }
 }
