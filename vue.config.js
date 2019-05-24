@@ -22,5 +22,15 @@ module.exports = {
 
     config.resolve.alias
       .set('@pages', args.pagesPath || '/src/pages')
+  },
+  css: {
+    sourceMap: true,
+    loaderOptions: {
+      postcss: {
+        plugins: [
+          require('autoprefixer')()
+        ]
+      }
+    }
   }
 }

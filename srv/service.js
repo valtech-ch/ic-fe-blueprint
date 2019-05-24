@@ -33,7 +33,7 @@ module.exports = function (pathToComponents) {
       if (fs.existsSync(pathToDoc)) {
         doc = service.getMarkdownByPath(pathToDoc)
       } else {
-        doc = '<p>DOCUMENATION IS MISSING!</p>'
+        doc = '<p>DOCUMENTATION IS MISSING!</p>'
       }
 
       return doc
@@ -56,15 +56,15 @@ module.exports = function (pathToComponents) {
       } else {
         componentPath += `/${type}/${component}/`
 
-        const mock = require(`${componentPath}/mock/${view}.js`)
-        const doc = service.getDocumentation(componentPath, `/doc/${view}.md`)
+        const mock = require(`${componentPath}/mock.js`)
+        const doc = service.getDocumentation(componentPath, `/doc.md`)
 
         const viewModelName = viewModel || 'default'
         const vm = mock.models[viewModelName]
-        const template = fs.readFileSync(`${componentPath}/views/${view}.hbs`, {
+        const template = fs.readFileSync(`${componentPath}/views.hbs`, {
           encoding: 'utf-8'
         })
-        const hbsOnly = !fs.existsSync(`${componentPath}/vue/${view}.vue`)
+        const hbsOnly = !fs.existsSync(`${componentPath}/${view}.vue`)
 
         response.models = mock.models
         response.doc = doc
@@ -113,7 +113,7 @@ module.exports = function (pathToComponents) {
         navPath = navPath + '/' + type
 
         if (level === 3 && component) {
-          navPath = navPath + '/' + component + '/views'
+          navPath = navPath + '/' + component
         }
       }
 
@@ -125,7 +125,7 @@ module.exports = function (pathToComponents) {
         }
 
         if (level === 3) {
-          return navElement.indexOf('.') !== -1
+          return navElement.indexOf('.') !== -1 && navElement.substr(-4) === '.vue'
         }
 
         return true

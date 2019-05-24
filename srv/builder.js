@@ -11,19 +11,16 @@ module.exports = {
       return stats.isDirectory()
     }).forEach(component => {
       const _path = `${src}/${component}`
-      const types = fs.readdirSync(_path)
+      const items = fs.readdirSync(_path)
 
-      types.filter(type => {
-        return !['.gitkeep'].includes(type)
-      }).forEach(type => {
-        if (fs.existsSync(`${_path}/${type}/vue`)) {
-          const files = fs.readdirSync(`${_path}/${type}/vue`)
-          files.forEach(file => {
-            const fileNoExt = file.substr(0, file.length - 4)
-            data.push({
-              path: `${_path}/${type}/vue/${file}`,
-              name: fileNoExt
-            })
+      items.filter(item => {
+        return !['.gitkeep', 'README.md'].includes(item)
+      }).forEach(item => {
+        const name = item.charAt(0).toUpperCase() + item.slice(1)
+        if (fs.existsSync(`${_path}/${item}/${name}.vue`)) {
+          data.push({
+            path: `${_path}/${item}/${name}.vue`,
+            name
           })
         }
       })
