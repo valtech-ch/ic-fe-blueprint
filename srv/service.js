@@ -1,6 +1,7 @@
 const fs = require('fs')
 const marked = require('marked')
 const hbs = require('handlebars')
+const axios = require('axios')
 
 module.exports = function (pathToComponents, pathToPages) {
   const registerPartials = function (directory) {
@@ -39,8 +40,8 @@ module.exports = function (pathToComponents, pathToPages) {
       return doc
     },
 
-    processViewHit: function (req, res) {
-      const { type, component, view, viewModel } = req.params
+    processViewHit: async function (req, res) {
+      const {type, component, view, viewModel} = req.params
       const response = {}
 
       let path = type === 'pages' ? `${pathToPages}` : `${pathToComponents}`
@@ -61,19 +62,54 @@ module.exports = function (pathToComponents, pathToPages) {
 
         const viewModelName = viewModel || 'default'
         const vm = mock.models[viewModelName]
-        const template = fs.readFileSync(`${path}/views.hbs`, {
+        const hbsTemplate = fs.readFileSync(`${path}/views.hbs`, {
           encoding: 'utf-8'
         })
         const hbsOnly = !fs.existsSync(`${path}/${view}.vue`)
+        let htlTemplate = 'NO DATA'
+
+        try {
+          htlTemplate = await service.getHtlTemplate(path, view)
+        } catch (e) {
+          console.log(e)
+        }
 
         response.models = mock.models
         response.doc = doc
-        response.raw = service.getView(template, vm)
-        response.html = template
+        response.raw = service.getView(hbsTemplate, vm)
+        response.html = htlTemplate
         response.hbsOnly = hbsOnly
       }
 
       res.json(response)
+    },
+
+    getHtlTemplate: async function (path, view) {
+      let meta = {};
+      try {
+        meta = require(`${path}/meta`);
+      } catch (e) {
+        console.log(e);
+        return 'MISSING meta.js'
+      }
+      const htlPath = `${pathToComponents}/${meta.templatePath}/${meta.component}.html`
+      const contentPath = `${pathToComponents}/${meta.templatePath}/.content.xml`
+      let htlTemplate = 'NO DATA';
+
+      if (fs.existsSync(htlPath)) {
+        htlTemplate = fs.readFileSync(htlPath, {
+          encoding: 'utf-8'
+        });
+      } else {
+        const contentConfig = fs.readFileSync(contentPath, {
+          encoding: 'utf-8'
+        });
+        const regex = /sling\:resourceSuperType="([^"]*)"/gm
+        const componentPath = regex.exec(contentConfig)
+        const result = await axios.get(`https://raw.githubusercontent.com/adobe/aem-core-wcm-components/master/content/src/content/jcr_root/apps/${componentPath[1]}/${meta.component}.html`);
+        htlTemplate = result.data
+      }
+      return htlTemplate
     },
 
     getView: function (html, viewModel) {
