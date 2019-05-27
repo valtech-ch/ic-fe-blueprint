@@ -35,5 +35,31 @@ module.exports = {
     const destArr = dest.split('/').slice(0, -1).join('/')
     mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString)
+  },
+  buildPages (src, dest) {
+    const data = []
+    const pages = fs.readdirSync(src)
+    pages.filter(page => {
+      const stats = fs.lstatSync(`${src}/${page}`)
+      return stats.isFile()
+    }).forEach(page => {
+      const name = page.slice(0, -4)
+      if (fs.existsSync(`${src}/${page}`)) {
+        data.push({
+          path: `${src}/${page}`,
+          name
+        })
+      }
+    })
+
+    let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
+    data.forEach(module => {
+      internalString += `\nimport ${module.name} from '${module.path}'\n`
+      internalString += `Vue.component('${module.name}', ${module.name})\n`
+    })
+
+    const destArr = dest.split('/').slice(0, -1).join('/')
+    mkdirp.sync(destArr)
+    fs.writeFileSync(dest, internalString)
   }
 }

@@ -2,7 +2,7 @@ const fs = require('fs')
 const marked = require('marked')
 const hbs = require('handlebars')
 
-module.exports = function (pathToComponents) {
+module.exports = function (pathToComponents, pathToPages) {
   const registerPartials = function (directory) {
     var files = fs.readdirSync(directory)
 
@@ -43,28 +43,28 @@ module.exports = function (pathToComponents) {
       const { type, component, view, viewModel } = req.params
       const response = {}
 
-      let componentPath = `${pathToComponents}`
+      let path = type === 'pages' ? `${pathToPages}` : `${pathToComponents}`
 
       if (!component) {
-        componentPath += `/${type}`
+        path += `/${type}`
 
-        response.doc = service.getDocumentation(componentPath)
+        response.doc = service.getDocumentation(path)
       } else if (!view) {
-        componentPath += `/${type}/${component}`
+        path += `/${type}/${component}`
 
-        response.doc = service.getDocumentation(componentPath)
+        response.doc = service.getDocumentation(path)
       } else {
-        componentPath += `/${type}/${component}/`
+        path += `/${type}/${component}/`
 
-        const mock = require(`${componentPath}/mock.js`)
-        const doc = service.getDocumentation(componentPath, `/doc.md`)
+        const mock = require(`${path}/mock.js`)
+        const doc = service.getDocumentation(path, `/doc.md`)
 
         const viewModelName = viewModel || 'default'
         const vm = mock.models[viewModelName]
-        const template = fs.readFileSync(`${componentPath}/views.hbs`, {
+        const template = fs.readFileSync(`${path}/views.hbs`, {
           encoding: 'utf-8'
         })
-        const hbsOnly = !fs.existsSync(`${componentPath}/${view}.vue`)
+        const hbsOnly = !fs.existsSync(`${path}/${view}.vue`)
 
         response.models = mock.models
         response.doc = doc
@@ -193,7 +193,19 @@ module.exports = function (pathToComponents) {
     },
 
     getPages: function (modul) {
-      return []
+      const navPath = pathToPages
+      //get navigation elements
+      const navElements = fs.readdirSync(navPath)
+      const pages = []
+
+      navElements.map((navElement) => {
+        pages.push({
+          title: navElement.slice(0, -4),
+          children: null
+        })
+      })
+
+      return pages
     }
   }
   return service

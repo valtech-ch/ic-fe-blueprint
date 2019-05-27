@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from '@/components/App.vue'
 import router from '@/router'
 import '../dist/allComponents'
+import '../dist/allPages'
 
 Vue.config.productionTip = false
 Vue.prototype.$feComponents = process.env.COMPONENTS_BASEPATH

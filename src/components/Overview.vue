@@ -102,15 +102,19 @@ export default {
         })
       } else {
         this.data.forEach(type => {
-          type.children.forEach(component => {
-            component.children.forEach(view => {
-              data.push({
-                type: type.title,
-                component: component.title,
-                view: view.title
-              })
+          if (type.children) {
+            type.children.forEach(component => {
+              if (component.children) {
+                component.children.forEach(view => {
+                  data.push({
+                    type: type.title,
+                    component: component.title,
+                    view: view.title
+                  })
+                })
+              }
             })
-          })
+          }
         })
       }
 
