@@ -3,7 +3,7 @@ const marked = require('marked')
 const hbs = require('handlebars')
 const axios = require('axios')
 
-module.exports = function (pathToComponents, pathToPages) {
+module.exports = function (pathToComponents, pathToPages, backendTemplates = 'hbs') {
   const registerPartials = function (directory) {
     var files = fs.readdirSync(directory)
 
@@ -41,7 +41,7 @@ module.exports = function (pathToComponents, pathToPages) {
     },
 
     processViewHit: async function (req, res) {
-      const {type, component, view, viewModel} = req.params
+      const { type, component, view, viewModel } = req.params
       const response = {}
 
       let path = type === 'pages' ? `${pathToPages}` : `${pathToComponents}`
@@ -74,9 +74,23 @@ module.exports = function (pathToComponents, pathToPages) {
           console.log(e)
         }
 
+        let raw
+        if (backendTemplates === 'hbs') {
+          raw = service.getView(hbsTemplate, vm)
+        } else if (backendTemplates === 'htl') {
+          const { Compiler } = require('@adobe/htlengine')
+
+          const compiler = new Compiler()
+            .withOutputDirectory('')
+            .includeRuntime(true)
+            .withRuntimeGlobalName('it')
+
+          raw = await compiler.compileToString(htlTemplate)
+        }
+
         response.models = mock.models
         response.doc = doc
-        response.raw = service.getView(hbsTemplate, vm)
+        response.raw = raw
         response.html = htlTemplate
         response.hbsOnly = hbsOnly
       }
@@ -85,28 +99,28 @@ module.exports = function (pathToComponents, pathToPages) {
     },
 
     getHtlTemplate: async function (path, view) {
-      let meta = {};
+      let meta = {}
       try {
-        meta = require(`${path}/meta`);
+        meta = require(`${path}/meta`)
       } catch (e) {
-        console.log(e);
+        console.log(e)
         return 'MISSING meta.js'
       }
       const htlPath = `${pathToComponents}/${meta.templatePath}/${meta.component}.html`
       const contentPath = `${pathToComponents}/${meta.templatePath}/.content.xml`
-      let htlTemplate = 'NO DATA';
+      let htlTemplate = 'NO DATA'
 
       if (fs.existsSync(htlPath)) {
         htlTemplate = fs.readFileSync(htlPath, {
           encoding: 'utf-8'
-        });
+        })
       } else {
         const contentConfig = fs.readFileSync(contentPath, {
           encoding: 'utf-8'
-        });
-        const regex = /sling\:resourceSuperType="([^"]*)"/gm
+        })
+        const regex = /sling:resourceSuperType="([^"]*)"/gm
         const componentPath = regex.exec(contentConfig)
-        const result = await axios.get(`https://raw.githubusercontent.com/adobe/aem-core-wcm-components/master/content/src/content/jcr_root/apps/${componentPath[1]}/${meta.component}.html`);
+        const result = await axios.get(`https://raw.githubusercontent.com/adobe/aem-core-wcm-components/master/content/src/content/jcr_root/apps/${componentPath[1]}/${meta.component}.html`)
         htlTemplate = result.data
       }
       return htlTemplate
@@ -230,7 +244,7 @@ module.exports = function (pathToComponents, pathToPages) {
 
     getPages: function (modul) {
       const navPath = pathToPages
-      //get navigation elements
+      // get navigation elements
       const navElements = fs.readdirSync(navPath)
       const pages = []
 

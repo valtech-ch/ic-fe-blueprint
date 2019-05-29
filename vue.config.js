@@ -1,5 +1,6 @@
 const configureAPI = require('./srv/configure')
 const minimist = require('minimist')
+const path = require('path')
 
 const args = minimist(process.argv)
 console.log('VCONF Received arguments:', args)
@@ -18,10 +19,12 @@ module.exports = {
       })
 
     config.resolve.alias
-      .set('@components', args.componentsPath || '/src/components')
+      .set('@components', args.componentsPath || path.resolve(__dirname, 'ic-components/components'))
 
     config.resolve.alias
-      .set('@pages', args.pagesPath || '/src/pages')
+      .set('@pages', args.pagesPath || path.resolve(__dirname, 'ic-components/pages'))
+
+    console.log(config.resolve.alias)
   },
   css: {
     sourceMap: true,

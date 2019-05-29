@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "nodemon",
+    "localserve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "clean-dist": "rimraf ./dist"
   },
   "dependencies": {
+    "@adobe/htlengine": "^2.2.2",
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
     "bulma": "^0.7.4",
