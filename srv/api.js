@@ -5,12 +5,22 @@ const config = require('./config.json')
 const minimist = require('minimist')
 const args = minimist(process.argv)
 console.log('Received arguments:', args)
-const componentsPath = args.componentsPath ? path.resolve(args.componentsPath) : path.resolve(__dirname, config.components)
-const pagesPath = args.pagesPath ? path.resolve(args.pagesPath) : path.resolve(__dirname, config.pages)
+
 const backendTemplates = args.backendTemplates || 'hbs'
+
+const componentsPath = args.componentsPath ? path.resolve(args.componentsPath) : path.resolve(__dirname, config.components)
 console.log('Your components are in:', componentsPath)
+
+const pagesPath = args.pagesPath ? path.resolve(args.pagesPath) : path.resolve(__dirname, config.pages)
 console.log('Your pages are in:', pagesPath)
-const service = require('./service')(componentsPath, pagesPath, backendTemplates)
+
+let aemMocksPath
+if (backendTemplates === 'htl') {
+  aemMocksPath = args.aemMocksPath ? args.aemMocksPath : config.aemMocks
+  console.log('Your AEM mocks are in:', pagesPath)
+}
+
+const service = require('./service')(componentsPath, pagesPath, aemMocksPath, backendTemplates)
 
 router.get('', function (req, res, next) {
   res.send({ running: true })
