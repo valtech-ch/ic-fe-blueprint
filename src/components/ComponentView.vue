@@ -117,14 +117,14 @@ export default {
   },
 
   methods: {
-    loadData (type, component, view) {
+    loadData (type, component, view, model) {
       const componentName = view[0].toUpperCase() + view.slice(1)
 
-      fetch(`/api/${type}/${component}/${view}`)
+      fetch(`/api/${type}/${component}/${view}/${model}`)
         .then(res => res.json())
         .then(res => {
           this.data = res
-          this.component = res.hbsOnly ? false : componentName
+          this.component = res.cmsOnly ? false : componentName
         })
     },
 
@@ -151,9 +151,9 @@ export default {
     },
 
     rParams () {
-      const { type, component, view } = this.$route.params
+      const { type, component, view, model } = this.$route.params
 
-      this.loadData(type, component, view)
+      this.loadData(type, component, view, model)
 
       return { ...this.$route.params }
     }
@@ -162,21 +162,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .usage {
-    position: relative;
+.usage {
+  position: relative;
 
-    button {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-    }
+  button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
   }
+}
 
-  .modelSelection {
-    padding: 20px 0;
-  }
+.modelSelection {
+  padding: 20px 0;
+}
 
-  .dropdown-item {
-    text-transform: capitalize;
-  }
+.dropdown-item {
+  text-transform: capitalize;
+}
 </style>

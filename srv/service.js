@@ -62,37 +62,40 @@ module.exports = function (pathToComponents, pathToPages, backendTemplates = 'hb
 
         const viewModelName = viewModel || 'default'
         const vm = mock.models[viewModelName]
-        const hbsTemplate = fs.readFileSync(`${path}/views.hbs`, {
-          encoding: 'utf-8'
-        })
-        const hbsOnly = !fs.existsSync(`${path}/${view}.vue`)
-        let htlTemplate = 'NO DATA'
 
-        try {
-          htlTemplate = await service.getHtlTemplate(path, view)
-        } catch (e) {
-          console.log(e)
-        }
-
+        // define CMS template
         let raw
+        let cmsTemplate = 'FILE NOT FOUND'
+        let cmsOnly = !fs.existsSync(`${path}/${view}.vue`)
         if (backendTemplates === 'hbs') {
-          raw = service.getView(hbsTemplate, vm)
+          if (fs.existsSync(`${path}/views.hbs`)) {
+            cmsTemplate = fs.readFileSync(`${path}/views.hbs`, {
+              encoding: 'utf-8'
+            })
+            raw = service.getView(cmsTemplate, vm)
+          }
         } else if (backendTemplates === 'htl') {
-          const { Compiler } = require('@adobe/htlengine')
-
-          const compiler = new Compiler()
-            .withOutputDirectory('')
-            .includeRuntime(true)
-            .withRuntimeGlobalName('it')
-
-          raw = await compiler.compileToString(htlTemplate)
+          try {
+            cmsTemplate = await service.getHtlTemplate(path, view)
+            if (cmsTemplate) {
+              const engine = require('./htl/engine')
+              raw = await engine(vm.htl, cmsTemplate, {useDir: '../../src/mocks', useOptions: {model: viewModel}})
+              if (raw) {
+                raw = raw.body
+              }
+            } else {
+              cmsTemplate = 'FILE NOT FOUND'
+            }
+          } catch (e) {
+            console.log(e)
+          }
         }
 
         response.models = mock.models
         response.doc = doc
         response.raw = raw
-        response.html = htlTemplate
-        response.hbsOnly = hbsOnly
+        response.html = cmsTemplate
+        response.cmsOnly = cmsOnly
       }
 
       res.json(response)
@@ -108,20 +111,24 @@ module.exports = function (pathToComponents, pathToPages, backendTemplates = 'hb
       }
       const htlPath = `${pathToComponents}/${meta.templatePath}/${meta.component}.html`
       const contentPath = `${pathToComponents}/${meta.templatePath}/.content.xml`
-      let htlTemplate = 'NO DATA'
+      let htlTemplate = false
 
       if (fs.existsSync(htlPath)) {
         htlTemplate = fs.readFileSync(htlPath, {
           encoding: 'utf-8'
         })
-      } else {
+      } else if (fs.existsSync(contentPath)) {
         const contentConfig = fs.readFileSync(contentPath, {
           encoding: 'utf-8'
         })
         const regex = /sling:resourceSuperType="([^"]*)"/gm
         const componentPath = regex.exec(contentConfig)
-        const result = await axios.get(`https://raw.githubusercontent.com/adobe/aem-core-wcm-components/master/content/src/content/jcr_root/apps/${componentPath[1]}/${meta.component}.html`)
-        htlTemplate = result.data
+        try {
+          const result = await axios.get(`https://raw.githubusercontent.com/adobe/aem-core-wcm-components/master/content/src/content/jcr_root/apps/${componentPath[1]}/${meta.component}.html`)
+          htlTemplate = result.data
+        } catch (e) {
+          console.log(e)
+        }
       }
       return htlTemplate
     },

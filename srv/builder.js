@@ -27,14 +27,15 @@ module.exports = {
     })
 
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
+    let componentsString = '\n'
     data.forEach(module => {
-      internalString += `\nimport ${module.name} from '${module.path}'\n`
-      internalString += `Vue.component('${module.name}', ${module.name})\n`
+      internalString += `import ${module.name} from '${module.path}'\n`
+      componentsString += `Vue.component('${module.name}', ${module.name})\n`
     })
 
     const destArr = dest.split('/').slice(0, -1).join('/')
     mkdirp.sync(destArr)
-    fs.writeFileSync(dest, internalString)
+    fs.writeFileSync(dest, internalString + componentsString)
   },
   buildPages (src, dest) {
     const data = []
@@ -53,13 +54,14 @@ module.exports = {
     })
 
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
+    let componentsString = '\n'
     data.forEach(module => {
-      internalString += `\nimport ${module.name} from '${module.path}'\n`
-      internalString += `Vue.component('${module.name}', ${module.name})\n`
+      internalString += `import ${module.name} from '${module.path}'\n`
+      componentsString += `Vue.component('${module.name}', ${module.name})\n`
     })
 
     const destArr = dest.split('/').slice(0, -1).join('/')
     mkdirp.sync(destArr)
-    fs.writeFileSync(dest, internalString)
+    fs.writeFileSync(dest, internalString + componentsString)
   }
 }
