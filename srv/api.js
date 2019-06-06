@@ -31,4 +31,7 @@ router.get('/structure', async (req, res) => {
 
 router.get('/:type/:component?/:view?/:viewModel?', service.processViewHit)
 
-module.exports = router
+module.exports = {
+  router,
+  express
+}
