@@ -2,6 +2,7 @@
   "components": "../ic-components/components",
   "pages": "../ic-components/pages",
   "styles": "../../../dist/css/app.css",
+  "assets": "../../../dist/",
   "componentsImportFile": "../dist/allComponents.js",
   "pagesImportFile": "../dist/allPages.js",
   "pathToPartials": "./preview/views/",
