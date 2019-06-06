@@ -4,7 +4,6 @@ const router = express.Router({ mergeParams: true })
 const config = require('./config.json')
 const minimist = require('minimist')
 const args = minimist(process.argv)
-console.log('Received arguments:', args)
 
 const backendTemplates = args.backendTemplates || 'hbs'
 

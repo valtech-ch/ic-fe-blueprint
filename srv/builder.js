@@ -3,7 +3,7 @@ const mkdirp = require('mkdirp')
 
 module.exports = {
 
-  build (src, dest) {
+  build (src, style, dest) {
     const data = []
     const components = fs.readdirSync(src)
     components.filter(component => {
@@ -27,6 +27,8 @@ module.exports = {
     })
 
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
+    // Add global project stylesheets
+    internalString += `import '${style}'\n`
     let componentsString = '\n'
     data.forEach(module => {
       internalString += `import ${module.name} from '${module.path}'\n`
@@ -37,7 +39,7 @@ module.exports = {
     mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString + componentsString)
   },
-  buildPages (src, dest) {
+  buildPages (src, style, dest) {
     const data = []
     const pages = fs.readdirSync(src)
     pages.filter(page => {
@@ -54,6 +56,8 @@ module.exports = {
     })
 
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
+    // Add global project stylesheets
+    internalString += `import '${style}'\n`
     let componentsString = '\n'
     data.forEach(module => {
       internalString += `import ${module.name} from '${module.path}'\n`

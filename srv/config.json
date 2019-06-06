@@ -1,6 +1,7 @@
 {
   "components": "../ic-components/components",
   "pages": "../ic-components/pages",
+  "styles": "../../../dist/css/app.css",
   "componentsImportFile": "../dist/allComponents.js",
   "pagesImportFile": "../dist/allPages.js",
   "pathToPartials": "./preview/views/",
