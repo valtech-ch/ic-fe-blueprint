@@ -28,7 +28,9 @@ module.exports = {
 
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
     // Add global project stylesheets
-    internalString += `import '${style}'\n`
+    if (fs.existsSync(style)) {
+      internalString += `import '${style}'\n`
+    }
     let componentsString = '\n'
     data.forEach(module => {
       internalString += `import ${module.name} from '${module.path}'\n`
@@ -57,7 +59,9 @@ module.exports = {
 
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
     // Add global project stylesheets
-    internalString += `import '${style}'\n`
+    if (fs.existsSync(style)) {
+      internalString += `import '${style}'\n`
+    }
     let componentsString = '\n'
     data.forEach(module => {
       internalString += `import ${module.name} from '${module.path}'\n`

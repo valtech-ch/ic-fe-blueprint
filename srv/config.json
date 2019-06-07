@@ -1,8 +1,9 @@
 {
-  "components": "../ic-components/components",
-  "pages": "../ic-components/pages",
-  "styles": "../../../dist/css/app.css",
-  "assets": "../../../dist/",
+  "components": "src/components",
+  "pages": "src/pages",
+  "styles": "dist/css/app.css",
+  "assets": "dist",
+  "aemMocks": "src/aemmocks",
   "componentsImportFile": "../dist/allComponents.js",
   "pagesImportFile": "../dist/allPages.js",
   "pathToPartials": "./preview/views/",
