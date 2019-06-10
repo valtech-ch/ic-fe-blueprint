@@ -13,9 +13,8 @@ export default {
   },
 
   mounted () {
-    console.log(this.$fePages)
     const componentName = this.$route.params.page[0].toUpperCase() + this.$route.params.page.slice(1)
-    this.component = () => import(`${this.$fePages}/${componentName}.vue`)
+    this.component = componentName
   }
 }
 </script>
