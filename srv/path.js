@@ -1,4 +1,6 @@
 const path = require('path')
+const minimist = require('minimist')
+const args = minimist(process.argv)
 
 const definePath = function (directPath, defaultPath, entity) {
   if (directPath) {
