@@ -1,19 +1,19 @@
 <template>
   <div>
-    <heading :title="title" />
+    <Icon name="account" />
 
     <p>This is a seperate Vue-Component that can contain whatever</p>
   </div>
 </template>
 
 <script>
-import Heading from '@components/atoms/text/vue/HeadingVue'
+import Icon from '@components/atoms/icon/Icon'
 
 export default {
   name: 'Demo',
 
   components: {
-    Heading
+    Icon
   },
 
   data () {

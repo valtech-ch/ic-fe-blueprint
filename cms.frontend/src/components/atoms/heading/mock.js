@@ -1,10 +1,10 @@
 module.exports = {
   routes: [],
   models: {
-    default : {
+    default: {
       title: 'Hello World'
     },
-    baum : {
+    baum: {
       title: 'Baum'
     }
   }

@@ -16,11 +16,18 @@ export default new Router({
       component: () => import('@/components/ComponentDemo')
     },
     {
-      path: '/:type/:component?',
+      path: '/:type',
       component: () => import('@/components/Overview')
     },
     {
-      path: '/:type/:component/:view/:tab/:model',
+      path: '/:type/:view',
+      redirect: to => {
+        return to.fullPath + '/view/default'
+      }
+    },
+    {
+      name: 'component-detail',
+      path: '/:type/:view/:tab/:model',
       component: () => import('@/components/ComponentView')
     },
     {

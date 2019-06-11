@@ -18,7 +18,7 @@
               <router-link
                 v-for="(item, _model) in models"
                 :key="_model"
-                :to="`/${rParams.type}/${rParams.component}/${rParams.view}/${rParams.tab}/${_model}`"
+                :to="`/${rParams.type}/${rParams.view}/${rParams.tab}/${_model}`"
                 :class="{ ' is-active': model === _model }"
                 class="dropdown-item">{{ _model }}</router-link>
             </div>
@@ -30,31 +30,31 @@
         <ul>
           <li :class="{'is-active': activeTab === 'view'}">
             <router-link
-              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/view/${model}`">Demo</router-link>
+              :to="`/${rParams.type}/${rParams.view}/view/${model}`">Vue</router-link>
           </li>
           <li :class="{'is-active': activeTab === 'model'}">
             <router-link
-              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/model/${model}`">Model</router-link>
+              :to="`/${rParams.type}/${rParams.view}/model/${model}`">Model</router-link>
           </li>
           <li :class="{'is-active': activeTab === 'documentation'}">
             <router-link
-              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/documentation/${model}`">Documentation</router-link>
+              :to="`/${rParams.type}/${rParams.view}/documentation/${model}`">Documentation</router-link>
           </li>
           <li :class="{'is-active': activeTab === 'usage'}">
             <router-link
-              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/usage/${model}`">Usage</router-link>
+              :to="`/${rParams.type}/${rParams.view}/usage/${model}`">Usage</router-link>
           </li>
           <li :class="{'is-active': activeTab === 'raw'}">
             <router-link
-              :to="`/${rParams.type}/${rParams.component}/${rParams.view}/raw/${model}`">Raw</router-link>
+              :to="`/${rParams.type}/${rParams.view}/raw/${model}`">Raw</router-link>
           </li>
         </ul>
       </div>
 
       <div class="tabs-content">
         <template v-if="activeTab === 'view'">
-          <div :isNot="component" v-html="data.raw" />
-          <component :is="component" v-bind="models[model]" />
+          <component v-if="component" :is="component" v-bind="models[model]" />
+          <div v-else>No Vue component available</div>
         </template>
 
         <template v-else-if="activeTab === 'model'">
@@ -117,10 +117,10 @@ export default {
   },
 
   methods: {
-    loadData (type, component, view, model) {
+    loadData (type, view, model) {
       const componentName = view[0].toUpperCase() + view.slice(1)
 
-      fetch(`/api/${type}/${component}/${view}/${model}`)
+      fetch(`/api/${type}/${view}/${model}`)
         .then(res => res.json())
         .then(res => {
           this.data = res
@@ -151,9 +151,9 @@ export default {
     },
 
     rParams () {
-      const { type, component, view, model } = this.$route.params
+      const { type, view, model } = this.$route.params
 
-      this.loadData(type, component, view, model)
+      this.loadData(type, view, model)
 
       return { ...this.$route.params }
     }

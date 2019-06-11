@@ -11,7 +11,7 @@ const factory = function (componentsPath, pagesPath, aemMocksPath, backendTempla
     res.json(service.getNavTree(1))
   })
 
-  router.get('/:type/:component?/:view?/:viewModel?', service.processViewHit)
+  router.get('/:type?/:view?/:viewModel?', service.processViewHit)
 
   return router
 }

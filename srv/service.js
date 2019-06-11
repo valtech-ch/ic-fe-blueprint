@@ -41,21 +41,17 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
     },
 
     processViewHit: async function (req, res) {
-      const { type, component, view, viewModel } = req.params
+      const { type, view, viewModel } = req.params
       const response = {}
 
       let path = type === 'pages' ? `${pathToPages}` : `${pathToComponents}`
 
-      if (!component) {
+      if (!view) {
         path += `/${type}`
 
         response.doc = service.getDocumentation(path)
-      } else if (!view) {
-        path += `/${type}/${component}`
-
-        response.doc = service.getDocumentation(path)
       } else {
-        path += `/${type}/${component}/`
+        path += `/${type}/${view}/`
 
         const mock = require(`${path}/mock.js`)
         const doc = service.getDocumentation(path, `/doc.md`)
@@ -160,7 +156,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
 
     getNavTree: function (level, type, component, view) {
       // stop of recursion
-      if (level > 3) {
+      if (level > 2) {
         return null
       }
 
@@ -168,10 +164,6 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
       var navPath = pathToComponents
       if (level > 1 && type) {
         navPath = navPath + '/' + type
-
-        if (level === 3 && component) {
-          navPath = navPath + '/' + component
-        }
       }
 
       // get navigation elements
@@ -181,7 +173,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
           return navElement.indexOf('.') === -1
         }
 
-        if (level === 3) {
+        if (level === 2) {
           return navElement.indexOf('.') !== -1 && navElement.substr(-4) === '.vue'
         }
 
@@ -189,52 +181,19 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
       })
 
       navElements = navElements.map((navElement) => {
-        // build name
-        var name = navElement
-        if (name.indexOf('.') !== -1) {
-          name = name.substr(0, name.indexOf('.'))
-        }
-
-        // Get url when clicking nav element
-        var url = '/'
-        if (level > 1 && type) {
-          url = url + type + '/'
-        }
-        if (level > 2 && component) {
-          url = url + component + '/'
-        }
-
-        url = url + name
-
-        // Check if is active nav element
-        var active = false
-        if (level === 3 && view) {
-          if (view.toLowerCase() === name.toLowerCase()) {
-            active = true
-          }
-        } else if (level === 2 && component) {
-          if (component.toLowerCase() === name.toLowerCase()) {
-            active = true
-          }
-        } else if (level === 1 && type) {
-          if (type.toLowerCase() === name.toLowerCase()) {
-            active = true
-          }
-        }
-
         var nextType = type
-        if (level == 1) {
-          nextType = name
+        if (level === 1) {
+          nextType = navElement
         }
 
         var nextComponent = component
-        if (level == 2) {
-          nextComponent = name
+        if (level === 2) {
+          nextComponent = navElement
         }
 
         return {
-          title: name,
-          children: service.getNavTree(level + 1, nextType, nextComponent, view)
+          title: navElement,
+          children: level + 1 >= 3 ? null : service.getNavTree(level + 1, nextType, nextComponent, view)
         }
       })
 

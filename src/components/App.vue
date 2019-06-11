@@ -15,15 +15,6 @@
             :key="component.title">
             <li class="menu-element">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
-
-              <ul class="menu-part">
-                <li
-                  class="menu-element"
-                  v-for="element in component.children"
-                  :key="element.title">
-                  <router-link :to="`/${type.title}/${component.title}/${element.title}/view/default`">{{ element.title }}</router-link>
-                </li>
-              </ul>
             </li>
           </ul>
         </template>

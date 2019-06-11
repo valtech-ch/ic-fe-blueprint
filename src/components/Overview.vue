@@ -26,7 +26,7 @@
         <tbody>
           <tr v-for="item in items" :key="item.view">
             <td width="40%">
-              <router-link :to="`/${item.type}/${item.component}/${item.view}/view/default`">{{ item.view }}</router-link>
+              <router-link :to="`/${item.type}/${item.view}/view/default`">{{ item.view }}</router-link>
             </td>
             <td width="30%">{{ item.type }}</td>
             <td width="30%">{{ item.component }}</td>
@@ -68,14 +68,13 @@ export default {
 
   methods: {
     loadData () {
-      const { type, component, view } = this.$route.params
+      const { type, view } = this.$route.params
       let target = '/api'
 
       if (type) target += `/${type}`
-      if (component) target += `/${component}`
       if (view) target += `/${view}`
 
-      if (type || component || view) {
+      if (type || view) {
         fetch(target)
           .then(res => res.json())
           .then(res => {
@@ -88,31 +87,21 @@ export default {
   computed: {
     items () {
       let data = []
-      if (this.selected != null) {
+      if (this.selected) {
         this.selected.children.forEach(component => {
-          if (component.children) {
-            component.children.forEach(view => {
-              data.push({
-                type: this.selected.title,
-                component: component.title,
-                view: view.title
-              })
-            })
-          }
+          data.push({
+            type: this.selected.title,
+            view: component.title
+          })
         })
       } else {
         this.data.forEach(type => {
           if (type.children) {
             type.children.forEach(component => {
-              if (component.children) {
-                component.children.forEach(view => {
-                  data.push({
-                    type: type.title,
-                    component: component.title,
-                    view: view.title
-                  })
-                })
-              }
+              data.push({
+                type: type.title,
+                view: component.title
+              })
             })
           }
         })
@@ -126,14 +115,22 @@ export default {
     },
 
     pageTitle () {
+      let pageTitleParts = []
       let pageTitle
-      const { type, component, view } = this.$route.params
+      const { type, view } = this.$route.params
 
-      if (view) pageTitle = view
-      if (type) pageTitle = type
-      if (component) pageTitle = component
+      if (type) {
+        pageTitleParts.push(type)
+      }
+      if (view) {
+        pageTitleParts.push(view)
+      }
 
-      if (!pageTitle) pageTitle = 'Overview'
+      if (pageTitleParts.length === 0) {
+        pageTitle = 'Overview'
+      } else {
+        pageTitle = pageTitleParts.reverse().join(' - ')
+      }
 
       return pageTitle
     }
@@ -142,6 +139,12 @@ export default {
   watch: {
     '$route' (to, from) {
       this.loadData()
+    },
+    pageTitle: {
+      immediate: true,
+      handler: function (value) {
+        this.$root.$emit('titleChanged', value)
+      }
     }
   }
 }
