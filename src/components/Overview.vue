@@ -117,13 +117,10 @@ export default {
     pageTitle () {
       let pageTitleParts = []
       let pageTitle
-      const { type, view } = this.$route.params
+      const { type } = this.$route.params
 
       if (type) {
         pageTitleParts.push(type)
-      }
-      if (view) {
-        pageTitleParts.push(view)
       }
 
       if (pageTitleParts.length === 0) {

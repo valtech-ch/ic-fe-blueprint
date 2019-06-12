@@ -11,6 +11,7 @@ Vue.prototype.$fePages = process.env.PAGES_BASEPATH
 new Vue({
   router,
   render: h => h(App)
-}).$mount('#app').$on('titleChanged', value => {
-  document.title = value + ' - ic-blueprint'
-})
+}).$mount('#app')
+  .$on('titleChanged', value => {
+    document.title = value + ' - ic-blueprint'
+  })

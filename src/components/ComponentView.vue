@@ -116,27 +116,6 @@ export default {
     }
   },
 
-  methods: {
-    loadData (type, view, model) {
-      const componentName = view[0].toUpperCase() + view.slice(1)
-
-      fetch(`/api/${type}/${view}/${model}`)
-        .then(res => res.json())
-        .then(res => {
-          this.data = res
-          this.component = res.cmsOnly ? false : componentName
-        })
-    },
-
-    onCopy (event) {
-      const pos = (event.trigger.classList.contains('button1')) ? 1 : 2
-      this[`copied${pos}`] = true
-      window.setTimeout(() => {
-        this[`copied${pos}`] = false
-      }, 2500)
-    }
-  },
-
   computed: {
     model () {
       return this.$route.params.model
@@ -156,6 +135,43 @@ export default {
       this.loadData(type, view, model)
 
       return { ...this.$route.params }
+    },
+
+    pageTitle () {
+      const { type, view } = this.$route.params
+      let pageTitleParts = [ type, view ]
+
+      return pageTitleParts.reverse().join(' - ')
+    }
+  },
+
+  watch: {
+    pageTitle: {
+      immediate: true,
+      handler: function (value) {
+        this.$root.$emit('titleChanged', value)
+      }
+    }
+  },
+
+  methods: {
+    loadData (type, view, model) {
+      const componentName = view[0].toUpperCase() + view.slice(1)
+
+      fetch(`/api/${type}/${view}/${model}`)
+        .then(res => res.json())
+        .then(res => {
+          this.data = res
+          this.component = res.cmsOnly ? false : componentName
+        })
+    },
+
+    onCopy (event) {
+      const pos = (event.trigger.classList.contains('button1')) ? 1 : 2
+      this[`copied${pos}`] = true
+      window.setTimeout(() => {
+        this[`copied${pos}`] = false
+      }, 2500)
     }
   }
 }
