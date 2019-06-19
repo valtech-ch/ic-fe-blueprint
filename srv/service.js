@@ -83,6 +83,8 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
         let raw
         let cmsTemplate = ''
         let cmsOnly = !fs.existsSync(`${path}/${view}.vue`)
+        let renderer = require('./ssr')(backendTemplates)
+        raw = renderer.getProcessedTpl(path)
         if (backendTemplates === 'hbs') {
           if (fs.existsSync(`${path}/views.hbs`)) {
             cmsTemplate = fs.readFileSync(`${path}/views.hbs`, {
@@ -94,10 +96,10 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
           }
         } else if (backendTemplates === 'htl') {
           try {
-            cmsTemplate = await service.getHtlTemplate(path, view)
+            cmsTemplate = await service.getHtlTemplate(path)
             if (cmsTemplate) {
-              const engine = require('./htl/engine')
-              raw = await engine(vm.htl || {}, cmsTemplate, {useDir: pathToAemMocks, useOptions: {model: viewModel}})
+              const engine = renderer.getEngine()
+              raw = await engine(vm.htl || {}, cmsTemplate, { useDir: pathToAemMocks, useOptions: { model: viewModel } })
               if (raw) {
                 raw = raw.body
               }
@@ -125,7 +127,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
       res.json(response)
     },
 
-    getHtlTemplate: async function (path, view) {
+    getHtlTemplate: async function (path) {
       let meta = {}
       try {
         meta = require(`${path}/meta`)
@@ -182,7 +184,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
       }
     },
 
-    getNavTree: function (level, type, component, view) {
+    getNavTree: function (level = 1, type, component, view) {
       // stop of recursion
       if (level > 2) {
         return null

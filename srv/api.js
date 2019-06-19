@@ -8,7 +8,7 @@ const factory = function (componentsPath, pagesPath, aemMocksPath, backendTempla
   })
 
   router.get('/structure', async (req, res) => {
-    res.json(service.getNavTree(1))
+    res.json(service.getNavTree())
   })
 
   router.get('/:type?/:view?/:viewModel?', service.processViewHit)

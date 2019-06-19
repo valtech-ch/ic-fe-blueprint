@@ -21,7 +21,7 @@ module.exports = async function main (resource, template, userConfig = {}) {
 
   const config = Object.assign({
     outFile: './out.js',
-    template: './srv/htl/template.js',
+    template: './srv/ssr/htl/codeTemplate.js',
     useOptions: {
       model: 'default'
     }

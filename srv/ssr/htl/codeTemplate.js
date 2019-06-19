@@ -11,7 +11,7 @@
  */
 
 /* eslint-disable */
-const ICRuntime = require('./srv/htl/ICRuntime');
+const ICRuntime = require('./srv/ssr/htl/ICRuntime');
 
 function run(runtime) {
   const $ = {
