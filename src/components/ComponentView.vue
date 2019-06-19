@@ -28,25 +28,33 @@
 
       <div class="tabs">
         <ul>
-          <li :class="{'is-active': activeTab === 'view'}">
+          <li v-if="!data.cmsOnly" :class="{'is-active': activeTab === 'view'}">
             <router-link
               :to="`/${rParams.type}/${rParams.view}/view/${model}`">Vue</router-link>
           </li>
-          <li :class="{'is-active': activeTab === 'model'}">
+          <li v-if="models[model]" :class="{'is-active': activeTab === 'model'}">
             <router-link
               :to="`/${rParams.type}/${rParams.view}/model/${model}`">Model</router-link>
           </li>
-          <li :class="{'is-active': activeTab === 'documentation'}">
+          <li v-if="data.doc" :class="{'is-active': activeTab === 'documentation'}">
             <router-link
               :to="`/${rParams.type}/${rParams.view}/documentation/${model}`">Documentation</router-link>
           </li>
-          <li :class="{'is-active': activeTab === 'usage'}">
+          <li v-if="data.html || data.raw" :class="{'is-active': activeTab === 'usage'}">
             <router-link
               :to="`/${rParams.type}/${rParams.view}/usage/${model}`">Usage</router-link>
           </li>
-          <li :class="{'is-active': activeTab === 'raw'}">
+          <li v-if="data.raw" :class="{'is-active': activeTab === 'raw'}">
             <router-link
               :to="`/${rParams.type}/${rParams.view}/raw/${model}`">Raw</router-link>
+          </li>
+          <li v-if="data.notifications && data.notifications.length > 0" :class="{'is-active': activeTab === 'notifications'}">
+            <router-link
+              :to="`/${rParams.type}/${rParams.view}/notifications/${model}`">Notifications</router-link>
+          </li>
+          <li v-if="data.errors && data.errors.length > 0" :class="{'is-active': activeTab === 'errors'}">
+            <router-link
+              :to="`/${rParams.type}/${rParams.view}/errors/${model}`">Errors</router-link>
           </li>
         </ul>
       </div>
@@ -87,6 +95,24 @@
 
         <template v-else-if="activeTab === 'raw'">
           <div v-html="data.raw" />
+        </template>
+        <template v-else-if="activeTab === 'notifications'">
+            <ul>
+              <li
+                v-for="(notification, index) in data.notifications"
+                :key="index">
+                {{ notification.text }}
+              </li>
+            </ul>
+        </template>
+        <template v-else-if="activeTab === 'errors'">
+          <ul>
+            <li
+              v-for="(errors, index) in data.errors"
+              :key="index">
+              {{ errors.text }}
+            </li>
+          </ul>
         </template>
       </div>
     </div>

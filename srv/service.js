@@ -34,7 +34,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
       if (fs.existsSync(pathToDoc)) {
         doc = service.getMarkdownByPath(pathToDoc)
       } else {
-        doc = '<p>DOCUMENTATION IS MISSING!</p>'
+        doc = false
       }
 
       return doc
@@ -43,25 +43,45 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
     processViewHit: async function (req, res) {
       const { type, view, viewModel } = req.params
       const response = {}
+      const notifications = []
+      const errors = []
 
       let path = type === 'pages' ? `${pathToPages}` : `${pathToComponents}`
 
+
       if (!view) {
         path += `/${type}`
+        const doc = service.getDocumentation(path)
 
-        response.doc = service.getDocumentation(path)
+        notifications.push({ text: 'view not set' })
+
+        if (doc) {
+          response.doc = doc
+        } else {
+          notifications.push({ text: 'doc.md not found' })
+        }
       } else {
         path += `/${type}/${view}/`
 
-        const mock = require(`${path}/mock.js`)
         const doc = service.getDocumentation(path, `/doc.md`)
-
+        if (!doc) {
+          notifications.push({ text: 'doc.md not found' })
+        }
         const viewModelName = viewModel || 'default'
-        const vm = mock.models[viewModelName]
+
+        let mock = {}
+        let vm = {}
+
+        if (fs.existsSync(`${path}/mock.js`)) {
+          mock = require(`${path}/mock.js`)
+          vm = mock.models[viewModelName]
+        } else {
+          notifications.push({ text: 'mock.js file not found' })
+        }
 
         // define CMS template
         let raw
-        let cmsTemplate = 'FILE NOT FOUND'
+        let cmsTemplate = ''
         let cmsOnly = !fs.existsSync(`${path}/${view}.vue`)
         if (backendTemplates === 'hbs') {
           if (fs.existsSync(`${path}/views.hbs`)) {
@@ -69,29 +89,37 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
               encoding: 'utf-8'
             })
             raw = service.getView(cmsTemplate, vm)
+          } else {
+            notifications.push({ text: `${path}/views.hbs not found` })
           }
         } else if (backendTemplates === 'htl') {
           try {
             cmsTemplate = await service.getHtlTemplate(path, view)
             if (cmsTemplate) {
               const engine = require('./htl/engine')
-              raw = await engine(vm.htl, cmsTemplate, {useDir: pathToAemMocks, useOptions: {model: viewModel}})
+              raw = await engine(vm.htl || {}, cmsTemplate, {useDir: pathToAemMocks, useOptions: {model: viewModel}})
               if (raw) {
                 raw = raw.body
               }
+
+              if (!raw) {
+                notifications.push({ text: 'Referenced htl template not found' })
+              }
             } else {
-              cmsTemplate = 'FILE NOT FOUND'
+              notifications.push({ text: 'meta.js file not found' })
             }
           } catch (e) {
-            console.log(e)
+            errors.push({ text: e })
           }
         }
 
-        response.models = mock.models
+        response.models = mock.models || null
         response.doc = doc
         response.raw = raw
         response.html = cmsTemplate
         response.cmsOnly = cmsOnly
+        response.notifications = notifications
+        response.errors = errors
       }
 
       res.json(response)
@@ -102,10 +130,10 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
       try {
         meta = require(`${path}/meta`)
       } catch (e) {
-        console.log(e)
-        return 'MISSING meta.js'
+        return false
       }
       const htlPath = `${pathToComponents}/${meta.templatePath}/${meta.component}.html`
+      // TODO check whether this makes sense
       const contentPath = `${pathToComponents}/${meta.templatePath}/.content.xml`
       let htlTemplate = false
 
