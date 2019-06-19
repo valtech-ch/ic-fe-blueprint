@@ -26,8 +26,6 @@ module.exports = {
 
     config.resolve.alias
       .set('@pages', pagesPath)
-
-    console.log(config.resolve.alias)
   },
   css: {
     sourceMap: true,
