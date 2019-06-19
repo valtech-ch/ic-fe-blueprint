@@ -33,7 +33,6 @@ module.exports = async function main (resource, template, userConfig = {}) {
   }
 
   let code = await compiler.compileToString(template)
-  console.log(code)
 
   const filename = path.resolve(process.cwd(), config.outFile)
   await fse.writeFile(filename, code, 'utf-8')
