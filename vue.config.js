@@ -10,7 +10,8 @@ const pagesPath = definePath(args.pagesPath, rootPath, config.pages)
 
 module.exports = {
   devServer: {
-    before: configureAPI
+    before: configureAPI,
+    disableHostCheck: true,
   },
   chainWebpack: config => {
     config
