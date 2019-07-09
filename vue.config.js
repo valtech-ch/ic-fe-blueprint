@@ -11,7 +11,8 @@ const assetsPath = definePath(args.assetsPath, rootPath, config.assets)
 
 module.exports = {
   devServer: {
-    before: configureAPI
+    before: configureAPI,
+    disableHostCheck: true,
   },
   chainWebpack: config => {
     config
