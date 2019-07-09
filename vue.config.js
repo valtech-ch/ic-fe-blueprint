@@ -7,6 +7,7 @@ const args = minimist(process.argv)
 const rootPath = defineRootPath(args.embedded)
 const componentsPath = definePath(args.componentsPath, rootPath, config.components)
 const pagesPath = definePath(args.pagesPath, rootPath, config.pages)
+const assetsPath = definePath(args.assetsPath, rootPath, config.assets)
 
 module.exports = {
   devServer: {
@@ -26,6 +27,9 @@ module.exports = {
 
     config.resolve.alias
       .set('@pages', pagesPath)
+
+    config.resolve.alias
+      .set('@assets', assetsPath)
 
     console.log(config.resolve.alias)
   },
