@@ -31,8 +31,6 @@ module.exports = {
 
     config.resolve.alias
       .set('@assets', assetsPath)
-
-    console.log(config.resolve.alias)
   },
   css: {
     sourceMap: true,
