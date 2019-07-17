@@ -3,7 +3,7 @@ const mkdirp = require('mkdirp')
 
 module.exports = {
 
-  build (src, style, dest) {
+  build (src, style, script, dest) {
     const data = []
     const components = fs.readdirSync(src)
     components.filter(component => {
@@ -31,6 +31,10 @@ module.exports = {
     if (fs.existsSync(style)) {
       internalString += `import '${style}'\n`
     }
+    // Add global project script
+    if (fs.existsSync(script)) {
+      internalString += `import '${script}'\n`
+    }
     let componentsString = '\n'
     data.forEach(module => {
       internalString += `import ${module.name} from '${module.path}'\n`
@@ -41,7 +45,7 @@ module.exports = {
     mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString + componentsString)
   },
-  buildPages (src, style, dest) {
+  buildPages (src, style, script, dest) {
     const data = []
     const pages = fs.readdirSync(src)
     pages.filter(page => {
@@ -61,6 +65,10 @@ module.exports = {
     // Add global project stylesheets
     if (fs.existsSync(style)) {
       internalString += `import '${style}'\n`
+    }
+    // Add global project script
+    if (fs.existsSync(script)) {
+      internalString += `import '${script}'\n`
     }
     let componentsString = '\n'
     data.forEach(module => {

@@ -2,6 +2,7 @@
   "components": "src/components",
   "pages": "src/pages",
   "styles": "dist/css/app.css",
+  "scripts": "src/components/components.js",
   "assets": "dist",
   "aemMocks": "src/aemmocks",
   "componentsImportFile": "../dist/allComponents.js",
