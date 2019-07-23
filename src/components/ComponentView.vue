@@ -46,7 +46,7 @@
           </li>
           <li v-if="data.raw" :class="{'is-active': activeTab === 'raw'}">
             <router-link
-              :to="`/${rParams.type}/${rParams.view}/raw/${model}`">Raw</router-link>
+              :to="`/${rParams.type}/${rParams.view}/raw/${model}`">Htl</router-link>
           </li>
           <li v-if="data.notifications && data.notifications.length > 0" :class="{'is-active': activeTab === 'notifications'}">
             <router-link
