@@ -3,7 +3,7 @@
   "pages": "src/pages",
   "styles": "dist/css/app.css",
   "scripts": "src/components/components.js",
-  "assets": "dist",
+  "assets": "src/assets",
   "aemMocks": "src/aemmocks",
   "componentsImportFile": "../dist/allComponents.js",
   "pagesImportFile": "../dist/allPages.js",
