@@ -18,14 +18,14 @@
     "marked": "^0.6.1",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "nodemon": "^1.19.0",
     "raw-loader": "^1.0.0",
     "sass": "^1.16.0",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.6",
     "vue-clipboard2": "^0.3.0",
     "vue-markdown": "^2.2.4",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "chokidar": "^3.0.2"
   },
   "description": "## Project setup ``` yarn install ```",
   "devDependencies": {
