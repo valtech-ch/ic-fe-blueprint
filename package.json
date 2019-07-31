@@ -25,7 +25,13 @@
     "vue-clipboard2": "^0.3.0",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.1",
-    "chokidar": "^3.0.2"
+    "chokidar": "^3.0.2",
+    "apollo-cache-inmemory": "^1.6.0",
+    "vue-apollo": "^3.0.0-beta.11",
+    "graphql-type-json": "^0.2.1",
+    "lowdb": "^1.0.0",
+    "shortid": "^2.2.8",
+    "graphql": "^0.12.0"
   },
   "description": "## Project setup ``` yarn install ```",
   "devDependencies": {
@@ -37,7 +43,9 @@
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "rimraf": "^2.6.3",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "eslint-plugin-graphql": "^2.1.1",
+    "graphql-tag": "^2.9.0"
   },
   "eslintConfig": {
     "root": true,

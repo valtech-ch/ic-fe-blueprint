@@ -1,5 +1,0 @@
-{
-  "name": "vue-cli-plugin-ic-apollo",
-  "version": "0.0.1",
-  "description": "vue-cli plugin as extension to ic-fe-blueprint to enable Apollo queries, mutations and subscriptions"
-}
