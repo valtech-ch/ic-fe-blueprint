@@ -39,8 +39,8 @@ module.exports = api => {
       const renderIndex = lines.findIndex(line => line.match(/new Vue/))
       lines[renderIndex] = `const graphQLSettings = document.querySelector('body').dataset
 const graphQLOptions = {
-  wsEndpoint: graphQLSettings.graphqlWs || 'ws://localhost:4000/graphql',
-  httpEndpoint: graphQLSettings.graphqlHttp || 'http://localhost:4000/graphql'
+  wsEndpoint: process.env.IC_VUE_APP_GRAPHQL_WS || graphQLSettings.graphqlWs || 'ws://localhost:4000/graphql',
+  httpEndpoint: process.env.IC_VUE_APP_GRAPHQL_HTTP || graphQLSettings.graphqlHttp || 'http://localhost:4000/graphql'
 }${EOL}
 ${lines[renderIndex]}
   apolloProvider: createProvider(graphQLOptions),`
@@ -64,6 +64,11 @@ ${lines[renderIndex]}
       .end()
       `
 
+      const returnOptionsIndex = linesWebpack.findIndex(line => line.match(/return options/))
+      linesWebpack[returnOptionsIndex] = `        options[0]['process.env'].IC_VUE_APP_GRAPHQL_WS = \`"\${process.env.IC_VUE_APP_GRAPHQL_WS || 'ws://localhost:4000/graphql'}"\`
+        options[0]['process.env'].IC_VUE_APP_GRAPHQL_HTTP = \`"\${process.env.IC_VUE_APP_GRAPHQL_HTTP || 'http://localhost:4000/graphql'}"\`
+      return options
+      `
       fs.writeFileSync(webpackFile, linesWebpack.join(EOL), { encoding: 'utf-8' })
     }
   })
