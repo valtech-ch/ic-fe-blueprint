@@ -5,6 +5,11 @@ module.exports = {
 
   build (src, style, script, dest) {
     const data = []
+    if (!fs.existsSync(src)) {
+      console.log('WARNING: components src does not exist')
+      fs.writeFileSync(dest, '')
+      return
+    }
     const components = fs.readdirSync(src)
     components.filter(component => {
       const stats = fs.lstatSync(`${src}/${component}`)
@@ -47,6 +52,11 @@ module.exports = {
   },
   buildPages (src, style, script, dest) {
     const data = []
+    if (!fs.existsSync(src)) {
+      console.log('WARNING: pages src does not exist')
+      fs.writeFileSync(dest, '')
+      return
+    }
     const pages = fs.readdirSync(src)
     pages.filter(page => {
       const stats = fs.lstatSync(`${src}/${page}`)
@@ -79,5 +89,25 @@ module.exports = {
     const destArr = dest.split('/').slice(0, -1).join('/')
     mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString + componentsString)
+  },
+  buildDirectives (src, dest) {
+    let directiveString = ''
+    if (!fs.existsSync(src)) {
+      console.log('WARNING: directives src does not exist')
+      fs.writeFileSync(dest, '')
+      return
+    }
+    const directives = fs.readdirSync(src)
+    directives.filter(directive => {
+      const stats = fs.lstatSync(`${src}/${directive}`)
+      return stats.isFile()
+    }).forEach(directive => {
+      if (fs.existsSync(`${src}/${directive}`)) {
+        const directiveCode = fs.readFileSync(`${src}/${directive}`)
+        directiveString += `${directiveCode}`
+      }
+    })
+
+    fs.writeFileSync(dest, directiveString)
   }
 }
