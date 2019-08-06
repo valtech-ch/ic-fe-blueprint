@@ -16,20 +16,11 @@ module.exports = {
   },
 
   chainWebpack: config => {
-    config.module
-      .rule('gql')
-      .test(/\.gql$/)
-      .use('graphql-tag/loader')
-      .loader('graphql-tag/loader')
-      .end()
-
     config
       .plugin('define')
       .tap(options => {
         options[0]['process.env'].COMPONENTS_BASEPATH = `"${componentsPath}"`
         options[0]['process.env'].PAGES_BASEPATH = `"${pagesPath}"`
-        options[0]['process.env'].IC_VUE_APP_GRAPHQL_WS = `"${process.env.IC_VUE_APP_GRAPHQL_WS || 'ws://localhost:4000/graphql'}"`
-        options[0]['process.env'].IC_VUE_APP_GRAPHQL_HTTP = `"${process.env.IC_VUE_APP_GRAPHQL_HTTP || 'http://localhost:4000/graphql'}"`
         return options
       }
       )
@@ -52,13 +43,6 @@ module.exports = {
           require('autoprefixer')()
         ]
       }
-    }
-  },
-
-  pluginOptions: {
-    apollo: {
-      enableMocks: true,
-      enableEngine: false
     }
   }
 }
