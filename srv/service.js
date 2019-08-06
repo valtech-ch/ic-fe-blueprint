@@ -48,7 +48,6 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
 
       let path = type === 'pages' ? `${pathToPages}` : `${pathToComponents}`
 
-
       if (!view) {
         path += `/${type}`
         const doc = service.getDocumentation(path)
@@ -97,7 +96,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
             cmsTemplate = await service.getHtlTemplate(path, view)
             if (cmsTemplate) {
               const engine = require('./htl/engine')
-              raw = await engine(vm.htl || {}, cmsTemplate, {useDir: pathToAemMocks, useOptions: {model: viewModel}})
+              raw = await engine(vm.htl || {}, cmsTemplate, { useDir: pathToAemMocks, useOptions: { model: viewModel } })
               if (raw) {
                 raw = raw.body
               }
