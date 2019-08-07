@@ -6,7 +6,6 @@ module.exports = {
   build (src, style, script, dest) {
     const data = []
     if (!fs.existsSync(src)) {
-      console.log('WARNING: components src does not exist')
       fs.writeFileSync(dest, '')
       return
     }
@@ -53,7 +52,6 @@ module.exports = {
   buildPages (src, style, script, dest) {
     const data = []
     if (!fs.existsSync(src)) {
-      console.log('WARNING: pages src does not exist')
       fs.writeFileSync(dest, '')
       return
     }
@@ -93,7 +91,6 @@ module.exports = {
   buildDirectives (src, dest) {
     let directiveString = ''
     if (!fs.existsSync(src)) {
-      console.log('WARNING: directives src does not exist')
       fs.writeFileSync(dest, '')
       return
     }

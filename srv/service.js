@@ -151,7 +151,6 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
           const result = await axios.get(`https://raw.githubusercontent.com/adobe/aem-core-wcm-components/master/content/src/content/jcr_root/apps/${componentPath[1]}/${meta.component}.html`)
           htlTemplate = result.data
         } catch (e) {
-          console.log(e)
         }
       }
       return htlTemplate

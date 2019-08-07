@@ -31,28 +31,24 @@ const stylesWatcher = chokidar.watch(stylePath)
 
 componentsWatcher.on('ready', function () {
   componentsWatcher.on('all', function () {
-    console.log('rebuild components')
     builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, config.componentsImportFile))
   })
 })
 
 pagesWatcher.on('ready', function () {
   pagesWatcher.on('all', function () {
-    console.log('rebuild pages')
     builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
   })
 })
 
 directivesWatcher.on('ready', function () {
   directivesWatcher.on('all', function () {
-    console.log('rebuild directives')
     builder.buildDirectives(directivePath, path.resolve(__dirname, config.directivesImportFile))
   })
 })
 
 stylesWatcher.on('ready', function () {
   stylesWatcher.on('all', function () {
-    console.log('get new styles')
     builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, config.componentsImportFile))
     builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
   })
@@ -60,7 +56,6 @@ stylesWatcher.on('ready', function () {
 
 assetsWatcher.on('ready', function () {
   assetsWatcher.on('all', function () {
-    console.log('get new assets')
     builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, config.componentsImportFile))
     builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
   })
@@ -70,14 +65,7 @@ const api = require('./api')(componentsPath, pagesPath, aemMocksPath, backendTem
 
 // Initial builder
 
-console.log('build index for Vue components', componentsPath)
-console.log('build index for Vue pages', pagesPath)
-console.log('build path for styles', stylePath)
-console.log('build path for scripts', scriptPath)
-console.log('build path for assets', assetsPath)
-console.log('build path for directives', directivePath)
 if (aemMocksPath) {
-  console.log('Your AEM mocks are in:', aemMocksPath)
 }
 
 // build Vue components importer
