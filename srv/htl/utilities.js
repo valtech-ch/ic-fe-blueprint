@@ -1,6 +1,6 @@
 module.exports.prepareTemplate = function (template) {
   const expressions = [
-    /data-sly-use\.template=(["'])core.*?\1/,
+    /data-sly-use\.templates?=(["'])core.*?\1/,
     /<sly[^>]+data-sly-call=(["']).*?\1.*?><\/sly>/
   ]
 
