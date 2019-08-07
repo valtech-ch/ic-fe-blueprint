@@ -177,6 +177,21 @@ export default {
       handler: function (value) {
         this.$root.$emit('titleChanged', value)
       }
+    },
+
+    'data.cmsOnly': {
+      immediate: true,
+      handler: function (isCmsOnly) {
+        if (isCmsOnly && this.$route.params.tab === 'view') {
+          this.$router.replace({ params: { tab: 'raw' } })
+        }
+      }
+    },
+
+    '$route.params.tab' (tab) {
+      if (this.data.cmsOnly && tab === 'view') {
+        this.$router.replace({ params: { tab: 'raw' } })
+      }
     }
   },
 
