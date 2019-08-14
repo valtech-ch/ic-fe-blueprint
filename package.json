@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "clean-dist": "rimraf ./dist",
-    "localserve": "vue-cli-service serve"
+    "localserve": "vue-cli-service serve",
+    "localserve:htl": "vue-cli-service serve --backendTemplates=htl"
   },
   "dependencies": {
     "@adobe/htlengine": "^2.3.2",

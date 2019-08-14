@@ -5,6 +5,8 @@ const fse = require('fs-extra')
 // local modules
 const { Compiler } = require('@adobe/htlengine')
 
+const { prepareTemplate } = require('./utilities')
+
 /**
  * Simple engine that compiles the given template and executes it.
  * @param resource the global object to pass into the script
@@ -31,6 +33,8 @@ module.exports = async function main (resource, template, userConfig = {}) {
     let runtimeTemplate = await fse.readFile(config.template, 'utf-8')
     compiler.withCodeTemplate(runtimeTemplate)
   }
+
+  template = prepareTemplate(template)
 
   let code = await compiler.compileToString(template)
 
