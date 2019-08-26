@@ -120,7 +120,8 @@ html, body {
   padding: 20px;
 
   &-image {
-    width: 50%;
+    width: 80%;
+    max-height: 80px;
     margin-bottom: 50px;
   }
 
