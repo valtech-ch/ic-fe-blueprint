@@ -116,7 +116,6 @@ html, body {
 .menu {
   min-width: 250px;
   background: $grey-light;
-  height: 100%;
   padding: 20px;
 
   &-image {
