@@ -3,7 +3,7 @@ import App from '@/components/App.vue'
 import router from '@/router'
 import '../dist/allComponents'
 import '../dist/allPages'
-import '../dist/allDirectives'
+import '@directives'
 import { createProvider } from './vue-apollo'
 
 Vue.config.productionTip = false

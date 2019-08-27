@@ -89,27 +89,5 @@ module.exports = {
     const destArr = dest.split('/').slice(0, -1).join('/')
     mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString + componentsString)
-  },
-  buildDirectives (src, dest) {
-    let directiveString = ''
-    if (!fs.existsSync(src)) {
-      console.log('WARNING: directives src does not exist')
-      fs.writeFileSync(dest, '')
-      return
-    }
-
-    directiveString = "import Vue from 'vue'\n"
-    const directives = fs.readdirSync(src)
-    directives.filter(directive => {
-      const stats = fs.lstatSync(`${src}/${directive}`)
-      return stats.isFile()
-    }).forEach(directive => {
-      if (fs.existsSync(`${src}/${directive}`)) {
-        const directiveCode = fs.readFileSync(`${src}/${directive}`).toString().replace('import Vue from \'vue\'', '' )
-        directiveString += `${directiveCode}`
-      }
-    })
-
-    fs.writeFileSync(dest, directiveString)
   }
 }
