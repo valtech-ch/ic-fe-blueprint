@@ -1,8 +1,10 @@
 <template>
   <div id="app" class="columns">
-    <div class="column is-narrow">
+    <div class="column is-narrow" v-show="hideSideMenu()">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
+
+        <a href="#fullview">{{ fullView }}</a>
 
         <template v-for="type in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
@@ -37,7 +39,18 @@ export default {
   data () {
     return {
       logo,
-      navigation: {}
+      navigation: {},
+      fullView: 'full view'
+    }
+  },
+
+  methods: {
+    hideSideMenu() {
+      if (window.location.href.indexOf("#fullview") > -1) {
+        return false
+      } else {
+        return true
+      }
     }
   },
 
