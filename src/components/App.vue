@@ -4,8 +4,6 @@
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
 
-        <a href="#fullview">{{ fullView }}</a>
-
         <template v-for="type in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
             <p
@@ -20,6 +18,12 @@
             </li>
           </ul>
         </template>
+        <p>Tools</p>
+        <ul>
+          <li class="menu-element">
+            <a href="#fullview">{{ fullView }}</a>
+          </li>
+        </ul>
       </aside>
     </div>
     <div class="column">
