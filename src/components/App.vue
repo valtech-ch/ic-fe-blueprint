@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="columns">
-    <div class="column is-narrow">
+    <div class="column is-narrow" v-show="hideSideMenu()">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
 
@@ -18,6 +18,12 @@
             </li>
           </ul>
         </template>
+        <p>Tools</p>
+        <ul>
+          <li class="menu-element">
+            <a href="#fullview">{{ fullView }}</a>
+          </li>
+        </ul>
       </aside>
     </div>
     <div class="column">
@@ -37,7 +43,18 @@ export default {
   data () {
     return {
       logo,
-      navigation: {}
+      navigation: {},
+      fullView: 'full view'
+    }
+  },
+
+  methods: {
+    hideSideMenu() {
+      if (window.location.href.indexOf("#fullview") > -1) {
+        return false
+      } else {
+        return true
+      }
     }
   },
 
