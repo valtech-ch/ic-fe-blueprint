@@ -96,9 +96,13 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
             cmsTemplate = await service.getHtlTemplate(path, view)
             if (cmsTemplate) {
               const engine = require('./htl/engine')
-              raw = await engine(vm.htl || {}, cmsTemplate, { useDir: pathToAemMocks, useOptions: { model: viewModel } })
-              if (raw) {
-                raw = raw.body
+              try {
+                raw = await engine(vm.htl || {}, cmsTemplate, {
+                  useDir: pathToAemMocks,
+                  useOptions: { model: viewModel }
+                })
+              } catch (e) {
+                errors.push({ text: e.toString() })
               }
 
               if (!raw) {
