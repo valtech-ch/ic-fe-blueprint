@@ -21,6 +21,8 @@ if (backendTemplates === 'htl') {
   aemMocksPath = definePath(args.aemMocksPath, rootPath, config.aemMocks)
 }
 
+const potentialMockPaths = [componentsPath, aemMocksPath].filter(Boolean).map(dir => path.join(dir, '/**/*.js'))
+
 // Watchers
 
 const componentsWatcher = chokidar.watch(componentsPath)
@@ -28,19 +30,7 @@ const pagesWatcher = chokidar.watch(pagesPath)
 const directivesWatcher = chokidar.watch(directivePath)
 const assetsWatcher = chokidar.watch(assetsPath)
 const stylesWatcher = chokidar.watch(stylePath)
-
-if (aemMocksPath) {
-  const aemMocksWatcher = chokidar.watch(aemMocksPath)
-
-  aemMocksWatcher.on('ready', function () {
-    aemMocksWatcher.on('all', function (event, file) {
-      // Make sure the mock files are not cached when rendering HTL.
-      // This watcher does not trigger a rebuild, so after editing a 
-      // mock file the corresponding component needs to be saved manually.
-      delete require.cache[file]
-    })
-  })
-}
+const mocksWatcher = chokidar.watch(potentialMockPaths)
 
 componentsWatcher.on('ready', function () {
   componentsWatcher.on('all', function () {
@@ -74,6 +64,20 @@ stylesWatcher.on('ready', function () {
 assetsWatcher.on('ready', function () {
   assetsWatcher.on('all', function () {
     console.log('get new assets')
+    builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, config.componentsImportFile))
+    builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
+  })
+})
+
+mocksWatcher.on('ready', function () {
+  mocksWatcher.on('all', function () {
+    // Make sure mock files are not cached
+    Object.keys(require.cache).forEach((file, i) => {
+      if ([componentsPath, aemMocksPath].find(dir => file.includes(dir))) {
+        delete require.cache[file]
+      }
+    })
+    console.log('get new mocks')
     builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, config.componentsImportFile))
     builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
   })
