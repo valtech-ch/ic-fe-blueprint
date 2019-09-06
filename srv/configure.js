@@ -29,6 +29,19 @@ const directivesWatcher = chokidar.watch(directivePath)
 const assetsWatcher = chokidar.watch(assetsPath)
 const stylesWatcher = chokidar.watch(stylePath)
 
+if (aemMocksPath) {
+  const aemMocksWatcher = chokidar.watch(aemMocksPath)
+
+  aemMocksWatcher.on('ready', function () {
+    aemMocksWatcher.on('all', function (event, file) {
+      // Make sure the mock files are not cached when rendering HTL.
+      // This watcher does not trigger a rebuild, so after editing a 
+      // mock file the corresponding component needs to be saved manually.
+      delete require.cache[file]
+    })
+  })
+}
+
 componentsWatcher.on('ready', function () {
   componentsWatcher.on('all', function () {
     console.log('rebuild components')
