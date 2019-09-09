@@ -22,7 +22,7 @@ if (backendTemplates === 'htl') {
 
 // Watchers
 
-const componentsWatcher = chokidar.watch(componentsPath)
+const componentsWatcher = chokidar.watch(`${componentsPath}/**/**/*.vue`)
 const pagesWatcher = chokidar.watch(pagesPath)
 const assetsWatcher = chokidar.watch(assetsPath)
 const stylesWatcher = chokidar.watch(stylePath)
