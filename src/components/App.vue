@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="columns">
+  <div id="app" class="columns" :class="{ 'is-fullscreen-demo': isFullscreenDemo }">
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
@@ -37,7 +37,8 @@ export default {
   data () {
     return {
       logo,
-      navigation: {}
+      navigation: {},
+      isFullscreenDemo: false
     }
   },
 
@@ -47,6 +48,12 @@ export default {
       .then(res => {
         this.navigation = res
       })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.altKey && event.which === 70) {
+        this.isFullscreenDemo = !this.isFullscreenDemo
+      }
+    })
   },
 
   computed: {
