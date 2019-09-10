@@ -101,7 +101,14 @@ $input-shadow: none;
 // Import only what you need from Bulma
 @import "bulma/sass/utilities/_all.sass";
 @import "bulma/sass/base/_all.sass";
-@import "bulma/sass/elements/_all.sass";
+
+// elements
+@import "bulma/sass/elements/button.sass";
+@import "bulma/sass/elements/icon.sass";
+@import "bulma/sass/elements/image.sass";
+@import "bulma/sass/elements/title.sass";
+@import "bulma/sass/elements/other.sass";
+
 @import "bulma/sass/components/_all.sass";
 @import "bulma/sass/grid/_all.sass";
 @import "bulma/sass/layout/_all.sass";
