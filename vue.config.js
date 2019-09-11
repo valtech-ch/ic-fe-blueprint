@@ -35,6 +35,8 @@ module.exports = {
       .set('@assets', assetsPath)
   },
 
+  transpileDependencies: ['ic-fe-blueprint'],
+
   css: {
     sourceMap: true,
     loaderOptions: {
