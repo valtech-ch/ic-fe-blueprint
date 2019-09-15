@@ -40,6 +40,7 @@ module.exports.main = async function main(resource, config) {
   const runtime = new ICRuntime(config.useOptions);
   runtime.setGlobal(resource);
   runtime.withUseDirectory(config.useDir);
+  runtime.withResourceDirectory(config.useDir);
   await run(runtime);
   return {
     body: runtime.stream
