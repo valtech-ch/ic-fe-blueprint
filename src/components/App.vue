@@ -12,7 +12,8 @@
           </router-link>
           <ul
             v-for="component in type.children"
-            :key="component.title">
+            :key="component.title"
+            class="menu-list">
             <li class="menu-element">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
@@ -100,7 +101,6 @@ $input-shadow: none;
 
 // Import only what you need from Bulma
 @import "bulma/sass/utilities/_all.sass";
-@import "bulma/sass/base/_all.sass";
 
 // elements
 @import "bulma/sass/elements/button.sass";
@@ -113,10 +113,6 @@ $input-shadow: none;
 @import "bulma/sass/grid/_all.sass";
 @import "bulma/sass/layout/_all.sass";
 
-*, *:before, *:after {
-  box-sizing: border-box;
-}
-
 html, body {
   height: 100%;
   width: 100%;
@@ -125,13 +121,20 @@ html, body {
 #app {
   height: 100%;
   width: 100%;
+  margin: 0;
 }
 
 .menu {
-  min-width: 250px;
   background: $grey-light;
-  height: 100%;
-  padding: 20px;
+  min-height: calc(100% + #{2 * $column-gap});
+  padding: $column-gap;
+  margin: - $column-gap;
+
+  &-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
   &-image {
     width: 50%;
