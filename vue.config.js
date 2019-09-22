@@ -36,6 +36,7 @@ module.exports = {
   },
 
   transpileDependencies: ['ic-fe-blueprint'],
+  runtimeCompiler: true,
 
   css: {
     sourceMap: true,
