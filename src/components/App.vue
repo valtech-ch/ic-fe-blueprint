@@ -162,6 +162,7 @@ html, body {
 
   .is-wide-demo & {
     width: 0;
+    height: 0;
     padding: 0;
     overflow: hidden;
   }
