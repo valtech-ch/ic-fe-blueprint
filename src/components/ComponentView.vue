@@ -94,7 +94,7 @@
         </template>
 
         <template v-else-if="activeTab === 'raw'">
-          <div v-html="data.raw" />
+          <component :is="insertRaw(data.raw)"/>
         </template>
         <template v-else-if="activeTab === 'notifications'">
             <ul>
@@ -217,7 +217,13 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
-    }
+    },
+
+    insertRaw (template) {
+      return {
+        template
+      }
+    },
   }
 }
 </script>
