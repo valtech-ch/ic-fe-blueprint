@@ -208,6 +208,8 @@ export default {
         .then(res => {
           this.data = res
           this.component = res.cmsOnly ? false : componentName
+
+          document.dispatchEvent(new Event('DOMContentLoaded'))
         })
     },
 
