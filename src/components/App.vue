@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="columns" :class="{ 'is-fullscreen-demo': isFullscreenDemo }">
+  <div id="app" class="columns" :class="{ 'is-fullscreen-demo': isFullscreenDemo, 'is-wide-demo': isWideDemo }">
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
@@ -39,7 +39,8 @@ export default {
     return {
       logo,
       navigation: {},
-      isFullscreenDemo: false
+      isFullscreenDemo: false,
+      isWideDemo: false
     }
   },
 
@@ -51,8 +52,14 @@ export default {
       })
 
     document.addEventListener('keydown', (event) => {
+      // cmd+f
       if (event.altKey && event.which === 70) {
         this.isFullscreenDemo = !this.isFullscreenDemo
+      }
+
+      // cmd+s
+      if (event.altKey && event.which === 83) {
+        this.isWideDemo = !this.isWideDemo
       }
     })
   },
@@ -151,6 +158,13 @@ html, body {
     .menu-element {
       padding-left: 20px;
     }
+  }
+
+  .is-wide-demo & {
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
   }
 }
 
