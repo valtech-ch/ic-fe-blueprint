@@ -209,7 +209,9 @@ export default {
           this.data = res
           this.component = res.cmsOnly ? false : componentName
 
-          document.dispatchEvent(new Event('DOMContentLoaded'))
+          Vue.nextTick(() => {
+            document.dispatchEvent(new Event('DOMContentLoaded'))
+          })
         })
     },
 
