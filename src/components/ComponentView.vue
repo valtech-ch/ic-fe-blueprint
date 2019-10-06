@@ -123,6 +123,7 @@
 import Vue from 'vue'
 import VueMarkdown from 'vue-markdown'
 import VueClipboard from 'vue-clipboard2'
+import 'mdn-polyfills/CustomEvent'
 
 Vue.use(VueClipboard)
 
@@ -210,7 +211,7 @@ export default {
           this.component = res.cmsOnly ? false : componentName
 
           Vue.nextTick(() => {
-            document.dispatchEvent(new Event('DOMContentLoaded'))
+            document.dispatchEvent(new CustomEvent('DOMContentLoaded'))
           })
         })
     },
