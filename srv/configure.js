@@ -103,7 +103,13 @@ builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, con
 builder.buildDirectives(directivePath, path.resolve(__dirname, config.directivesImportFile))
 
 module.exports = app => {
-  app.use('/assets', express.static(assetsPath))
+  app.use('/assets', (req, res, next) => {
+    // Rewrite POST to GET so `express.static` can handle it
+    if (req.method === 'POST') {
+      req.method = 'GET'
+    }
+    return next()
+  }, express.static(assetsPath))
   app.use(bodyParser.json())
   app.use('/api', api)
   app.set('view engine', '.hbs')
