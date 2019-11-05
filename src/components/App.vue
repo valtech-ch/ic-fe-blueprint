@@ -110,7 +110,6 @@ $input-shadow: none;
 @import "bulma/sass/utilities/_all.sass";
 
 // elements
-@import "bulma/sass/elements/button.sass";
 @import "bulma/sass/elements/icon.sass";
 @import "bulma/sass/elements/image.sass";
 @import "bulma/sass/elements/title.sass";
