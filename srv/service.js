@@ -115,7 +115,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
         response.raw = raw
         response.html = cmsTemplate
         response.cms = backendTemplates
-        response.cmsOnly = cmsOnly || true
+        response.cmsOnly = cmsOnly
         response.notifications = notifications
         response.errors = errors
       }
