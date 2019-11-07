@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import '@assets/blueprint/app.pcss'
 import logo from '@assets/img/logo.svg'
 
 export default {
