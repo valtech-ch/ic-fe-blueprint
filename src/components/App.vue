@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="columns" :class="{ 'is-fullscreen-demo': isFullscreenDemo, 'is-wide-demo': isWideDemo }">
-    <a class="fullscreen-toggle" onclick="toggleFullscreenView()">{{ toggleFullscreen }}</a>
+    <button class="fullscreen-toggle" v-on:click="toggleFullscreenView()">{{ toggleFullscreen }}</button>
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
@@ -47,7 +47,7 @@ export default {
     }
   },
   methods: {
-    toggleFullscreenView() {
+    toggleFullscreenView () {
       this.isFullscreenDemo = !this.isFullscreenDemo
     }
   },
@@ -145,19 +145,14 @@ html, body {
 }
 
 .fullscreen-toggle {
-  display: none;
   position: fixed;
-  left: 0;
+  right: 0;
   bottom: 0;
   padding: 10px;
   background: black;
   color: white;
   z-index: 1;
   opacity: 0.7;
-}
-
-.is-fullscreen-demo .fullscreen-toggle {
-  display: block;
 }
 
 .menu {
