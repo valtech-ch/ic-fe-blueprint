@@ -1,15 +1,10 @@
 <template>
   <div id="app" class="columns" :class="{ 'is-fullscreen-demo': isFullscreenDemo, 'is-wide-demo': isWideDemo }">
-    <a class="narrow-trigger" href="#">{{ narrowView }}</a>
+    <a class="fullscreen-toggle" onclick="toggleFullscreenView()">{{ toggleFullscreen }}</a>
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
         <p>Tools</p>
-        <ul>
-          <li class="menu-element">
-            <a href="#fullview">{{ fullView }}</a>
-          </li>
-        </ul>
         <template v-for="type in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
             <p
@@ -48,8 +43,12 @@ export default {
       navigation: {},
       isFullscreenDemo: false,
       isWideDemo: false,
-      fullView: 'full view',
-      narrowView: 'narrow view'
+      toggleFullscreen: 'toggle fullview'
+    }
+  },
+  methods: {
+    toggleFullscreenView() {
+      this.isFullscreenDemo = !this.isFullscreenDemo
     }
   },
   mounted () {
@@ -64,7 +63,7 @@ export default {
     document.addEventListener('keydown', (event) => {
       // cmd+f
       if (event.altKey && event.which === 70) {
-        this.isFullscreenDemo = !this.isFullscreenDemo
+        this.toggleFullscreenView()
       }
 
       // cmd+s
@@ -145,22 +144,24 @@ html, body {
   margin: 0;
 }
 
-.narrow-trigger {
+.fullscreen-toggle {
   display: none;
   position: fixed;
   left: 0;
-  top: 20%;
-  padding: 20px;
-  background: $grey-light;
-  opacity: 0.4;
-  color: $link;
+  bottom: 0;
+  padding: 10px;
+  background: black;
+  color: white;
+  z-index: 1;
+  opacity: 0.7;
 }
 
-.is-fullscreen-demo .narrow-trigger {
+.is-fullscreen-demo .fullscreen-toggle {
   display: block;
 }
 
 .menu {
+  display: block;
   background: $grey-light;
   min-height: calc(100% + #{2 * $column-gap});
   padding: $column-gap;
@@ -190,6 +191,7 @@ html, body {
     }
   }
 
+  .is-fullscreen-demo &,
   .is-wide-demo & {
     width: 0;
     height: 0;
