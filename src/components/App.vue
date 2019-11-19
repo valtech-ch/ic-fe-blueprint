@@ -4,7 +4,6 @@
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
-        <p>Tools</p>
         <template v-for="type in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
             <p
