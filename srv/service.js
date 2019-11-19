@@ -112,7 +112,7 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
               notifications.push({ text: 'meta.js file not found' })
             }
           } catch (e) {
-            errors.push({ text: e })
+            errors.push({ text: e.toString() })
           }
         }
 

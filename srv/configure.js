@@ -20,12 +20,15 @@ if (backendTemplates === 'htl') {
   aemMocksPath = definePath(args.aemMocksPath, rootPath, config.aemMocks)
 }
 
+const potentialMockPaths = [componentsPath, aemMocksPath].filter(Boolean).map(dir => path.join(dir, '/**/*.js'))
+
 // Watchers
 
 const componentsWatcher = chokidar.watch(componentsPath)
 const pagesWatcher = chokidar.watch(pagesPath)
 const assetsWatcher = chokidar.watch(assetsPath)
 const stylesWatcher = chokidar.watch(stylePath)
+const mocksWatcher = chokidar.watch(potentialMockPaths)
 
 componentsWatcher.on('ready', function () {
   componentsWatcher.on('all', function () {
@@ -57,6 +60,20 @@ assetsWatcher.on('ready', function () {
   })
 })
 
+mocksWatcher.on('ready', function () {
+  mocksWatcher.on('all', function () {
+    // Make sure mock files are not cached
+    Object.keys(require.cache).forEach((file, i) => {
+      if ([componentsPath, aemMocksPath].find(dir => file.includes(dir))) {
+        delete require.cache[file]
+      }
+    })
+    console.log('get new mocks')
+    builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, config.componentsImportFile))
+    builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
+  })
+})
+
 const api = require('./api')(componentsPath, pagesPath, aemMocksPath, backendTemplates)
 
 // Initial builder
@@ -75,7 +92,13 @@ builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, con
 builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
 
 module.exports = app => {
-  app.use('/assets', express.static(assetsPath))
+  app.use('/assets', (req, res, next) => {
+    // Rewrite POST to GET so `express.static` can handle it
+    if (req.method === 'POST') {
+      req.method = 'GET'
+    }
+    return next()
+  }, express.static(assetsPath))
   app.use(bodyParser.json())
   app.use('/api', api)
   app.set('view engine', '.hbs')
