@@ -3,27 +3,28 @@
     <div class="column is-narrow" v-show="hideSideMenu()">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
-
-        <template v-for="type in navigation">
-          <router-link :key="type.title" :to="`/${type.title}`">
-            <p
-              class="menu-label"
-              :key="type.title">{{ type.title }}</p>
-          </router-link>
-          <ul
-            v-for="component in type.children"
-            :key="component.title">
-            <li class="menu-element">
-              <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
-            </li>
-          </ul>
-        </template>
         <p>Tools</p>
         <ul>
           <li class="menu-element">
             <a href="#fullview">{{ fullView }}</a>
           </li>
         </ul>
+        <div class="scroll-area">
+          <template v-for="type in navigation">
+            <router-link :key="type.title" :to="`/${type.title}`">
+              <p
+                class="menu-label"
+                :key="type.title">{{ type.title }}</p>
+            </router-link>
+            <ul
+              v-for="component in type.children"
+              :key="component.title">
+              <li class="menu-element">
+                <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
+              </li>
+            </ul>
+          </template>
+        </div>
       </aside>
     </div>
     <div class="column">
@@ -131,6 +132,7 @@ html, body {
 }
 
 .menu {
+  height: 100%;
   min-width: 250px;
   background: $grey-light;
   padding: 20px;
@@ -151,6 +153,11 @@ html, body {
     .menu-element {
       padding-left: 20px;
     }
+  }
+
+  .scroll-area {
+    overflow-y: auto;
+    height: calc(100% - 154px);
   }
 }
 
