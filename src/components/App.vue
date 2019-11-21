@@ -4,6 +4,14 @@
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
 
+        <p>Tools</p>
+        <ul>
+          <li class="menu-element">
+            <a href="#fullview">{{ fullView }}</a>
+          </li>
+          <hr/>
+        </ul>
+
         <template v-for="type in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
             <p
@@ -18,12 +26,6 @@
             </li>
           </ul>
         </template>
-        <p>Tools</p>
-        <ul>
-          <li class="menu-element">
-            <a href="#fullview">{{ fullView }}</a>
-          </li>
-        </ul>
       </aside>
     </div>
     <div class="column">
@@ -50,7 +52,7 @@ export default {
 
   methods: {
     hideSideMenu() {
-      if (window.location.href.indexOf("#fullview") > -1) {
+      if (window.location.href.indexOf('#fullview') > -1) {
         return false
       } else {
         return true
@@ -131,9 +133,10 @@ html, body {
 }
 
 .menu {
+  height: 100%;
   min-width: 250px;
   background: $grey-light;
-  padding: 20px;
+  padding: 20px 20px 0 20px;
 
   &-image {
     width: 80%;
@@ -151,6 +154,11 @@ html, body {
     .menu-element {
       padding-left: 20px;
     }
+  }
+
+  hr {
+    background-color: darkgray;
+    margin-top: 10px;
   }
 }
 

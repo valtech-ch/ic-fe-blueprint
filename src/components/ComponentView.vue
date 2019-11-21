@@ -1,6 +1,7 @@
 <template>
   <section class="section">
     <div>
+      <a v-if="isFullView()" href="#" class="show-side-menu">{{ sideMenu }}</a>
       <h1 class="title">{{ $route.params.view }}</h1>
 
       <div class="modelSelection">
@@ -138,7 +139,8 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      sideMenu: 'Show Side Menu'
     }
   },
 
@@ -198,12 +200,25 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
+    },
+
+    isFullView() {
+      if (window.location.href.indexOf('#fullview') > -1) {
+        return true
+      }
     }
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
+.show-side-menu {
+  float: right;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .usage {
   position: relative;
 
