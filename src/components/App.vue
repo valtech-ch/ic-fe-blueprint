@@ -4,16 +4,21 @@
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
 
-        <template v-for="type in navigation">
-          <router-link :key="type.title" :to="`/${type.title}`">
-            <p
-              class="menu-label"
-              :key="type.title">{{ type.title }}</p>
+        <template v-for="(type, index) in navigation" >
+          <router-link :key="type.title" :to="`/${type.title}`" >
+            <a href="#" @click="menuCategory(index)">
+              <p
+                class="menu-label"
+                :key="type.title">{{ type.title }}
+                  <span class="has-text-weight-bold is-pulled-right" v-if="type.children.length>0 && selectedItem !== index">+</span>
+                  <span class="has-text-weight-bold is-pulled-right" v-if="type.children.length>0 && selectedItem === index">-</span>
+              </p>
+            </a>
           </router-link>
           <ul
             v-for="component in type.children"
             :key="component.title">
-            <li class="menu-element">
+            <li v-if="selectedMenuItem === index" class="menu-element">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
           </ul>
@@ -44,17 +49,24 @@ export default {
     return {
       logo,
       navigation: {},
-      fullView: 'full view'
+      fullView: 'full view',
+      selectedMenuItem: null
     }
   },
 
   methods: {
-    hideSideMenu() {
-      if (window.location.href.indexOf("#fullview") > -1) {
+    hideSideMenu () {
+      if (window.location.href.indexOf('#fullview') > -1) {
         return false
       } else {
         return true
       }
+    },
+
+    menuCategory (index) {
+      if (this.selectedMenuItem === index) {
+        this.selectedMenuItem = null
+      } else this.selectedMenuItem = index
     }
   },
 
@@ -152,6 +164,14 @@ html, body {
       padding-left: 20px;
     }
   }
+
+  .menu-label {
+     padding: 4px 0;
+
+     &:hover {
+       color: black;
+     }
+   }
 }
 
 .menu-element .menu-element{

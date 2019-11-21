@@ -150,6 +150,16 @@ export default {
 <style lang="scss" scoped>
   .componentFilter {
     margin-bottom: 20px;
+
+    input {
+      border: 1px solid lightgray;
+      outline: none;
+      padding: 4px 8px;
+
+      &:focus {
+        border: 1px solid darkgray;
+      }
+    }
   }
 
   .title {
