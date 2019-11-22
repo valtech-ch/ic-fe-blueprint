@@ -8,6 +8,7 @@ const rootPath = defineRootPath(args.embedded)
 const componentsPath = definePath(args.componentsPath, rootPath, config.components)
 const pagesPath = definePath(args.pagesPath, rootPath, config.pages)
 const assetsPath = definePath(args.assetsPath, rootPath, config.assets)
+const transpileDependencies = args.transpileDependencies && !Array.isArray(args.transpileDependencies) ? [args.transpileDependencies] : args.transpileDependencies
 
 module.exports = {
   devServer: {
@@ -35,7 +36,7 @@ module.exports = {
       .set('@assets', assetsPath)
   },
 
-  transpileDependencies: ['ic-fe-blueprint'],
+  transpileDependencies: ['ic-fe-blueprint'].concat(transpileDependencies || []),
   runtimeCompiler: true,
 
   css: {
