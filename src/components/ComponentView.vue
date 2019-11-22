@@ -24,6 +24,12 @@
             </div>
           </div>
         </div>
+        <ul class="component-tools is-pulled-right">
+          <li v-if="activeTab === 'view'" @click="direction">
+            <span v-if="this.rtl">LTR</span>
+            <span v-else>RTL</span>
+          </li>
+        </ul>
       </div>
 
       <div class="tabs">
@@ -59,7 +65,7 @@
         </ul>
       </div>
 
-      <div class="tabs-content">
+      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -138,7 +144,8 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      rtl: false
     }
   },
 
@@ -198,6 +205,10 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
+    },
+
+    direction () {
+      this.rtl = !this.rtl
     }
   }
 }
@@ -216,6 +227,24 @@ export default {
 
 .modelSelection {
   padding: 20px 0;
+
+  .component-tools li {
+    display: inline-block;
+
+    &:empty {
+      display: none;
+    }
+
+    &:hover {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    &:not(:last-child):after {
+      padding: 0 6px;
+      content: '|';
+    }
+  }
 }
 
 .dropdown-item {
