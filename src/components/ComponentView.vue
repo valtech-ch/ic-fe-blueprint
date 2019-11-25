@@ -29,6 +29,9 @@
             <span v-if="this.rtl">{{ labelLtr }}</span>
             <span v-else>{{ labelRtl }}</span>
           </li>
+          <li>
+            <span @click="showGrid" :class="this.grid ? 'active' : ''">{{ labelGrid }}</span>
+          </li>
           <li class="breakpoints">
             <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape && breakpoints.mobile || breakpoints.tablet ? 'active' : ''">
               <template v-if="this.landscape">&olarr;</template>
@@ -75,6 +78,20 @@
       </div>
       <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content"
            :class="this.breakpoints.mobile && !this.landscape ? 'mobile portrait' : '' || this.breakpoints.mobile && this.landscape ? 'mobile landscape' : '' || this.breakpoints.tablet && !this.landscape ? 'tablet portrait' : '' || this.breakpoints.tablet && this.landscape ? 'tablet landscape' : ''">
+
+        <svg v-if="grid" class="svg-grid" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+              <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.5"/>
+            </pattern>
+            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+              <rect width="80" height="80" fill="url(#smallGrid)"/>
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -159,7 +176,9 @@ export default {
       desktop: 'desktop',
       labelRtl: 'RTL',
       labelLtr: 'LTR',
+      labelGrid: 'Grid',
       rtl: false,
+      grid: false,
       landscape: false,
       breakpoints: {
         desktop: true,
@@ -249,6 +268,9 @@ export default {
       if (value === 'rotate') {
         this.landscape = !this.landscape
       }
+    },
+    showGrid() {
+      this.grid = !this.grid
     }
   }
 }
@@ -265,10 +287,19 @@ export default {
   }
 }
 
+.svg-grid {
+  position: absolute;
+  pointer-events: none;
+}
+
 .modelSelection {
   padding: 20px 0;
 
   .component-tools {
+
+    .active {
+      font-weight: bold;
+    }
 
     .breakpoints {
       &:hover {
