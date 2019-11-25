@@ -287,9 +287,13 @@ export default {
   }
 }
 
-.svg-grid {
-  position: absolute;
-  pointer-events: none;
+.tabs-content {
+  position: relative;
+
+  .svg-grid {
+    position: absolute;
+    pointer-events: none;
+  }
 }
 
 .modelSelection {
