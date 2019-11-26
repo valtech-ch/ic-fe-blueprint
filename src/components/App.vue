@@ -49,8 +49,8 @@ export default {
   },
 
   methods: {
-    hideSideMenu() {
-      if (window.location.href.indexOf("#fullview") > -1) {
+    hideSideMenu () {
+      if (window.location.href.indexOf('#fullview') > -1) {
         return false
       } else {
         return true
