@@ -10,7 +10,7 @@
     "clean-dist": "rimraf ./dist"
   },
   "dependencies": {
-    "@adobe/htlengine": "^2.2.2",
+    "@adobe/htlengine": "^3.2.4",
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
     "bulma": "^0.7.4",

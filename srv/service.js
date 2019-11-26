@@ -97,9 +97,6 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
             if (cmsTemplate) {
               const engine = require('./htl/engine')
               raw = await engine(vm.htl || {}, cmsTemplate, { useDir: pathToAemMocks, useOptions: { model: viewModel } })
-              if (raw) {
-                raw = raw.body
-              }
 
               if (!raw) {
                 notifications.push({ text: 'Referenced htl template not found' })
