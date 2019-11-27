@@ -3,17 +3,26 @@
     <div class="column is-narrow" v-show="hideSideMenu()">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
-
+        <div class="componentFilter">
+          <input
+              autofocus
+              class="input"
+              :class="filter ? 'active' : '' "
+              type="search"
+              placeholder="Find component..."
+              v-model="filter"
+          >
+        </div>
         <template v-for="type in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
             <p
               class="menu-label"
               :key="type.title">{{ type.title }}</p>
           </router-link>
-          <ul
-            v-for="component in type.children"
-            :key="component.title">
-            <li class="menu-element">
+          <ul v-for="component in type.children"
+            :key="component.title"
+            v-show="!filter || search(filter, component.title)">
+            <li class="menu-element" :style="filter ? 'font-weight: bold' : ''">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
           </ul>
@@ -44,15 +53,25 @@ export default {
     return {
       logo,
       navigation: {},
-      fullView: 'full view'
+      fullView: 'full view',
+      filter: null
     }
   },
 
   methods: {
     hideSideMenu() {
-      if (window.location.href.indexOf("#fullview") > -1) {
+      if (window.location.href.indexOf('#fullview') > -1) {
         return false
       } else {
+        return true
+      }
+    },
+
+    search(filter, title) {
+      let filterUpperCase = filter.charAt(0).toUpperCase()
+      let filterLowerCase = filter.charAt(0).toLowerCase()
+
+      if (title.startsWith(filterLowerCase) || title.startsWith(filterUpperCase)) {
         return true
       }
     }
@@ -139,6 +158,23 @@ html, body {
     width: 80%;
     max-height: 80px;
     margin-bottom: 50px;
+  }
+
+  .componentFilter input {
+    background-color: whitesmoke;
+    outline: none;
+    padding: 6px;
+    border: 1px solid transparent;
+    margin-bottom: 10px;
+    width: 70%;
+
+    &:focus {
+      border: 1px solid #363636;
+    }
+
+    &.active {
+      border: 1px solid #99ca3c;
+    }
   }
 
   &-element {
