@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <ul class="component-tools is-pulled-right">
+        <ul class="component-tools">
           <li v-if="activeTab === 'view'" @click="direction">
             <span v-if="this.rtl">LTR</span>
             <span v-else>RTL</span>
@@ -258,21 +258,25 @@ export default {
 .modelSelection {
   padding: 20px 0;
 
-  .component-tools li {
-    display: inline-block;
+  .component-tools {
+    float: right;
 
-    &:empty {
-      display: none;
-    }
+    li {
+      display: inline-block;
 
-    &:hover {
-      font-weight: bold;
-      cursor: pointer;
-    }
+      &:empty {
+        display: none;
+      }
 
-    &:not(:last-child):after {
-      padding: 0 6px;
-      content: '|';
+      &:hover {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      &:not(:last-child):after {
+        padding: 0 6px;
+        content: '|';
+      }
     }
   }
 }
