@@ -4,14 +4,14 @@
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
-        <template v-for="type in navigation">
+        <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
               <a href="#" @click="menuCategory(index)">
                 <p
                   class="menu-label"
                   :key="type.title">{{ type.title }}
-                    <span class="has-text-weight-bold is-pulled-right" v-if="type.children.length>0 && selectedItem !== index">+</span>
-                    <span class="has-text-weight-bold is-pulled-right" v-if="type.children.length>0 && selectedItem === index">-</span>
+                    <span v-if="type.children.length>0 && selectedMenuItem !== index">+</span>
+                    <span v-if="type.children.length>0 && selectedMenuItem === index">-</span>
                 </p>
               </a>
           </router-link>
@@ -19,7 +19,7 @@
             v-for="component in type.children"
             :key="component.title"
             class="menu-list">
-            <li v-if="selectedMenuItem === index" class="menu-element" class="menu-element">
+            <li v-if="selectedMenuItem === index" class="menu-element">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
           </ul>
@@ -198,10 +198,14 @@ html, body {
   }
 
     .menu-label {
-        padding: 4px 0;
 
         &:hover {
           color: black;
+        }
+
+        span {
+            font-weight: bold;
+            float: right;
         }
     }
 
