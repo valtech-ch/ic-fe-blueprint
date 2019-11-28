@@ -152,49 +152,57 @@ html, body {
   color: white;
   z-index: 1;
   opacity: 0.7;
+  outline: none;
 }
 
 .menu {
-  display: block;
-  background: $grey-light;
-  min-height: calc(100% + #{2 * $column-gap});
-  padding: $column-gap;
-  margin: - $column-gap;
+    display: block;
+    background: $grey-light;
+    min-height: calc(100% + #{2 * $column-gap});
+    padding: $column-gap;
+    margin: - $column-gap;
 
-  &-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  &-image {
-    width: 80%;
-    max-height: 80px;
-    margin-bottom: 50px;
-  }
-
-  &-element {
-    padding-left: 20px;
-
-    a {
-      text-transform: capitalize;
+    &-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
     }
 
-    .menu-element {
-      padding-left: 20px;
+    &-image {
+        width: 80%;
+        max-height: 80px;
+        margin-bottom: 50px;
     }
-  }
 
-  .is-fullscreen-demo &,
-  .is-wide-demo & {
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-  }
+    &-element {
+        padding-left: 20px;
+
+        a {
+            text-transform: capitalize;
+        }
+
+        .menu-element {
+            padding-left: 20px;
+        }
+    }
+
+    .is-fullscreen-demo &,
+    .is-wide-demo & {
+        width: 0;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+    }
 }
 
-.menu-element .menu-element{
+.is-fullscreen-demo {
+
+   & .modelSelection, .tabs {
+        display: none;
+    }
+}
+
+.menu-element .menu-element {
   padding-left: 20px;
 }
 </style>
