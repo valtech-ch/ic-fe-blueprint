@@ -1,10 +1,6 @@
-// built-in modules
-const path = require('path')
-// declared dependencies
-const fse = require('fs-extra')
 // local modules
-const { Compiler } = require('@adobe/htlengine')
-
+const { Compiler } = require('@adobe/htlengine/src/index')
+const Runtime = require('./ICRuntime')
 const { prepareTemplate } = require('./utilities')
 
 /**
@@ -15,35 +11,25 @@ const { prepareTemplate } = require('./utilities')
  * @returns A promise that resolves to the evaluated code.
  */
 module.exports = async function main (resource, template, userConfig = {}) {
-  const compiler = new Compiler()
-    .withOutputDirectory('.')
-    .includeRuntime(true)
-    .withRuntimeVar(Object.keys(resource))
-    .withSourceMap(true)
+  // setup the HTL compiler
+  const compiler = new Compiler().withRuntimeVar(Object.keys(resource)).withSourceMap(true)
 
   const config = Object.assign({
-    outFile: './out.js',
-    template: './srv/htl/template.js',
     useOptions: {
       model: 'default'
     }
   }, userConfig)
 
-  if (config.template) {
-    let runtimeTemplate = await fse.readFile(config.template, 'utf-8')
-    compiler.withCodeTemplate(runtimeTemplate)
-  }
-
   template = prepareTemplate(template)
 
-  let code = await compiler.compileToString(template)
+  // compile the script to a executable template function
+  const fn = await compiler.compileToFunction(template, null)
 
-  const filename = path.resolve(process.cwd(), config.outFile)
-  await fse.writeFile(filename, code, 'utf-8')
+  // create the HTL runtime
+  const runtime = new Runtime(config.useOptions)
+    .setGlobal(resource)
+    .withUseDirectory(config.useDir)
 
-  // eslint-disable-next-line import/no-dynamic-require,global-require
-  delete require.cache[require.resolve(filename)]
-  // eslint-disable-next-line import/no-dynamic-require,global-require
-  const service = require(filename)
-  return service.main(resource, config)
+  // finally, execute the template function and return the result
+  return fn(runtime)
 }
