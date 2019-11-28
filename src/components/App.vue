@@ -153,6 +153,11 @@ html, body {
   z-index: 1;
   opacity: 0.7;
   outline: none;
+  cursor: pointer;
+
+  &:hover {
+    font-style: italic;
+  }
 }
 
 .menu {
