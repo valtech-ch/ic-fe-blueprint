@@ -160,6 +160,7 @@ html, body {
   display: block;
   background: $grey-light;
   min-height: calc(100% + #{2 * $column-gap});
+  height: 100%;
   padding: $column-gap;
   margin: - $column-gap;
 
@@ -195,10 +196,24 @@ html, body {
     overflow: hidden;
   }
 
-  /*.scroll-area {*/
-  /*  overflow-y: auto;*/
-  /*  height: calc(100% - 154px);*/
-  /*}*/
+  .scroll-area {
+    overflow-y: auto;
+    height: calc(100% - 110px);
+
+    &::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: silver;
+    }
+
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background: darkgray;
+      }
+    }
+  }
 }
 
 .menu-element .menu-element{
