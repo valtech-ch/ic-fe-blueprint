@@ -56,6 +56,11 @@
             <router-link
               :to="`/${rParams.type}/${rParams.view}/errors/${model}`">Errors</router-link>
           </li>
+          <li v-if="!data.cmsOnly" :class="{'is-active': activeTab === 'markup'}">
+            <router-link
+                    :to="`/${rParams.type}/${rParams.view}/markup/${model}`">Markup
+            </router-link>
+          </li>
         </ul>
       </div>
 
@@ -267,7 +272,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.usage {
+.usage, .markup {
   position: relative;
 
   button {
