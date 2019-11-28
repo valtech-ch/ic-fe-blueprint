@@ -1,6 +1,7 @@
 <template>
-  <div id="app" class="columns">
-    <div class="column is-narrow" v-show="hideSideMenu()">
+  <div id="app" class="columns" :class="{ 'is-fullscreen-demo': isFullscreenDemo, 'is-wide-demo': isWideDemo }">
+    <button class="fullscreen-toggle" v-on:click="toggleFullscreenView()">{{ toggleFullscreen }}</button>
+    <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
         <div class="componentFilter">
@@ -19,20 +20,16 @@
               class="menu-label"
               :key="type.title">{{ type.title }}</p>
           </router-link>
-          <ul v-for="component in type.children"
+          <ul
+            v-for="component in type.children"
             :key="component.title"
+            class="menu-list"
             v-show="!filter || search(filter, component.title)">
             <li class="menu-element" :style="filter ? 'font-weight: bold' : ''">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
           </ul>
         </template>
-        <p>Tools</p>
-        <ul>
-          <li class="menu-element">
-            <a href="#fullview">{{ fullView }}</a>
-          </li>
-        </ul>
       </aside>
     </div>
     <div class="column">
@@ -44,6 +41,7 @@
 </template>
 
 <script>
+import '@assets/blueprint/app.pcss'
 import logo from '@assets/img/logo.svg'
 
 export default {
@@ -53,18 +51,15 @@ export default {
     return {
       logo,
       navigation: {},
-      fullView: 'full view',
+      isFullscreenDemo: false,
+      isWideDemo: false,
+      toggleFullscreen: 'toggle fullview',
       filter: null
     }
   },
-
   methods: {
-    hideSideMenu() {
-      if (window.location.href.indexOf('#fullview') > -1) {
-        return false
-      } else {
-        return true
-      }
+    toggleFullscreenView () {
+      this.isFullscreenDemo = !this.isFullscreenDemo
     },
 
     search(filter, title) {
@@ -76,13 +71,26 @@ export default {
       }
     }
   },
-
   mounted () {
+    this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
+
     fetch('/api/structure')
       .then(res => res.json())
       .then(res => {
         this.navigation = res
       })
+
+    document.addEventListener('keydown', (event) => {
+      // cmd+f
+      if (event.altKey && event.which === 70) {
+        this.toggleFullscreenView()
+      }
+
+      // cmd+s
+      if (event.altKey && event.which === 83) {
+        this.isWideDemo = !this.isWideDemo
+      }
+    })
   },
 
   computed: {
@@ -129,8 +137,14 @@ $input-shadow: none;
 
 // Import only what you need from Bulma
 @import "bulma/sass/utilities/_all.sass";
-@import "bulma/sass/base/_all.sass";
-@import "bulma/sass/elements/_all.sass";
+
+// elements
+@import "bulma/sass/elements/button.sass";
+@import "bulma/sass/elements/icon.sass";
+@import "bulma/sass/elements/image.sass";
+@import "bulma/sass/elements/title.sass";
+@import "bulma/sass/elements/other.sass";
+
 @import "bulma/sass/components/_all.sass";
 @import "bulma/sass/grid/_all.sass";
 @import "bulma/sass/layout/_all.sass";
@@ -147,12 +161,32 @@ html, body {
 #app {
   height: 100%;
   width: 100%;
+  margin: 0;
+}
+
+.fullscreen-toggle {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+  background: black;
+  color: white;
+  z-index: 1;
+  opacity: 0.7;
 }
 
 .menu {
-  min-width: 250px;
+  display: block;
   background: $grey-light;
-  padding: 20px;
+  min-height: calc(100% + #{2 * $column-gap});
+  padding: $column-gap;
+  margin: - $column-gap;
+
+  &-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
   &-image {
     width: 80%;
@@ -187,6 +221,14 @@ html, body {
     .menu-element {
       padding-left: 20px;
     }
+  }
+
+  .is-fullscreen-demo &,
+  .is-wide-demo & {
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
   }
 }
 
