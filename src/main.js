@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import 'whatwg-fetch'
 import App from '@/components/App.vue'
 import router from '@/router'
 import '../dist/allComponents'
