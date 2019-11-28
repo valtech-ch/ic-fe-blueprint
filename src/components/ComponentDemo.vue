@@ -1,5 +1,7 @@
 <template>
-  <component :is="component" />
+  <div class="page-wrapper">
+    <component :is="component" />
+  </div>
 </template>
 
 <script>
@@ -18,3 +20,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .is-fullscreen-demo .page-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+  }
+</style>
