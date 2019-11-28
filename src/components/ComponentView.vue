@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <ul class="component-tools is-pulled-right">
+        <ul class="component-tools">
           <li v-if="activeTab === 'view'" @click="direction">
             <span v-if="this.rtl">{{ labelLtr }}</span>
             <span v-else>{{ labelRtl }}</span>
@@ -109,7 +109,7 @@
         </template>
 
         <template v-else-if="activeTab === 'raw'">
-          <div v-html="data.raw" />
+          <component :is="insertRaw(data.raw)"/>
         </template>
         <template v-else-if="activeTab === 'notifications'">
             <ul>
@@ -138,6 +138,7 @@
 import Vue from 'vue'
 import VueMarkdown from 'vue-markdown'
 import VueClipboard from 'vue-clipboard2'
+import 'mdn-polyfills/CustomEvent'
 
 Vue.use(VueClipboard)
 
@@ -204,6 +205,25 @@ export default {
       handler: function (value) {
         this.$root.$emit('titleChanged', value)
       }
+    },
+
+    'data.cmsOnly': {
+      immediate: true,
+      handler: function (isCmsOnly) {
+        if (isCmsOnly && this.$route.params.tab === 'view' && this.data.raw) {
+          this.$router.replace({ params: { tab: 'raw' } })
+        }
+
+        if (!isCmsOnly && this.$route.params.tab === 'raw') {
+          this.$router.replace({ params: { tab: 'view' } })
+        }
+      }
+    },
+
+    '$route.params.tab' (tab) {
+      if (this.data.cmsOnly && tab === 'view') {
+        this.$router.replace({ params: { tab: 'raw' } })
+      }
     }
   },
 
@@ -216,6 +236,10 @@ export default {
         .then(res => {
           this.data = res
           this.component = res.cmsOnly ? false : componentName
+
+          Vue.nextTick(() => {
+            document.dispatchEvent(new CustomEvent('DOMContentLoaded'))
+          })
         })
     },
 
@@ -225,6 +249,12 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
+    },
+
+    insertRaw (template) {
+      return {
+        template
+      }
     },
 
     direction () {
@@ -269,6 +299,7 @@ export default {
   padding: 20px 0;
 
   .component-tools {
+      float: right;
 
     .breakpoints {
       &:hover {
@@ -320,6 +351,15 @@ export default {
 
 .dropdown-item {
   text-transform: capitalize;
+}
+
+.is-fullscreen-demo .tabs-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
 }
 
 @mixin properties {
