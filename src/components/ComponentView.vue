@@ -38,6 +38,10 @@
             <span @click="breakpoint('tablet')" :class="breakpoints.tablet ? 'active' : ''">{{ tablet }}</span>
             <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
           </li>
+          <li class="zooming">
+            <span @click="zoom('decrease')" :class="zoomLevel < 1 ? 'active' : ''">(-)</span>
+            <span @click="zoom('increase')" :class="zoomLevel > 1 ? 'active' : ''">(+)</span>
+          </li>
         </ul>
       </div>
 
@@ -73,7 +77,7 @@
           </li>
         </ul>
       </div>
-      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content"
+      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{zoom: zoomLevel}"
            :class="this.breakpoints.mobile && !this.landscape ? 'mobile portrait' : '' || this.breakpoints.mobile && this.landscape ? 'mobile landscape' : '' || this.breakpoints.tablet && !this.landscape ? 'tablet portrait' : '' || this.breakpoints.tablet && this.landscape ? 'tablet landscape' : ''">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
@@ -166,7 +170,8 @@ export default {
         desktop: true,
         tablet: false,
         mobile: false
-      }
+      },
+      zoomLevel: 1
     }
   },
 
@@ -279,6 +284,19 @@ export default {
       if (value === 'rotate') {
         this.landscape = !this.landscape
       }
+    },
+
+    zoom(operation) {
+      let i = 0.1
+      if(operation === 'decrease') {
+        if (this.zoomLevel >= 0.2) {
+          this.zoomLevel = this.zoomLevel - i
+        }
+      } else {
+        if (this.zoomLevel <= 2) {
+          this.zoomLevel = this.zoomLevel + i
+        }
+      }
     }
   }
 }
@@ -325,6 +343,29 @@ export default {
           &:after {
             font-style: normal;
           }
+        }
+      }
+    }
+
+    .zooming {
+      &:hover {
+        font-weight: normal;
+      }
+
+      span {
+        &:hover {
+          font-weight: bold;
+        }
+
+        &:not(:last-child):after {
+          padding: 0 6px;
+          content: '•';
+          pointer-events: none;
+        }
+
+        &.active {
+          color: #44453a;
+          font-weight: bold;
         }
       }
     }
