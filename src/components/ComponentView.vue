@@ -29,7 +29,7 @@
             <span v-if="this.rtl">{{ labelLtr }}</span>
             <span v-else>{{ labelRtl }}</span>
           </li>
-          <li class="breakpoints">
+          <li v-if="activeTab === 'view'" class="breakpoints">
             <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape && breakpoints.mobile || breakpoints.tablet ? 'active' : ''">
               <template v-if="this.landscape">&olarr;</template>
               <template v-else>&orarr;</template>
@@ -38,7 +38,7 @@
             <span @click="breakpoint('tablet')" :class="breakpoints.tablet ? 'active' : ''">{{ tablet }}</span>
             <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
           </li>
-          <li class="zooming">
+          <li v-if="activeTab === 'view'" class="zooming">
             <span @click="zoom('decrease')" :class="zoomLevel < 1 ? 'active' : ''">(-)</span>
             <span @click="zoom('increase')" :class="zoomLevel > 1 ? 'active' : ''">(+)</span>
           </li>
