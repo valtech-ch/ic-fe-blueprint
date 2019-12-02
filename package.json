@@ -21,6 +21,7 @@
     "graphql": "^14.4.2",
     "graphql-type-json": "^0.2.1",
     "handlebars": "^4.1.2",
+    "html2canvas": "^1.0.0-rc.5",
     "lowdb": "^1.0.0",
     "marked": "^0.6.3",
     "mdn-polyfills": "^5.18.0",
