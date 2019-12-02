@@ -29,7 +29,7 @@
             <span v-if="this.rtl">{{ labelLtr }}</span>
             <span v-else>{{ labelRtl }}</span>
           </li>
-          <li class="breakpoints">
+          <li v-if="activeTab === 'view'" class="breakpoints">
             <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape && breakpoints.mobile || breakpoints.tablet ? 'active' : ''">
               <template v-if="this.landscape">&olarr;</template>
               <template v-else>&orarr;</template>
