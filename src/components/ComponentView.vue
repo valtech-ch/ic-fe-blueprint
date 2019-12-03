@@ -30,13 +30,31 @@
             <span v-else>{{ labelRtl }}</span>
           </li>
           <li v-if="activeTab === 'view'" class="breakpoints">
-            <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape && breakpoints.mobile || breakpoints.tablet ? 'active' : ''">
-              <template v-if="this.landscape">&olarr;</template>
-              <template v-else>&orarr;</template>
-            </span>
-            <span @click="breakpoint('mobile')" :class="breakpoints.mobile ? 'active' : ''">{{ mobile }}</span>
-            <span @click="breakpoint('tablet')" :class="breakpoints.tablet ? 'active' : ''">{{ tablet }}</span>
-            <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
+            <div class="viewport-dropdown">
+              <span>{{ labelViewport }}</span>
+              <div class="viewport-content">
+                <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape ? 'active' : ''">
+                  {{ labelRotate }}
+                </span>
+                <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
+                <span @click="breakpoint('iphone5')" :class="isActive.iphone5 ? 'active' : ''">iphone 5 <span>320 x 568</span></span>
+                <span @click="breakpoint('iphone6')" :class="isActive.iphone6 ? 'active' : ''">iphone 6 <span>375 x 667</span></span>
+                <span @click="breakpoint('iphone6plus')" :class="isActive.iphone6plus ? 'active' : ''">iphone 6 plus <span>414 x 736</span></span>
+                <span @click="breakpoint('iphone8plus')" :class="isActive.iphone8plus ? 'active' : ''">iphone 8 plus <span>414 x 736</span></span>
+                <span @click="breakpoint('iphoneX')" :class="isActive.iphoneX ? 'active' : ''">iphone X <span>375 x 812</span></span>
+                <span @click="breakpoint('iphoneXR')" :class="isActive.iphoneXR ? 'active' : ''">iphone XR <span>414 x 896</span></span>
+                <span @click="breakpoint('iphoneXSmax')" :class="isActive.iphoneXSmax ? 'active' : ''">iphone XS Max <span>414 x 896</span></span>
+                <span @click="breakpoint('ipad')" :class="isActive.ipad ? 'active' : ''">ipad <span>768 x 1024</span></span>
+                <span @click="breakpoint('ipadPro10')" :class="isActive.ipadPro10 ? 'active' : ''">ipad Pro 10.5 <span>834 x 1112</span></span>
+                <span @click="breakpoint('ipadPro12')" :class="isActive.ipadPro12 ? 'active' : ''">ipad Pro 12.9 <span>1024 x 1366</span></span>
+                <span @click="breakpoint('galaxyS5')" :class="isActive.galaxyS5 ? 'active' : ''">galaxy S5 <span>360 x 640</span></span>
+                <span @click="breakpoint('galaxyS9')" :class="isActive.galaxyS9 ? 'active' : ''">galaxy S9 <span>720 x 1480</span></span>
+                <span @click="breakpoint('nexus5x')" :class="isActive.nexus5x ? 'active' : ''">nexus 5X <span>412 x 660</span></span>
+                <span @click="breakpoint('nexus6p')" :class="isActive.nexus6p ? 'active' : ''">nexus 6P <span>412 x 732</span></span>
+                <span @click="breakpoint('pixel')" :class="isActive.pixel ? 'active' : ''">pixel <span>540 x 960</span></span>
+                <span @click="breakpoint('pixelXL')" :class="isActive.pixelXL ? 'active' : ''">pixelXL <span>720 x 1280</span></span>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -74,7 +92,8 @@
         </ul>
       </div>
       <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content"
-           :class="this.breakpoints.mobile && !this.landscape ? 'mobile portrait' : '' || this.breakpoints.mobile && this.landscape ? 'mobile landscape' : '' || this.breakpoints.tablet && !this.landscape ? 'tablet portrait' : '' || this.breakpoints.tablet && this.landscape ? 'tablet landscape' : ''">
+           :class="!this.breakpoints.desktop ? 'viewport' : '' "
+           :style="!this.landscape ? {height: this.breakpoints.height, width: this.breakpoints.width} : {height: this.breakpoints.width, width: this.breakpoints.height} ">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -155,17 +174,18 @@ export default {
       data: {},
       copied1: false,
       copied2: false,
-      mobile: 'mobile',
-      tablet: 'tablet',
-      desktop: 'desktop',
+      desktop: 'Reset viewport',
       labelRtl: 'RTL',
       labelLtr: 'LTR',
+      labelViewport: 'Viewport',
+      labelRotate: 'Rotate viewport',
       rtl: false,
       landscape: false,
+      isActive: Object,
       breakpoints: {
         desktop: true,
-        tablet: false,
-        mobile: false
+        height: null,
+        width: null
       }
     }
   },
@@ -262,20 +282,96 @@ export default {
     },
 
     breakpoint (value) {
-      if (value === 'mobile') {
-        this.breakpoints.tablet = false
+      if (value === 'iphone5') {
+        this.isActive = {}
+        this.breakpoints.width = '320px'
+        this.breakpoints.height = '568px'
         this.breakpoints.desktop = false
-        this.breakpoints.mobile = true
-      } else if (value === 'tablet') {
+        this.isActive[value] = true
+      } else if (value === 'iphone6') {
+        this.isActive = {}
+        this.breakpoints.width = '320px'
+        this.breakpoints.height = '667px'
         this.breakpoints.desktop = false
-        this.breakpoints.mobile = false
-        this.breakpoints.tablet = true
+        this.isActive[value] = true
+      } else if (value === 'iphone6plus' || value === 'iphone8plus') {
+        this.isActive = {}
+        this.breakpoints.width = '441px'
+        this.breakpoints.height = '736px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'iphoneX') {
+        this.isActive = {}
+        this.breakpoints.width = '375px'
+        this.breakpoints.height = '812px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'iphoneXR' || value === 'iphoneXSmax') {
+        this.isActive = {}
+        this.breakpoints.width = '414px'
+        this.breakpoints.height = '896px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'ipad') {
+        this.isActive = {}
+        this.breakpoints.width = '768px'
+        this.breakpoints.height = '1024px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'ipadPro10') {
+        this.isActive = {}
+        this.breakpoints.width = '834px'
+        this.breakpoints.height = '1112px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'ipadPro12') {
+        this.isActive = {}
+        this.breakpoints.width = '1024px'
+        this.breakpoints.height = '1366px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'galaxyS5') {
+        this.isActive = {}
+        this.breakpoints.width = '441px'
+        this.breakpoints.height = '736px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'galaxyS9') {
+        this.isActive = {}
+        this.breakpoints.width = '720px'
+        this.breakpoints.height = '1480px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'nexus5x') {
+        this.isActive = {}
+        this.breakpoints.width = '412px'
+        this.breakpoints.height = '660px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'nexus6p') {
+        this.isActive = {}
+        this.breakpoints.width = '412px'
+        this.breakpoints.height = '732px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'pixel') {
+        this.isActive = {}
+        this.breakpoints.width = '540px'
+        this.breakpoints.height = '960px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
+      } else if (value === 'pixelXL') {
+        this.isActive = {}
+        this.breakpoints.width = '720px'
+        this.breakpoints.height = '1280px'
+        this.breakpoints.desktop = false
+        this.isActive[value] = true
       } else if (value === 'desktop') {
-        this.breakpoints.mobile = false
-        this.breakpoints.tablet = false
+        this.isActive = {}
         this.breakpoints.desktop = true
+        this.breakpoints.width = '100%'
+        this.breakpoints.height = '100%'
       }
-
       if (value === 'rotate') {
         this.landscape = !this.landscape
       }
@@ -310,21 +406,10 @@ export default {
         &:hover {
           font-weight: bold;
         }
-
-        &:not(:last-child):after {
-          padding: 0 6px;
-          content: '•';
-          pointer-events: none;
-        }
-
         &.active {
           color: #44453a;
-          font-style: italic;
           font-weight: bold;
-
-          &:after {
-            font-style: normal;
-          }
+          text-decoration: underline;
         }
       }
     }
@@ -361,65 +446,40 @@ export default {
   height: 100%;
   background: #fff;
 }
+  .viewport {
+    border: 2px dashed #757763;
+    overflow: auto;
+  }
 
-@mixin properties {
-  position: absolute;
-  top: -24px;
-  text-align: center;
-  width: 100%;
+.viewport-dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-  .mobile {
-    border: 2px dashed #757763;
-    position: relative;
+.viewport-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  right: 0;
+  z-index: 1;
+  border-radius: 10px;
+  cursor: default;
 
-    &:before {
-      @include properties;
-    }
-
-    &.portrait {
-      height: 1218px;
-      width: 568px;
-
-      &:before{
-        content: 'mobile (portrait)';
-      }
-    }
-
-    &.landscape {
-      height: 568px;
-      width: 1218px;
-
-      &:before{
-        content: 'mobile (landscape)';
-      }
+  span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    &:hover {
+      background-color: lightgray;
+      cursor: pointer;
     }
   }
+}
 
-  .tablet {
-    border: 2px dashed #757763;
-    position: relative;
-
-    &:before {
-      @include properties;
-    }
-
-    &.portrait {
-      height: 1024px;
-      width: 768px;
-
-      &:before{
-        content: 'tablet (portrait)';
-      }
-    }
-
-    &.landscape {
-      height: 768px;
-      width: 1024px;
-
-      &:before{
-        content: 'tablet (landscape)';
-      }
-    }
-  }
+.viewport-dropdown:hover .viewport-content {
+  display: block;
+}
 </style>
