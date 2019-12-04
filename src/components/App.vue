@@ -6,14 +6,13 @@
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
         <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
-              <a href="#" @click="menuCategory(index)">
-                <p
-                  class="menu-label"
-                  :key="type.title">{{ type.title }}
-                    <span v-if="type.children.length>0 && selectedMenuItem !== index">+</span>
-                    <span v-if="type.children.length>0 && selectedMenuItem === index">-</span>
-                </p>
-              </a>
+              <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
+                 <span>{{ type.title }}</span>
+                <template v-if="type.children.length>0">
+                 <span v-if="selectedMenuItem !== index"><b>+</b></span>
+                 <span v-else><b>-</b></span>
+                </template>
+              </span>
           </router-link>
           <ul
             v-for="component in type.children"
@@ -173,6 +172,10 @@ html, body {
   padding: $column-gap;
   margin: - $column-gap;
 
+  a {
+    text-decoration: none;
+  }
+
   &-list {
     list-style: none;
     margin: 0;
@@ -198,14 +201,10 @@ html, body {
   }
 
     .menu-label {
-
+      display: flex;
+      justify-content: space-between;
         &:hover {
           color: black;
-        }
-
-        span {
-            font-weight: bold;
-            float: right;
         }
     }
 
