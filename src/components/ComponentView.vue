@@ -29,6 +29,9 @@
             <span v-if="this.rtl">LTR</span>
             <span v-else>RTL</span>
           </li>
+          <li v-if="activeTab === 'view'" @click="console('trigger')">
+            <span>Logs</span>
+          </li>
         </ul>
       </div>
 
@@ -67,8 +70,14 @@
 
       <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content">
         <template v-if="activeTab === 'view'">
-          <component v-if="component" :is="component" v-bind="models[model]" />
+          <component v-if="component" :is="component" v-bind="models[model]"/>
           <div v-else>No Vue component available</div>
+          <div v-show="logs" class="console" :dir="this.rtl ? 'ltr' : 'ltr'">
+            <button @click="console('reload')" type="button" class="reload">reload</button>
+            <button @click="console('clear')" type="button" class="clear">clear</button>
+            <button @click="console('trigger')" type="button" class="close">close</button>
+            <code id="console-output">...</code>
+         </div>
         </template>
 
         <template v-else-if="activeTab === 'model'">
@@ -146,7 +155,8 @@ export default {
       data: {},
       copied1: false,
       copied2: false,
-      rtl: false
+      rtl: false,
+      logs: false
     }
   },
 
@@ -235,11 +245,47 @@ export default {
       this.rtl = !this.rtl
     },
 
+    console (value) {
+      if (value === 'reload') {
+        location.href = '#reload'
+        location.reload()
+      } else if (value === 'clear') {
+        this.readLogs('clear')
+      } else if (value === 'trigger') {
+        this.logs = !this.logs
+      }
+      if (location.href.indexOf('reload') !== -1) {
+        location.href = '#'
+      }
+    },
+
+    readLogs (value) {
+      const logger = document.getElementById('console-output')
+      console.log = function (message) {
+        logger.innerHTML += '<br />' + '> ' + message
+        logger.parentElement.scrollTop = logger.parentElement.scrollHeight - logger.parentElement.clientHeight
+      }
+      if (value === 'clear') {
+        logger.innerHTML = ''
+        setTimeout(() => { logger.innerHTML = '...' }, 300)
+      }
+    },
+
     insertRaw (template) {
       return {
         template
       }
     }
+  },
+
+  beforeMount () {
+    if (location.href.indexOf('reload') !== -1) {
+      this.logs = true
+    }
+  },
+
+  mounted () {
+    this.readLogs()
   }
 }
 </script>
@@ -292,5 +338,58 @@ export default {
   width: 100%;
   height: 100%;
   background: #fff;
+}
+
+.console {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.9);
+  color: white;
+  height: 230px;
+  padding-left: 10px;
+  overflow-y: auto;
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.75);
+  border-top: .5px solid white;
+
+  &:before {
+    position: fixed;
+    content: 'console';
+    padding: 8px 0 4px 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+    border-bottom: 2px solid #fff;
+    background-color: black;
+  }
+  #console-output {
+    margin-top: 40px;
+    display: block;
+    margin-right: 95px;
+    word-break: break-all;
+    padding-left: 4px;
+  }
+  .close, .reload, .clear {
+    position: fixed;
+    right: 18px;
+    margin-top: 6px;
+    border: 1px solid white;
+    background-color: black;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    outline: none;
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .clear {
+    right: 70px;
+  }
+
+  .reload {
+    right: 120px;
+  }
 }
 </style>
