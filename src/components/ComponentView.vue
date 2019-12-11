@@ -228,7 +228,7 @@ export default {
       return {
         template
       }
-    },
+    }
   }
 }
 </script>
