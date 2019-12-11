@@ -246,6 +246,9 @@ export default {
     },
 
     console (value) {
+      const findBody = document.getElementsByTagName('body')[0]
+      const findApp = document.getElementById('app')
+
       if (value === 'reload') {
         location.href = '#reload'
         location.reload()
@@ -253,6 +256,15 @@ export default {
         this.readLogs('clear')
       } else if (value === 'trigger') {
         this.logs = !this.logs
+
+        if (this.logs) {
+          findApp.classList.add('console-height')
+          findBody.parentElement.scrollTop = findBody.parentElement.scrollHeight - findBody.parentElement.clientHeight
+        } else {
+          findApp.classList.remove('console-height')
+          findBody.scrollTop
+        }
+
       }
       if (location.href.indexOf('reload') !== -1) {
         location.href = '#'
