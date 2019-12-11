@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted () {
-    this.isFullscreenDemo = window.location.href.indexOf("#fullview") > -1
+    this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
     fetch('/api/structure')
       .then(res => res.json())
@@ -141,6 +141,9 @@ html, body {
   height: 100%;
   width: 100%;
   margin: 0;
+  &.console-height {
+    height: calc(100vh + 230px);
+  }
 }
 
 .fullscreen-toggle {
