@@ -29,6 +29,10 @@
             <span v-if="this.rtl">LTR</span>
             <span v-else>RTL</span>
           </li>
+          <li v-if="activeTab === 'view'" class="background">
+            <span v-if="!hasBackground" @click="hasBackground=true">{{ labelBackground }}</span>
+            <input v-else type="text" v-model="backgroundValue" v-on:change.enter="hasBackground">
+          </li>
         </ul>
       </div>
 
@@ -65,7 +69,7 @@
         </ul>
       </div>
 
-      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content">
+      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{ backgroundColor: backgroundValue }">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -146,7 +150,10 @@ export default {
       data: {},
       copied1: false,
       copied2: false,
-      rtl: false
+      rtl: false,
+      hasBackground: false,
+      labelBackground: 'Background',
+      backgroundValue: '#fff'
     }
   },
 
@@ -283,6 +290,14 @@ export default {
 
 .dropdown-item {
   text-transform: capitalize;
+}
+
+.background {
+  input {
+    outline: none;
+    width: 70px;
+    padding: 0 4px;
+  }
 }
 
 .is-fullscreen-demo .tabs-content {
