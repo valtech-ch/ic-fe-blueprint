@@ -33,26 +33,10 @@
             <div class="viewport-dropdown">
               <span>{{ labelViewport }}</span>
               <div class="viewport-content">
-                <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape ? 'active' : ''">
+                <span v-if="this.viewport.width != '100%'" @click="rotateViewport()" :class="this.landscape ? 'active' : ''">
                   {{ labelRotate }}
                 </span>
-                <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
-                <span @click="breakpoint('iphone5')" :class="isActive.iphone5 ? 'active' : ''">iphone 5 <span>320 x 568</span></span>
-                <span @click="breakpoint('iphone6')" :class="isActive.iphone6 ? 'active' : ''">iphone 6 <span>375 x 667</span></span>
-                <span @click="breakpoint('iphone6plus')" :class="isActive.iphone6plus ? 'active' : ''">iphone 6 plus <span>414 x 736</span></span>
-                <span @click="breakpoint('iphone8plus')" :class="isActive.iphone8plus ? 'active' : ''">iphone 8 plus <span>414 x 736</span></span>
-                <span @click="breakpoint('iphoneX')" :class="isActive.iphoneX ? 'active' : ''">iphone X <span>375 x 812</span></span>
-                <span @click="breakpoint('iphoneXR')" :class="isActive.iphoneXR ? 'active' : ''">iphone XR <span>414 x 896</span></span>
-                <span @click="breakpoint('iphoneXSmax')" :class="isActive.iphoneXSmax ? 'active' : ''">iphone XS Max <span>414 x 896</span></span>
-                <span @click="breakpoint('ipad')" :class="isActive.ipad ? 'active' : ''">ipad <span>768 x 1024</span></span>
-                <span @click="breakpoint('ipadPro10')" :class="isActive.ipadPro10 ? 'active' : ''">ipad Pro 10.5 <span>834 x 1112</span></span>
-                <span @click="breakpoint('ipadPro12')" :class="isActive.ipadPro12 ? 'active' : ''">ipad Pro 12.9 <span>1024 x 1366</span></span>
-                <span @click="breakpoint('galaxyS5')" :class="isActive.galaxyS5 ? 'active' : ''">galaxy S5 <span>360 x 640</span></span>
-                <span @click="breakpoint('galaxyS9')" :class="isActive.galaxyS9 ? 'active' : ''">galaxy S9 <span>720 x 1480</span></span>
-                <span @click="breakpoint('nexus5x')" :class="isActive.nexus5x ? 'active' : ''">nexus 5X <span>412 x 660</span></span>
-                <span @click="breakpoint('nexus6p')" :class="isActive.nexus6p ? 'active' : ''">nexus 6P <span>412 x 732</span></span>
-                <span @click="breakpoint('pixel')" :class="isActive.pixel ? 'active' : ''">pixel <span>540 x 960</span></span>
-                <span @click="breakpoint('pixelXL')" :class="isActive.pixelXL ? 'active' : ''">pixelXL <span>720 x 1280</span></span>
+                <span v-for="(device, index) in devices" @click="setActive(index)" :class="device.viewportActive ? 'active' : ''" :key="index">{{device.name }} <span v-show="device.width != '100%'">{{device.width.slice(0, -2) }} x {{device.height.slice(0, -2) }}</span></span>
               </div>
             </div>
           </li>
@@ -92,8 +76,9 @@
         </ul>
       </div>
       <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content"
-           :class="!this.breakpoints.desktop ? 'viewport' : '' "
-           :style="!this.landscape ? {height: this.breakpoints.height, width: this.breakpoints.width} : {height: this.breakpoints.width, width: this.breakpoints.height} ">
+           :class="!this.devices[0].viewportActive ? 'viewport' : ''"
+           :style="!this.landscape ? {height: this.viewport.height, width: this.viewport.width} : {height: this.viewport.width, width: this.viewport.height}">
+
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -181,11 +166,11 @@ export default {
       labelRotate: 'Rotate viewport',
       rtl: false,
       landscape: false,
-      isActive: Object,
-      breakpoints: {
-        desktop: true,
-        height: null,
-        width: null
+      viewportActive: false,
+      devices: Array,
+      viewport: {
+        height: '100%',
+        width: '100%'
       }
     }
   },
@@ -281,101 +266,151 @@ export default {
       this.rtl = !this.rtl
     },
 
-    breakpoint (value) {
-      if (value === 'iphone5') {
-        this.isActive = {}
-        this.breakpoints.width = '320px'
-        this.breakpoints.height = '568px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'iphone6') {
-        this.isActive = {}
-        this.breakpoints.width = '320px'
-        this.breakpoints.height = '667px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'iphone6plus' || value === 'iphone8plus') {
-        this.isActive = {}
-        this.breakpoints.width = '441px'
-        this.breakpoints.height = '736px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'iphoneX') {
-        this.isActive = {}
-        this.breakpoints.width = '375px'
-        this.breakpoints.height = '812px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'iphoneXR' || value === 'iphoneXSmax') {
-        this.isActive = {}
-        this.breakpoints.width = '414px'
-        this.breakpoints.height = '896px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'ipad') {
-        this.isActive = {}
-        this.breakpoints.width = '768px'
-        this.breakpoints.height = '1024px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'ipadPro10') {
-        this.isActive = {}
-        this.breakpoints.width = '834px'
-        this.breakpoints.height = '1112px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'ipadPro12') {
-        this.isActive = {}
-        this.breakpoints.width = '1024px'
-        this.breakpoints.height = '1366px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'galaxyS5') {
-        this.isActive = {}
-        this.breakpoints.width = '441px'
-        this.breakpoints.height = '736px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'galaxyS9') {
-        this.isActive = {}
-        this.breakpoints.width = '720px'
-        this.breakpoints.height = '1480px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'nexus5x') {
-        this.isActive = {}
-        this.breakpoints.width = '412px'
-        this.breakpoints.height = '660px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'nexus6p') {
-        this.isActive = {}
-        this.breakpoints.width = '412px'
-        this.breakpoints.height = '732px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'pixel') {
-        this.isActive = {}
-        this.breakpoints.width = '540px'
-        this.breakpoints.height = '960px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'pixelXL') {
-        this.isActive = {}
-        this.breakpoints.width = '720px'
-        this.breakpoints.height = '1280px'
-        this.breakpoints.desktop = false
-        this.isActive[value] = true
-      } else if (value === 'desktop') {
-        this.isActive = {}
-        this.breakpoints.desktop = true
-        this.breakpoints.width = '100%'
-        this.breakpoints.height = '100%'
+    rotateViewport () {
+      this.landscape = !this.landscape
+    },
+
+    setActive(index) {
+      for (let i = 0; i <= 16; i++) {
+        if (i === index) {
+          this.devices[i].viewportActive = true
+          this.viewport.height = this.devices[index].height
+          this.viewport.width = this.devices[index].width
+        } else {
+          this.devices[i].viewportActive = false
+        }
       }
-      if (value === 'rotate') {
-        this.landscape = !this.landscape
+    },
+
+    deviceTypes() {
+
+      let desktop = {
+        name : 'desktop',
+        height : '100%',
+        width : '100%',
+        viewportActive : true
       }
+
+      let iphone5 = {
+        name : 'iphone 5',
+        height : '568px',
+        width : '320px',
+        viewportActive : false
+      }
+
+      let iphone6 = {
+        name : 'iphone 6',
+        height : '667px',
+        width : '375px',
+        viewportActive : false
+      }
+
+      let iphone6plus = {
+        name : 'iphone 6 plus',
+        height : '736px',
+        width : '414px',
+        viewportActive : false
+      }
+
+      let iphone8plus = {
+        name : 'iphone 8 plus',
+        height : '736px',
+        width : '414px',
+        viewportActive : false
+      }
+
+      let iphoneX = {
+        name : 'iphone X',
+        height : '812px',
+        width : '375px',
+        viewportActive : false
+      }
+
+      let iphoneXR = {
+        name : 'iphone XR',
+        height : '896px',
+        width : '414px',
+        viewportActive : false
+      }
+
+      let iphoneXSmax = {
+        name : 'iphone XS Max',
+        height : '896px',
+        width : '414px',
+        viewportActive : false
+      }
+
+      let ipad = {
+        name : 'ipad',
+        height : '1024px',
+        width : '768px',
+        viewportActive : false
+      }
+
+      let ipadPro10 = {
+        name : 'ipad Pro 10.5',
+        height : '1112px',
+        width : '834px',
+        viewportActive : false
+      }
+
+      let ipadPro12 = {
+        name : 'ipad 12.9',
+        height : '1366px',
+        width : '1024px',
+        viewportActive : false
+      }
+
+      let galaxyS5 = {
+        name : 'galaxy S5',
+        height : '640px',
+        width : '360px',
+        viewportActive : false
+      }
+
+      let galaxyS9 = {
+        name : 'galaxy S9',
+        height : '1480px',
+        width : '720px',
+        viewportActive : false
+      }
+
+      let nexus5X = {
+        name : 'nexus 5X',
+        height : '660px',
+        width : '412px',
+        viewportActive : false
+      }
+
+      let nexus6P = {
+        name : 'nexus 6P',
+        height : '732px',
+        width : '412px',
+        viewportActive : false
+      }
+
+      let pixel = {
+        name : 'pixel',
+        height : '960px',
+        width : '540px',
+        viewportActive : false
+      }
+
+      let pixelXL = {
+        name : 'pixel XL',
+        height : '1280px',
+        width : '720px',
+        viewportActive : false
+      }
+      this.devices = [desktop, iphone5, iphone6,
+        iphone6plus, iphone8plus, iphoneX, iphoneXR,
+        iphoneXSmax, ipad, ipadPro10, ipadPro12, galaxyS5,
+        galaxyS9, nexus5X, nexus6P, pixel, pixelXL]
     }
+  },
+
+  beforeMount() {
+    this.deviceTypes()
   }
 }
 </script>
