@@ -94,7 +94,7 @@
         </template>
 
         <template v-else-if="activeTab === 'raw'">
-          <component :is="insertRaw(data.raw)"/>
+          <div v-html="data.raw" />
         </template>
         <template v-else-if="activeTab === 'notifications'">
             <ul>
