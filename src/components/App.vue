@@ -7,10 +7,10 @@
         <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
               <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
-                 <span>{{ type.title }}</span>
+                <span>{{ type.title }}</span>
                 <template v-if="type.children.length>0">
-                 <span v-if="selectedMenuItem !== index"><b>+</b></span>
-                 <span v-else><b>-</b></span>
+                 <span v-show="selectedMenuItem !== index"><b>+</b></span>
+                 <span v-show="selectedMenuItem === index"><b>-</b></span>
                 </template>
               </span>
           </router-link>
@@ -18,7 +18,7 @@
             v-for="component in type.children"
             :key="component.title"
             class="menu-list">
-            <li v-if="selectedMenuItem === index" class="menu-element">
+            <li v-show="selectedMenuItem === index" class="menu-element">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
           </ul>
@@ -47,7 +47,9 @@ export default {
       isFullscreenDemo: false,
       isWideDemo: false,
       toggleFullscreen: 'toggle fullview',
-      selectedMenuItem: null
+      selectedMenuItem: null,
+      menuItems: null,
+      menuTitles: {}
     }
   },
   methods: {
@@ -61,7 +63,85 @@ export default {
       } else this.selectedMenuItem = index
     }
   },
+
+  updated() {
+
+    // this.menuItems = document.querySelectorAll('.menu .menu-label').length
+    // if (this.menuItems) {
+    //   for (let i = 0; i <= this.menuItems; i++) {
+    //     // this.menuTitles[i] = document.querySelectorAll('.menu .menu-label')[i].firstChild.textContent
+    //     this.menuTitles[i] = 0
+    //
+    //   }
+    //   // console.log(this.menuTitles[3])
+    // }
+
+
+
+    // console.log(this.menuTitles[0])
+    //
+    // console.log(this.menuItems)
+    // this.takeItems()
+    // console.log(this.takeItems())
+
+    // console.log(this.navigation[0].title)
+
+    // if (location.href.indexOf(this.navigation[0].title) > -1) {
+    //   this.menuCategory(0)
+    // }
+    //
+    // else if (location.href.indexOf(this.navigation[1].title) > -1) {
+    //   this.menuCategory(1)
+    // } else if (location.href.indexOf(this.navigation[2].title) > -1) {
+    //   this.menuCategory(2)
+    // } else if (location.href.indexOf(this.navigation[3].title) > -1) {
+    //   this.menuCategory(3)
+    // }
+  },
+
   mounted () {
+
+    setTimeout(function(){
+      let  list =document.querySelectorAll('.is-narrow .menu .menu-label')
+
+      let test = false
+      let listIndex
+      if (list.length > 0) {
+        console.log('found')
+        for (let i = 0; i < list.length; i++) {
+          console.log(list[i].firstChild.textContent)
+          if (location.href.indexOf(list[i].firstChild.textContent) > -1) {
+            test = true
+            listIndex = i
+          }
+        }
+      }
+      if ( test ) {
+        console.log('added-index ' + listIndex)
+        if (this.selectedMenuItem === listIndex) {
+          this.selectedMenuItem = null
+        } else this.selectedMenuItem = listIndex
+
+        //menu not shown automatically
+      }
+    }, 500)
+
+
+
+    //this works but not dynamic
+    // if (location.href.indexOf('atoms') > -1) {
+    //     this.menuCategory(0)
+    // }
+    // else if (location.href.indexOf('molecules') > -1) {
+    //   this.menuCategory(1)
+    // } else if (location.href.indexOf('organisms') > -1) {
+    //   this.menuCategory(2)
+    // } else if (location.href.indexOf('pages') > -1) {
+    //   this.menuCategory(3)
+    // }
+
+
+
     this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
     fetch('/api/structure')
@@ -197,6 +277,11 @@ html, body {
 
     .menu-element {
       padding-left: 20px;
+    }
+
+    .router-link-active {
+      color: black;
+      text-decoration: underline;
     }
   }
 
