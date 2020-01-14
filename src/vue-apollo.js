@@ -6,9 +6,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 // Install the vue plugin
 Vue.use(VueApollo)
 
-// Name of the localStorage item
-const AUTH_TOKEN = 'apollo-token'
-
 // Http endpoint
 const httpEndpoint = process.env.IC_VUE_APP_GRAPHQL_HTTP || 'http://localhost:4000/graphql'
 // Files URL root
@@ -24,8 +21,6 @@ const defaultOptions = {
   // Use `null` to disable subscriptions
   wsEndpoint: process.env.IC_VUE_APP_GRAPHQL_WS || 'ws://localhost:4000/graphql',
   // LocalStorage token
-  tokenName: AUTH_TOKEN,
-  // Enable Automatic Query persisting with Apollo Engine
   persisting: false,
   // Use websockets for everything (no HTTP)
   // You need to pass a `wsEndpoint` for this to work
@@ -39,8 +34,6 @@ const defaultOptions = {
   httpLinkOptions: {
     credentials: 'include'
   },
-  // link: myLink
-
   // Override default cache
   cache: new InMemoryCache()
 
@@ -80,32 +73,4 @@ export function createProvider (options = {}) {
   })
 
   return apolloProvider
-}
-
-// Manually call this when user log in
-export async function onLogin (apolloClient, token) {
-  if (typeof localStorage !== 'undefined' && token) {
-    localStorage.setItem(AUTH_TOKEN, token)
-  }
-  if (apolloClient.wsClient) restartWebsockets(apolloClient.wsClient)
-  try {
-    await apolloClient.resetStore()
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log('%cError on cache reset (login)', 'color: orange;', e.message)
-  }
-}
-
-// Manually call this when user log out
-export async function onLogout (apolloClient) {
-  if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem(AUTH_TOKEN)
-  }
-  if (apolloClient.wsClient) restartWebsockets(apolloClient.wsClient)
-  try {
-    await apolloClient.resetStore()
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log('%cError on cache reset (logout)', 'color: orange;', e.message)
-  }
 }
