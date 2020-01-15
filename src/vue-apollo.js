@@ -32,7 +32,9 @@ const defaultOptions = {
   // note: don't override httpLink here, specify httpLink options in the
   // httpLinkOptions property of defaultOptions.
   httpLinkOptions: {
-    credentials: 'include'
+    // Blueprint can be used to fetch data from the mock API or the test API.
+    // To use the test API we need html only cookies which works in the production mode
+    credentials: process.env.NODE_ENV === 'production' ? 'include' : 'omit'
   },
   // Override default cache
   cache: new InMemoryCache()
