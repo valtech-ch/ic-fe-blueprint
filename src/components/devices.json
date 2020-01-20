@@ -1,0 +1,106 @@
+{
+  "items": [
+    {
+      "name": "desktop",
+      "height": "100%",
+      "width": "100%",
+      "viewportActive": true
+    },
+    {
+      "name": "iphone 5",
+      "height": "568px",
+      "width": "320px",
+      "viewportActive": false
+    },
+    {
+      "name": "iphone 6",
+      "height": "667px",
+      "width": "375px",
+      "viewportActive": false
+    },
+    {
+      "name": "iphone 6 plus",
+      "height": "736px",
+      "width": "414px",
+      "viewportActive": false
+    },
+    {
+      "name": "iphone 8 plus",
+      "height": "736px",
+      "width": "414px",
+      "viewportActive": false
+    },
+    {
+      "name": "iphone X",
+      "height": "812px",
+      "width": "375px",
+      "viewportActive": false
+    },
+    {
+      "name": "iphone XR",
+      "height": "896px",
+      "width": "414px",
+      "viewportActive": false
+    },
+    {
+      "name": "iphone XS Max",
+      "height": "896px",
+      "width": "414px",
+      "viewportActive": false
+    },
+    {
+      "name": "ipad",
+      "height": "1024px",
+      "width": "768px",
+      "viewportActive": false
+    },
+    {
+      "name": "ipad Pro 10.5",
+      "height": "1112px",
+      "width": "834px",
+      "viewportActive": false
+    },
+    {
+      "name": "ipad 12.9",
+      "height": "1366px",
+      "width": "1024px",
+      "viewportActive": false
+    },
+    {
+      "name": "galaxy S5",
+      "height": "640px",
+      "width": "360px",
+      "viewportActive": false
+    },
+    {
+      "name": "galaxy S9",
+      "height": "1480px",
+      "width": "720px",
+      "viewportActive": false
+    },
+    {
+      "name": "nexus 5X",
+      "height": "660px",
+      "width": "412px",
+      "viewportActive": false
+    },
+    {
+      "name": "nexus 6P",
+      "height": "732px",
+      "width": "412px",
+      "viewportActive": false
+    },
+    {
+      "name": "pixel",
+      "height": "960px",
+      "width": "540px",
+      "viewportActive": false
+    },
+    {
+      "name": "pixel XL",
+      "height": "1280px",
+      "width": "720px",
+      "viewportActive": false
+    }
+  ]
+}

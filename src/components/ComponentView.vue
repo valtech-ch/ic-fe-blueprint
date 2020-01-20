@@ -144,6 +144,8 @@ import VueMarkdown from 'vue-markdown'
 import VueClipboard from 'vue-clipboard2'
 import 'mdn-polyfills/CustomEvent'
 
+import listDevices from './devices.json'
+
 Vue.use(VueClipboard)
 
 export default {
@@ -167,7 +169,7 @@ export default {
       rtl: false,
       landscape: false,
       viewportActive: false,
-      devices: Array,
+      devices: listDevices.items,
       viewport: {
         height: '100%',
         width: '100%'
@@ -271,7 +273,7 @@ export default {
     },
 
     setActive(index) {
-      for (let i = 0; i <= 16; i++) {
+      for (let i = 0; i <= this.devices.length; i++) {
         if (i === index) {
           this.devices[i].viewportActive = true
           this.viewport.height = this.devices[index].height
@@ -280,137 +282,7 @@ export default {
           this.devices[i].viewportActive = false
         }
       }
-    },
-
-    deviceTypes() {
-
-      let desktop = {
-        name : 'desktop',
-        height : '100%',
-        width : '100%',
-        viewportActive : true
-      }
-
-      let iphone5 = {
-        name : 'iphone 5',
-        height : '568px',
-        width : '320px',
-        viewportActive : false
-      }
-
-      let iphone6 = {
-        name : 'iphone 6',
-        height : '667px',
-        width : '375px',
-        viewportActive : false
-      }
-
-      let iphone6plus = {
-        name : 'iphone 6 plus',
-        height : '736px',
-        width : '414px',
-        viewportActive : false
-      }
-
-      let iphone8plus = {
-        name : 'iphone 8 plus',
-        height : '736px',
-        width : '414px',
-        viewportActive : false
-      }
-
-      let iphoneX = {
-        name : 'iphone X',
-        height : '812px',
-        width : '375px',
-        viewportActive : false
-      }
-
-      let iphoneXR = {
-        name : 'iphone XR',
-        height : '896px',
-        width : '414px',
-        viewportActive : false
-      }
-
-      let iphoneXSmax = {
-        name : 'iphone XS Max',
-        height : '896px',
-        width : '414px',
-        viewportActive : false
-      }
-
-      let ipad = {
-        name : 'ipad',
-        height : '1024px',
-        width : '768px',
-        viewportActive : false
-      }
-
-      let ipadPro10 = {
-        name : 'ipad Pro 10.5',
-        height : '1112px',
-        width : '834px',
-        viewportActive : false
-      }
-
-      let ipadPro12 = {
-        name : 'ipad 12.9',
-        height : '1366px',
-        width : '1024px',
-        viewportActive : false
-      }
-
-      let galaxyS5 = {
-        name : 'galaxy S5',
-        height : '640px',
-        width : '360px',
-        viewportActive : false
-      }
-
-      let galaxyS9 = {
-        name : 'galaxy S9',
-        height : '1480px',
-        width : '720px',
-        viewportActive : false
-      }
-
-      let nexus5X = {
-        name : 'nexus 5X',
-        height : '660px',
-        width : '412px',
-        viewportActive : false
-      }
-
-      let nexus6P = {
-        name : 'nexus 6P',
-        height : '732px',
-        width : '412px',
-        viewportActive : false
-      }
-
-      let pixel = {
-        name : 'pixel',
-        height : '960px',
-        width : '540px',
-        viewportActive : false
-      }
-
-      let pixelXL = {
-        name : 'pixel XL',
-        height : '1280px',
-        width : '720px',
-        viewportActive : false
-      }
-      this.devices = [desktop, iphone5, iphone6,
-        iphone6plus, iphone8plus, iphoneX, iphoneXR,
-        iphoneXSmax, ipad, ipadPro10, ipadPro12, galaxyS5,
-        galaxyS9, nexus5X, nexus6P, pixel, pixelXL]
     }
-  },
-
-  beforeMount() {
-    this.deviceTypes()
   }
 }
 </script>
