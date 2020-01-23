@@ -222,6 +222,7 @@ html, body {
   .scroll-area {
     overflow-y: auto;
     height: calc(100% - 110px);
+    width: 380px;
 
     &::-webkit-scrollbar {
       width: 2px;
