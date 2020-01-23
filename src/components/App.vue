@@ -27,7 +27,7 @@
           </div>
       </aside>
     </div>
-    <div class="column">
+    <div class="column component">
       <router-view
         :selected="selected"
         :data="navigation" />
@@ -170,10 +170,12 @@ html, body {
 .menu {
   display: block;
   background: $grey-light;
-  min-height: calc(100% + #{2 * $column-gap});
   height: 100%;
   padding: $column-gap;
   margin: - $column-gap;
+  position: fixed;
+  top: 12px;
+  left: 12px;
 
   a {
     text-decoration: none;
@@ -242,5 +244,9 @@ html, body {
 
 .menu-element .menu-element{
   padding-left: 20px;
+}
+
+.column.component {
+  margin-left: 380px;
 }
 </style>
