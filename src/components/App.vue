@@ -6,7 +6,7 @@
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
         <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
-              <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
+              <span class="menu-label">
                 <span>{{ type.title }}</span>
                 <template v-if="type.children.length>0">
                  <span v-show="selectedMenuItem !== index"><b>+</b></span>
@@ -57,46 +57,14 @@ export default {
       this.isFullscreenDemo = !this.isFullscreenDemo
     },
 
-    menuCategory (index) {
-      if (this.selectedMenuItem === index) {
-        this.selectedMenuItem = null
-      } else this.selectedMenuItem = index
+    // this method is checking the url and based on that will open the correct menu item
+    selectMenuItem() {
+      for (let index = 0; index < this.navigation.length; index++) {
+        if (this.$route.params.type === this.navigation[index].title) {
+          this.selectedMenuItem = index
+        }
+      }
     }
-  },
-
-  updated() {
-
-    // this.menuItems = document.querySelectorAll('.menu .menu-label').length
-    // if (this.menuItems) {
-    //   for (let i = 0; i <= this.menuItems; i++) {
-    //     // this.menuTitles[i] = document.querySelectorAll('.menu .menu-label')[i].firstChild.textContent
-    //     this.menuTitles[i] = 0
-    //
-    //   }
-    //   // console.log(this.menuTitles[3])
-    // }
-
-
-
-    // console.log(this.menuTitles[0])
-    //
-    // console.log(this.menuItems)
-    // this.takeItems()
-    // console.log(this.takeItems())
-
-    // console.log(this.navigation[0].title)
-
-    // if (location.href.indexOf(this.navigation[0].title) > -1) {
-    //   this.menuCategory(0)
-    // }
-    //
-    // else if (location.href.indexOf(this.navigation[1].title) > -1) {
-    //   this.menuCategory(1)
-    // } else if (location.href.indexOf(this.navigation[2].title) > -1) {
-    //   this.menuCategory(2)
-    // } else if (location.href.indexOf(this.navigation[3].title) > -1) {
-    //   this.menuCategory(3)
-    // }
   },
 
   mounted () {
