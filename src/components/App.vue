@@ -47,9 +47,7 @@ export default {
       isFullscreenDemo: false,
       isWideDemo: false,
       toggleFullscreen: 'toggle fullview',
-      selectedMenuItem: null,
-      menuItems: null,
-      menuTitles: {}
+      selectedMenuItem: null
     }
   },
   methods: {
