@@ -68,48 +68,6 @@ export default {
   },
 
   mounted () {
-
-    setTimeout(function(){
-      let  list =document.querySelectorAll('.is-narrow .menu .menu-label')
-
-      let test = false
-      let listIndex
-      if (list.length > 0) {
-        console.log('found')
-        for (let i = 0; i < list.length; i++) {
-          console.log(list[i].firstChild.textContent)
-          if (location.href.indexOf(list[i].firstChild.textContent) > -1) {
-            test = true
-            listIndex = i
-          }
-        }
-      }
-      if ( test ) {
-        console.log('added-index ' + listIndex)
-        if (this.selectedMenuItem === listIndex) {
-          this.selectedMenuItem = null
-        } else this.selectedMenuItem = listIndex
-
-        //menu not shown automatically
-      }
-    }, 500)
-
-
-
-    //this works but not dynamic
-    // if (location.href.indexOf('atoms') > -1) {
-    //     this.menuCategory(0)
-    // }
-    // else if (location.href.indexOf('molecules') > -1) {
-    //   this.menuCategory(1)
-    // } else if (location.href.indexOf('organisms') > -1) {
-    //   this.menuCategory(2)
-    // } else if (location.href.indexOf('pages') > -1) {
-    //   this.menuCategory(3)
-    // }
-
-
-
     this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
     fetch('/api/structure')
@@ -129,6 +87,14 @@ export default {
         this.isWideDemo = !this.isWideDemo
       }
     })
+  },
+
+  watch: {
+    $route () {
+      if (this.$route.params.type !== '' || this.$route.params.pages !== '') {
+        this.selectMenuItem()
+      }
+    }
   },
 
   computed: {
