@@ -85,9 +85,7 @@ export default {
       }
     },
     isPages () {
-      if (this.$route.params.type === 'pages') {
-        return true
-      }
+      return this.$route.params.type === 'pages'
     }
   },
 
