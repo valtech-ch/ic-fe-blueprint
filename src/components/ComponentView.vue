@@ -25,14 +25,16 @@
           </div>
         </div>
         <ul class="component-tools">
-          <li v-if="activeTab === 'view'" @click="direction">
-            <span v-if="this.rtl">LTR</span>
+          <template v-if="activeTab === 'view'">
+          <li @click="rtl = !rtl">
+            <span v-if="rtl">LTR</span>
             <span v-else>RTL</span>
           </li>
-          <li v-if="activeTab === 'view'" class="background">
+          <li class="background">
             <span v-if="!hasBackground" @click="hasBackground=true">{{ labelBackground }}</span>
             <input v-else type="text" v-model="backgroundValue" v-on:change.enter="hasBackground">
           </li>
+          </template>
         </ul>
       </div>
 
@@ -69,7 +71,7 @@
         </ul>
       </div>
 
-      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{ backgroundColor: backgroundValue }">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{ backgroundColor: backgroundValue }">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -236,10 +238,6 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
-    },
-
-    direction () {
-      this.rtl = !this.rtl
     },
 
     insertRaw (template) {
