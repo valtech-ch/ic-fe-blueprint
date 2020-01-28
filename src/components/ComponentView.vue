@@ -81,10 +81,10 @@
           </li>
         </ul>
       </div>
+
       <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content"
            :class="!devices[0].viewportActive ? 'viewport' : ''"
            :style="!landscape ? {height: viewport.height, width: viewport.width} : {height: viewport.width, width: viewport.height}">
-
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -119,7 +119,7 @@
         </template>
 
         <template v-else-if="activeTab === 'raw'">
-          <component :is="insertRaw(data.raw)"/>
+          <div v-html="data.raw" />
         </template>
         <template v-else-if="activeTab === 'notifications'">
             <ul>
