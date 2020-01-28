@@ -177,8 +177,8 @@ export default {
       viewportActive: false,
       devices: listDevices.items,
       viewport: {
-        height: 100,
-        width: 100
+        height: '100%',
+        width: '100%'
       }
     }
   },
