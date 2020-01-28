@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted () {
-    this.isFullscreenDemo = window.location.href.indexOf("#fullview") > -1
+    this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
     fetch('/api/structure')
       .then(res => res.json())

@@ -25,18 +25,24 @@
           </div>
         </div>
         <ul class="component-tools">
-          <li v-if="activeTab === 'view'" @click="direction">
-            <span v-if="this.rtl">{{ labelLtr }}</span>
+          <li v-if="activeTab === 'view'" @click="rtl = !rtl">
+            <span v-if="rtl">{{ labelLtr }}</span>
             <span v-else>{{ labelRtl }}</span>
           </li>
           <li v-if="activeTab === 'view'" class="breakpoints">
             <div class="viewport-dropdown">
               <span>{{ labelViewport }}</span>
               <div class="viewport-content">
-                <span v-if="this.viewport.width != '100%'" @click="rotateViewport()" :class="this.landscape ? 'active' : ''">
+                <span v-if="viewport.width != '100%'" @click="landscape = !landscape" :class="landscape ? 'active' : ''">
                   {{ labelRotate }}
                 </span>
-                <span v-for="(device, index) in devices" @click="setActive(index)" :class="device.viewportActive ? 'active' : ''" :key="index">{{device.name }} <span v-show="device.width != '100%'">{{device.width.slice(0, -2) }} x {{device.height.slice(0, -2) }}</span></span>
+                <span v-for="(device, index) in devices" @click="setActive(index)"
+                      :class="device.viewportActive ? 'active' : ''"
+                      :key="index">{{device.name }}
+                  <span v-show="device.width != '100%'">
+                    {{device.width.slice(0, -2) }} x {{device.height.slice(0, -2) }}
+                  </span>
+                </span>
               </div>
             </div>
           </li>
@@ -75,9 +81,9 @@
           </li>
         </ul>
       </div>
-      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content"
-           :class="!this.devices[0].viewportActive ? 'viewport' : ''"
-           :style="!this.landscape ? {height: this.viewport.height, width: this.viewport.width} : {height: this.viewport.width, width: this.viewport.height}">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content"
+           :class="!devices[0].viewportActive ? 'viewport' : ''"
+           :style="!landscape ? {height: viewport.height, width: viewport.width} : {height: viewport.width, width: viewport.height}">
 
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
@@ -171,8 +177,8 @@ export default {
       viewportActive: false,
       devices: listDevices.items,
       viewport: {
-        height: '100%',
-        width: '100%'
+        height: 100,
+        width: 100
       }
     }
   },
@@ -264,16 +270,8 @@ export default {
       }
     },
 
-    direction () {
-      this.rtl = !this.rtl
-    },
-
-    rotateViewport () {
-      this.landscape = !this.landscape
-    },
-
     setActive(index) {
-      for (let i = 0; i <= this.devices.length; i++) {
+      for (let i = 0; i < this.devices.length; i++) {
         if (i === index) {
           this.devices[i].viewportActive = true
           this.viewport.height = this.devices[index].height
