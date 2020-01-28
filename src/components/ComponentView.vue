@@ -327,11 +327,4 @@ export default {
   height: 100%;
   background: #fff;
 }
-
-@mixin properties {
-  position: absolute;
-  top: -24px;
-  text-align: center;
-  width: 100%;
-}
 </style>
