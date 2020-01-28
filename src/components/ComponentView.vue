@@ -25,8 +25,8 @@
           </div>
         </div>
         <ul class="component-tools">
-          <li v-if="activeTab === 'view'" @click="direction">
-            <span v-if="this.rtl">LTR</span>
+          <li v-if="activeTab === 'view'" @click="rtl = !rtl">
+            <span v-if="rtl">LTR</span>
             <span v-else>RTL</span>
           </li>
         </ul>
@@ -65,7 +65,7 @@
         </ul>
       </div>
 
-      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -229,10 +229,6 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
-    },
-
-    direction () {
-      this.rtl = !this.rtl
     },
 
     insertRaw (template) {
