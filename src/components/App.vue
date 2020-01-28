@@ -223,13 +223,6 @@ html, body {
   }
 }
 
-.is-fullscreen-demo {
-
-   & .modelSelection, .tabs {
-        display: none;
-    }
-}
-
 .menu-element .menu-element {
   padding-left: 20px;
 }
