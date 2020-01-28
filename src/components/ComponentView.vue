@@ -25,23 +25,25 @@
           </div>
         </div>
         <ul class="component-tools">
-          <li v-if="activeTab === 'view'" @click="direction">
-            <span v-if="this.rtl">{{ labelLtr }}</span>
-            <span v-else>{{ labelRtl }}</span>
-          </li>
-          <li v-if="activeTab === 'view'" class="breakpoints">
-            <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape && breakpoints.mobile || breakpoints.tablet ? 'active' : ''">
-              <template v-if="this.landscape">&olarr;</template>
-              <template v-else>&orarr;</template>
-            </span>
-            <span @click="breakpoint('mobile')" :class="breakpoints.mobile ? 'active' : ''">{{ mobile }}</span>
-            <span @click="breakpoint('tablet')" :class="breakpoints.tablet ? 'active' : ''">{{ tablet }}</span>
-            <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
-          </li>
-          <li v-if="activeTab === 'view'" class="zooming">
-            <span @click="zoom('decrease')" :class="zoomLevel < 1 ? 'active' : ''">(-)</span>
-            <span @click="zoom('increase')" :class="zoomLevel > 1 ? 'active' : ''">(+)</span>
-          </li>
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">{{ labelLtr }}</span>
+              <span v-else>{{ labelRtl }}</span>
+            </li>
+            <li class="breakpoints">
+              <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape && breakpoints.mobile || breakpoints.tablet ? 'active' : ''">
+                <template v-if="this.landscape">&olarr;</template>
+                <template v-else>&orarr;</template>
+              </span>
+              <span @click="breakpoint('mobile')" :class="breakpoints.mobile ? 'active' : ''">{{ mobile }}</span>
+              <span @click="breakpoint('tablet')" :class="breakpoints.tablet ? 'active' : ''">{{ tablet }}</span>
+              <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
+            </li>
+            <li class="zooming">
+              <span @click="zoom('decrease')" :class="zoomLevel < 1 ? 'active' : ''">(-)</span>
+              <span @click="zoom('increase')" :class="zoomLevel > 1 ? 'active' : ''">(+)</span>
+            </li>
+          </template>
         </ul>
       </div>
 
@@ -77,7 +79,7 @@
           </li>
         </ul>
       </div>
-      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{zoom: zoomLevel}"
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{zoom: zoomLevel}"
            :class="this.breakpoints.mobile && !this.landscape ? 'mobile portrait' : '' || this.breakpoints.mobile && this.landscape ? 'mobile landscape' : '' || this.breakpoints.tablet && !this.landscape ? 'tablet portrait' : '' || this.breakpoints.tablet && this.landscape ? 'tablet landscape' : ''">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
@@ -262,10 +264,6 @@ export default {
       }
     },
 
-    direction () {
-      this.rtl = !this.rtl
-    },
-
     breakpoint (value) {
       if (value === 'mobile') {
         this.breakpoints.tablet = false
@@ -287,14 +285,14 @@ export default {
     },
 
     zoom(operation) {
-      let i = 0.1
+      const step = 0.1
       if(operation === 'decrease') {
         if (this.zoomLevel >= 0.2) {
-          this.zoomLevel = this.zoomLevel - i
+          this.zoomLevel = this.zoomLevel - step
         }
       } else {
         if (this.zoomLevel <= 2) {
-          this.zoomLevel = this.zoomLevel + i
+          this.zoomLevel = this.zoomLevel + step
         }
       }
     }
