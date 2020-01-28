@@ -356,10 +356,11 @@ export default {
   height: 100%;
   background: #fff;
 }
-  .viewport {
-    border: 2px dashed #757763;
-    overflow: auto;
-  }
+
+.viewport {
+border: 2px dashed #757763;
+overflow: auto;
+}
 
 .viewport-dropdown {
   position: relative;
