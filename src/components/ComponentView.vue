@@ -104,7 +104,7 @@
         </template>
 
         <template v-else-if="activeTab === 'raw'">
-          <component :is="insertRaw(data.raw)"/>
+          <div v-html="data.raw" />
         </template>
         <template v-else-if="activeTab === 'notifications'">
             <ul>
@@ -151,9 +151,6 @@ export default {
       data: {},
       copied1: false,
       copied2: false,
-      mobile: 'mobile',
-      tablet: 'tablet',
-      desktop: 'desktop',
       labelRtl: 'RTL',
       labelLtr: 'LTR',
       rtl: false,
