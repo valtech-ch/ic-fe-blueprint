@@ -25,22 +25,15 @@
           </div>
         </div>
         <ul class="component-tools">
-          <li v-if="activeTab === 'view'" @click="direction">
-            <span v-if="this.rtl">{{ labelLtr }}</span>
-            <span v-else>{{ labelRtl }}</span>
-          </li>
-          <li v-if="activeTab === 'view'">
-            <span @click="showGrid" :class="this.grid ? 'active' : ''">{{ labelGrid }}</span>
-          </li>
-          <li v-if="activeTab === 'view'" class="breakpoints">
-            <span v-if="!this.breakpoints.desktop" @click="breakpoint('rotate')" :class="this.landscape && breakpoints.mobile || breakpoints.tablet ? 'active' : ''">
-              <template v-if="this.landscape">&olarr;</template>
-              <template v-else>&orarr;</template>
-            </span>
-            <span @click="breakpoint('mobile')" :class="breakpoints.mobile ? 'active' : ''">{{ mobile }}</span>
-            <span @click="breakpoint('tablet')" :class="breakpoints.tablet ? 'active' : ''">{{ tablet }}</span>
-            <span v-if="!this.breakpoints.desktop" @click="breakpoint('desktop')">{{ desktop }}</span>
-          </li>
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">{{ labelLtr }}</span>
+              <span v-else>{{ labelRtl }}</span>
+            </li>
+            <li>
+              <span @click="grid = !grid" :class="grid ? 'active' : ''">{{ labelGrid }}</span>
+            </li>
+          </template>
         </ul>
       </div>
 
@@ -76,8 +69,7 @@
           </li>
         </ul>
       </div>
-      <div :dir="this.rtl ? 'rtl' : 'ltr'" class="tabs-content"
-           :class="this.breakpoints.mobile && !this.landscape ? 'mobile portrait' : '' || this.breakpoints.mobile && this.landscape ? 'mobile landscape' : '' || this.breakpoints.tablet && !this.landscape ? 'tablet portrait' : '' || this.breakpoints.tablet && this.landscape ? 'tablet landscape' : ''">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content">
 
         <svg v-if="grid" class="svg-grid" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -180,12 +172,6 @@ export default {
       labelGrid: 'Grid',
       rtl: false,
       grid: false,
-      landscape: false,
-      breakpoints: {
-        desktop: true,
-        tablet: false,
-        mobile: false
-      }
     }
   },
 
@@ -274,33 +260,6 @@ export default {
       return {
         template
       }
-    },
-
-    direction () {
-      this.rtl = !this.rtl
-    },
-
-    breakpoint (value) {
-      if (value === 'mobile') {
-        this.breakpoints.tablet = false
-        this.breakpoints.desktop = false
-        this.breakpoints.mobile = true
-      } else if (value === 'tablet') {
-        this.breakpoints.desktop = false
-        this.breakpoints.mobile = false
-        this.breakpoints.tablet = true
-      } else if (value === 'desktop') {
-        this.breakpoints.mobile = false
-        this.breakpoints.tablet = false
-        this.breakpoints.desktop = true
-      }
-
-      if (value === 'rotate') {
-        this.landscape = !this.landscape
-      }
-    },
-    showGrid() {
-      this.grid = !this.grid
     }
   }
 }
@@ -334,34 +293,6 @@ export default {
 
     .active {
       font-weight: bold;
-    }
-
-    .breakpoints {
-      &:hover {
-        font-weight: normal;
-      }
-
-      span {
-        &:hover {
-          font-weight: bold;
-        }
-
-        &:not(:last-child):after {
-          padding: 0 6px;
-          content: '•';
-          pointer-events: none;
-        }
-
-        &.active {
-          color: #44453a;
-          font-style: italic;
-          font-weight: bold;
-
-          &:after {
-            font-style: normal;
-          }
-        }
-      }
     }
 
     li {
@@ -403,58 +334,4 @@ export default {
   text-align: center;
   width: 100%;
 }
-
-  .mobile {
-    border: 2px dashed #757763;
-    position: relative;
-
-    &:before {
-      @include properties;
-    }
-
-    &.portrait {
-      height: 1218px;
-      width: 568px;
-
-      &:before{
-        content: 'mobile (portrait)';
-      }
-    }
-
-    &.landscape {
-      height: 568px;
-      width: 1218px;
-
-      &:before{
-        content: 'mobile (landscape)';
-      }
-    }
-  }
-
-  .tablet {
-    border: 2px dashed #757763;
-    position: relative;
-
-    &:before {
-      @include properties;
-    }
-
-    &.portrait {
-      height: 1024px;
-      width: 768px;
-
-      &:before{
-        content: 'tablet (portrait)';
-      }
-    }
-
-    &.landscape {
-      height: 768px;
-      width: 1024px;
-
-      &:before{
-        content: 'tablet (landscape)';
-      }
-    }
-  }
 </style>
