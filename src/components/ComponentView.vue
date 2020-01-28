@@ -39,8 +39,8 @@
                 <span v-for="(device, index) in devices" @click="setActive(index)"
                       :class="device.viewportActive ? 'active' : ''"
                       :key="index">{{device.name }}
-                  <span v-show="device.width != '100%'">
-                    {{device.width.slice(0, -2) }} x {{device.height.slice(0, -2) }}
+                  <span v-show="device.width != '100'">
+                    {{device.width}} x {{device.height}}
                   </span>
                 </span>
               </div>
@@ -274,8 +274,13 @@ export default {
       for (let i = 0; i < this.devices.length; i++) {
         if (i === index) {
           this.devices[i].viewportActive = true
-          this.viewport.height = this.devices[index].height
-          this.viewport.width = this.devices[index].width
+          if (i !== 0) {
+            this.viewport.height = this.devices[index].height + 'px'
+            this.viewport.width = this.devices[index].width + 'px'
+          } else {
+            this.viewport.height = this.devices[index].height + '%'
+            this.viewport.width = this.devices[index].width + '%'
+          }
         } else {
           this.devices[i].viewportActive = false
         }

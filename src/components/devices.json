@@ -2,104 +2,104 @@
   "items": [
     {
       "name": "desktop",
-      "height": "100%",
-      "width": "100%",
+      "height": "100",
+      "width": "100",
       "viewportActive": true
     },
     {
       "name": "iphone 5",
-      "height": "568px",
-      "width": "320px",
+      "height": "568",
+      "width": "320",
       "viewportActive": false
     },
     {
       "name": "iphone 6",
-      "height": "667px",
-      "width": "375px",
+      "height": "667",
+      "width": "375",
       "viewportActive": false
     },
     {
       "name": "iphone 6 plus",
-      "height": "736px",
-      "width": "414px",
+      "height": "736",
+      "width": "414",
       "viewportActive": false
     },
     {
       "name": "iphone 8 plus",
-      "height": "736px",
-      "width": "414px",
+      "height": "736",
+      "width": "414",
       "viewportActive": false
     },
     {
       "name": "iphone X",
-      "height": "812px",
-      "width": "375px",
+      "height": "812",
+      "width": "375",
       "viewportActive": false
     },
     {
       "name": "iphone XR",
-      "height": "896px",
-      "width": "414px",
+      "height": "896",
+      "width": "414",
       "viewportActive": false
     },
     {
       "name": "iphone XS Max",
-      "height": "896px",
-      "width": "414px",
+      "height": "896",
+      "width": "414",
       "viewportActive": false
     },
     {
       "name": "ipad",
-      "height": "1024px",
-      "width": "768px",
+      "height": "1024",
+      "width": "768",
       "viewportActive": false
     },
     {
       "name": "ipad Pro 10.5",
-      "height": "1112px",
-      "width": "834px",
+      "height": "1112",
+      "width": "834",
       "viewportActive": false
     },
     {
       "name": "ipad 12.9",
-      "height": "1366px",
-      "width": "1024px",
+      "height": "1366",
+      "width": "1024",
       "viewportActive": false
     },
     {
       "name": "galaxy S5",
-      "height": "640px",
-      "width": "360px",
+      "height": "640",
+      "width": "360",
       "viewportActive": false
     },
     {
       "name": "galaxy S9",
-      "height": "1480px",
-      "width": "720px",
+      "height": "1480",
+      "width": "720",
       "viewportActive": false
     },
     {
       "name": "nexus 5X",
-      "height": "660px",
-      "width": "412px",
+      "height": "660",
+      "width": "412",
       "viewportActive": false
     },
     {
       "name": "nexus 6P",
-      "height": "732px",
-      "width": "412px",
+      "height": "732",
+      "width": "412",
       "viewportActive": false
     },
     {
       "name": "pixel",
-      "height": "960px",
-      "width": "540px",
+      "height": "960",
+      "width": "540",
       "viewportActive": false
     },
     {
       "name": "pixel XL",
-      "height": "1280px",
-      "width": "720px",
+      "height": "1280",
+      "width": "720",
       "viewportActive": false
     }
   ]
