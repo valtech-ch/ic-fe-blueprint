@@ -25,13 +25,15 @@
           </div>
         </div>
         <ul class="component-tools">
-          <li v-if="activeTab === 'view'" @click="rtl = !rtl">
-            <span v-if="rtl">LTR</span>
-            <span v-else>RTL</span>
-          </li>
-          <li v-if="activeTab === 'view'" @click="console('trigger')">
-            <span>Logs</span>
-          </li>
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">LTR</span>
+              <span v-else>RTL</span>
+            </li>
+            <li @click="console('trigger')">
+              <span>Logs</span>
+            </li>
+          </template>
         </ul>
       </div>
 
@@ -260,7 +262,6 @@ export default {
           findApp.classList.remove('console-height')
           findBody.scrollTop
         }
-
       }
       if (location.href.indexOf('reload') !== -1) {
         location.href = '#'
@@ -276,12 +277,6 @@ export default {
       if (value === 'clear') {
         logger.innerHTML = ''
         setTimeout(() => { logger.innerHTML = '...' }, 300)
-      }
-    },
-
-    insertRaw (template) {
-      return {
-        template
       }
     }
   },
