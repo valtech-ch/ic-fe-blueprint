@@ -26,14 +26,14 @@
         </div>
         <ul class="component-tools">
           <template v-if="activeTab === 'view'">
-          <li @click="rtl = !rtl">
-            <span v-if="rtl">LTR</span>
-            <span v-else>RTL</span>
-          </li>
-          <li class="background">
-            <span v-if="!hasBackground" @click="hasBackground=true">{{ labelBackground }}</span>
-            <input v-else type="text" v-model="backgroundValue" v-on:change.enter="hasBackground">
-          </li>
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">LTR</span>
+              <span v-else>RTL</span>
+            </li>
+            <li class="background">
+              <span v-if="!hasBackground" @click="hasBackground=true">{{ labelBackground }}</span>
+              <input v-else type="text" v-model="backgroundValue" v-on:change.enter="hasBackground">
+            </li>
           </template>
         </ul>
       </div>
@@ -238,12 +238,6 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
-    },
-
-    insertRaw (template) {
-      return {
-        template
-      }
     }
   }
 }
