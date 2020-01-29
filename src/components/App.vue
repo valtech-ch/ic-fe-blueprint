@@ -14,12 +14,8 @@
               v-model="filter"
           >
         </div>
-        <template v-for="type in navigation">
+        <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
-<!--            <p-->
-<!--              class="menu-label"-->
-<!--              :key="type.title">{{ type.title }}</p>-->
-
               <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
                  <span>{{ type.title }}</span>
                 <template v-if="type.children.length>0">
@@ -29,22 +25,14 @@
               </span>
           </router-link>
             <ul
-                    v-for="component in type.children"
-                    :key="component.title"
-                    class="menu-list"
-                    v-show="!filter || search(filter, component.title)">
-                <li class="menu-element" :style="filter ? 'font-weight: bold' : ''">
+                v-for="component in type.children"
+                :key="component.title"
+                class="menu-list"
+                v-show="search(filter, component.title)">
+                <li v-show="filter !== '' || selectedMenuItem === index" class="menu-element" :style="filter ? 'font-weight: bold' : ''">
                     <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
                 </li>
             </ul>
-<!--          <ul-->
-<!--            v-for="component in type.children"-->
-<!--            :key="component.title"-->
-<!--            class="menu-list">-->
-<!--            <li v-if="selectedMenuItem === index" class="menu-element">-->
-<!--              <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>-->
-<!--            </li>-->
-<!--          </ul>-->
         </template>
       </aside>
     </div>
@@ -71,7 +59,7 @@ export default {
       isWideDemo: false,
       toggleFullscreen: 'toggle fullview',
       selectedMenuItem: null,
-      filter: null
+      filter: ''
     }
   },
 
@@ -80,7 +68,7 @@ export default {
       this.isFullscreenDemo = !this.isFullscreenDemo
     },
 
-    search(filter, title) {
+    search (filter, title) {
       let filterUpperCase = filter.charAt(0).toUpperCase()
       let filterLowerCase = filter.charAt(0).toLowerCase()
 
@@ -90,6 +78,7 @@ export default {
     },
 
     menuCategory (index) {
+      this.filter = ''
       if (this.selectedMenuItem === index) {
         this.selectedMenuItem = null
       } else this.selectedMenuItem = index
