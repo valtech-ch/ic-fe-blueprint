@@ -224,7 +224,7 @@ html, body {
   .scroll-area {
     overflow-y: auto;
     height: calc(100% - 110px);
-    width: 380px;
+    width: 300px;
 
     &::-webkit-scrollbar {
       width: 2px;
@@ -247,6 +247,6 @@ html, body {
 }
 
 .column.component {
-  margin-left: 380px;
+  margin-left: 300px;
 }
 </style>
