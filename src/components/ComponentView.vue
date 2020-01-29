@@ -167,7 +167,6 @@ export default {
       data: {},
       copied1: false,
       copied2: false,
-      desktop: 'Reset viewport',
       labelRtl: 'RTL',
       labelLtr: 'LTR',
       labelViewport: 'Viewport',
@@ -358,8 +357,8 @@ export default {
 }
 
 .viewport {
-border: 2px dashed #757763;
-overflow: auto;
+  border: 2px dashed #757763;
+  overflow: auto;
 }
 
 .viewport-dropdown {
