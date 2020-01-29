@@ -14,9 +14,21 @@ export default {
     }
   },
 
+  methods: {
+    updateRoute () {
+      const componentName = this.$route.params.page[0].toUpperCase() + this.$route.params.page.slice(1)
+      this.component = componentName
+    }
+  },
+
+  watch: {
+    $route () {
+      this.updateRoute()
+    }
+  },
+
   mounted () {
-    const componentName = this.$route.params.page[0].toUpperCase() + this.$route.params.page.slice(1)
-    this.component = componentName
+    this.updateRoute()
   }
 }
 </script>
