@@ -35,7 +35,7 @@
 
 <script>
 import '@assets/blueprint/app.pcss'
-import logo from '@assets/img/logo.svg'
+import logo from '@assets/blueprint/logo.svg'
 
 export default {
   name: 'App',
