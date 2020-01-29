@@ -25,10 +25,12 @@
           </div>
         </div>
         <ul class="component-tools">
-          <li v-if="activeTab === 'view'" @click="rtl = !rtl">
-            <span v-if="rtl">LTR</span>
-            <span v-else>RTL</span>
-          </li>
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">LTR</span>
+              <span v-else>RTL</span>
+            </li>
+          </template>
         </ul>
       </div>
 
