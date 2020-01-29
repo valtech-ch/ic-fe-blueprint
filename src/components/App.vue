@@ -4,17 +4,21 @@
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
-        <template v-for="type in navigation">
+        <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
-            <p
-              class="menu-label"
-              :key="type.title">{{ type.title }}</p>
+              <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
+                 <span>{{ type.title }}</span>
+                <template v-if="type.children.length>0">
+                 <span v-if="selectedMenuItem !== index"><b>+</b></span>
+                 <span v-else><b>-</b></span>
+                </template>
+              </span>
           </router-link>
           <ul
             v-for="component in type.children"
             :key="component.title"
             class="menu-list">
-            <li class="menu-element">
+            <li v-if="selectedMenuItem === index" class="menu-element">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
           </ul>
@@ -31,7 +35,7 @@
 
 <script>
 import '@assets/blueprint/app.pcss'
-import logo from '@assets/img/logo.svg'
+import logo from '@assets/blueprint/logo.svg'
 
 export default {
   name: 'App',
@@ -42,16 +46,23 @@ export default {
       navigation: {},
       isFullscreenDemo: false,
       isWideDemo: false,
-      toggleFullscreen: 'toggle fullview'
+      toggleFullscreen: 'toggle fullview',
+      selectedMenuItem: null
     }
   },
   methods: {
     toggleFullscreenView () {
       this.isFullscreenDemo = !this.isFullscreenDemo
+    },
+
+    menuCategory (index) {
+      if (this.selectedMenuItem === index) {
+        this.selectedMenuItem = null
+      } else this.selectedMenuItem = index
     }
   },
   mounted () {
-    this.isFullscreenDemo = window.location.href.indexOf("#fullview") > -1
+    this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
     fetch('/api/structure')
       .then(res => res.json())
@@ -161,6 +172,10 @@ html, body {
   padding: $column-gap;
   margin: - $column-gap;
 
+  a {
+    text-decoration: none;
+  }
+
   &-list {
     list-style: none;
     margin: 0;
@@ -184,6 +199,14 @@ html, body {
       padding-left: 20px;
     }
   }
+
+    .menu-label {
+      display: flex;
+      justify-content: space-between;
+        &:hover {
+          color: black;
+        }
+    }
 
   .is-fullscreen-demo &,
   .is-wide-demo & {
