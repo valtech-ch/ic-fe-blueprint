@@ -245,9 +245,9 @@ export default {
       }
     },
 
-    zoom(operation) {
+    zoom (operation) {
       const step = 0.1
-      if(operation === 'decrease') {
+      if (operation === 'decrease') {
         if (this.zoomLevel >= 0.2) {
           this.zoomLevel = this.zoomLevel - step
         }
