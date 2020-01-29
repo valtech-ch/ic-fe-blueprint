@@ -9,6 +9,7 @@ const componentsPath = definePath(args.componentsPath, rootPath, config.componen
 const pagesPath = definePath(args.pagesPath, rootPath, config.pages)
 const assetsPath = definePath(args.assetsPath, rootPath, config.assets)
 const directivesFilePath = definePath(args.directivesFilePath, rootPath, config.directivesFile)
+const filtersFilePath = definePath(args.filtersFilePath, rootPath, config.filtersFile)
 
 module.exports = {
   devServer: {
@@ -30,6 +31,7 @@ module.exports = {
           options[0]['process.env'].COMPONENTS_BASEPATH = `"${componentsPath}"`
           options[0]['process.env'].PAGES_BASEPATH = `"${pagesPath}"`
           options[0]['process.env'].DIRECTIVES = `"${directivesFilePath}"`
+          options[0]['process.env'].FILTERS = `"${filtersFilePath}"`
           options[0]['process.env'].IC_VUE_APP_GRAPHQL_WS = `"${process.env.IC_VUE_APP_GRAPHQL_WS || 'ws://localhost:4000/graphql'}"`
           options[0]['process.env'].IC_VUE_APP_GRAPHQL_HTTP = `"${process.env.IC_VUE_APP_GRAPHQL_HTTP || 'http://localhost:4000/graphql'}"`
           return options
@@ -47,6 +49,9 @@ module.exports = {
 
     config.resolve.alias
       .set('@directives', directivesFilePath)
+
+    config.resolve.alias
+        .set('@filters', filtersFilePath)
   },
 
   css: {

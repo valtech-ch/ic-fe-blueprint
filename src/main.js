@@ -5,6 +5,7 @@ import router from '@/router'
 import '../dist/allComponents'
 import '../dist/allPages'
 import '@directives'
+import '@filters'
 import { createProvider } from './vue-apollo'
 
 Vue.config.productionTip = false
