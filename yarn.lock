@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@adobe/htlengine@^2.3.2":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@adobe/htlengine/-/htlengine-2.3.2.tgz#2102c92a23f475849a3647d17a9be0754f01d19e"
-  integrity sha512-ApPpAjijMSTrBjNh61YAGx9jEAbFAnDvsSg7qmGFhim1IDjRM2xGwL70eOH+uMyweU1AqJjkqZ9sT2ar+9YAUQ==
+"@adobe/htlengine@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@adobe/htlengine/-/htlengine-2.2.2.tgz#25809fc48d6acee12fc08ec8c5092a526a4a510d"
+  integrity sha512-zkuHXnbAVszJ3OzJy8OxBtJKlEZHyguwVdhziPUL1IG+NR8LSgcLKcEziYpuu5pvtdJPqGVFA18JzucF6DSdqw==
   dependencies:
     antlr4 "^4.7.2"
     co "^4.6.0"
@@ -17,7 +17,6 @@
     sanitizer "^0.1.3"
     source-map "^0.7.3"
     urijs "^1.19.1"
-    xregexp "^4.2.4"
 
 "@babel/code-frame@^7.0.0":
   version "7.0.0"
@@ -5790,6 +5789,11 @@ mdn-data@~1.1.0:
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-1.1.4.tgz#50b5d4ffc4575276573c4eedb8780812a8419f01"
   integrity sha512-FSYbp3lyKjyj3E7fMl6rYvUdX0FBXaluGqlFoYESWQlyUTq8R+wp0rkFxoYFqZlHCvsUXGjyJmLQSnXToYhOSA==
 
+mdn-polyfills@^5.18.0:
+  version "5.20.0"
+  resolved "https://registry.yarnpkg.com/mdn-polyfills/-/mdn-polyfills-5.20.0.tgz#ca8247edf20a4f60dec6804372229812b348260b"
+  integrity sha512-AbTv1ytcoOUAkxw6u5oo2QPf27kEZgxBAQr49jFb4i2VnTnFGfJbcIQ9UDBOdfNECeXsgkYFwB2BkdeTfOzztw==
+
 mdurl@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
@@ -9196,6 +9200,11 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.2.tgz#1fcc1495effe08a790909b46bf7b5c4cfeb6f21b"
   integrity sha512-NpznMQoe/DzMG7nJjPkJKT7FdEn9xXfnntG7POfTmqnSaza97ylaBf1luZDh4IgV+vgUoR//id5pf8Ru+Ym+0g==
 
+vue-i18n@^8.15.3:
+  version "8.15.3"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.15.3.tgz#9f947802d9b734fcb92e2ce724da654f2f9fc0f4"
+  integrity sha512-PVNgo6yhOmacZVFjSapZ314oewwLyXHjJwAqjnaPN1GJAJd/dvsrShGzSiJuCX4Hc36G4epJvNXUwO8y7wEKew==
+
 vue-loader@^15.7.0:
   version "15.7.1"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.7.1.tgz#6ccacd4122aa80f69baaac08ff295a62e3aefcfd"
@@ -9527,13 +9536,6 @@ ws@^6.2.1:
   integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   dependencies:
     async-limiter "~1.0.0"
-
-xregexp@^4.2.4:
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/xregexp/-/xregexp-4.2.4.tgz#02a4aea056d65a42632c02f0233eab8e4d7e57ed"
-  integrity sha512-sO0bYdYeJAJBcJA8g7MJJX7UrOZIfJPd8U2SC7B2Dd/J24U0aQNoGp33shCaBSWeb0rD5rh6VBUIXOkGal1TZA==
-  dependencies:
-    "@babel/runtime-corejs2" "^7.2.0"
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.1"
