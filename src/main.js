@@ -5,15 +5,10 @@ import router from '@/router'
 import '../dist/allComponents'
 import '../dist/allPages'
 import '@directives'
+import '@plugins'
+import vueConfig from '@pluginsConfig'
 import '@filters'
 import { createProvider } from './vue-apollo'
-import VueI18n from 'vue-i18n'
-
-Vue.use(VueI18n)
-
-const i18n = new VueI18n({
-  locale: 'en' // set locale
-})
 
 Vue.config.productionTip = false
 Vue.prototype.$feComponents = process.env.COMPONENTS_BASEPATH
@@ -26,7 +21,7 @@ const graphQLOptions = {
 }
 
 new Vue({
-  i18n,
+  ...vueConfig,
   apolloProvider: createProvider(graphQLOptions),
   router,
   render: h => h(App)
