@@ -9,7 +9,6 @@
   "pagesImportFile": "../dist/allPages.js",
   "directivesFile": "src/register/directives.js",
   "pluginsFile": "src/register/plugins.js",
-  "pluginsConfigFile": "src/register/pluginsConfigs.js",
   "filtersFile": "src/register/filters.js",
   "pathToPartials": "./preview/views/",
   "pathToComponentViews": "./dist/views/",
