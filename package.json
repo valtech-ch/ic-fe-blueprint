@@ -13,13 +13,10 @@
   },
   "dependencies": {
     "@adobe/htlengine": "2.2.2",
-    "apollo-cache-inmemory": "^1.6.0",
     "axios": "^0.18.1",
     "babel-runtime": "^6.26.0",
     "bulma": "^0.7.5",
     "chokidar": "^3.0.2",
-    "graphql": "^14.4.2",
-    "graphql-type-json": "^0.2.1",
     "handlebars": "^4.1.2",
     "lowdb": "^1.0.0",
     "marked": "^0.6.3",
@@ -31,7 +28,6 @@
     "sass-loader": "^7.2.0",
     "shortid": "^2.2.8",
     "vue": "^2.6.10",
-    "vue-apollo": "^3.0.0-beta.11",
     "vue-clipboard2": "^0.3.0",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.1.2"
@@ -43,9 +39,7 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.2",
     "eslint": "^5.16.0",
-    "eslint-plugin-graphql": "^3.0.3",
     "eslint-plugin-vue": "^5.2.3",
-    "graphql-tag": "^2.9.0",
     "rimraf": "^2.7.0",
     "vue-template-compiler": "^2.6.10"
   },
