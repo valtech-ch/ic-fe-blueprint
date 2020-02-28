@@ -24,6 +24,17 @@
             </div>
           </div>
         </div>
+        <ul class="component-tools">
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">{{ labelLtr }}</span>
+              <span v-else>{{ labelRtl }}</span>
+            </li>
+            <li>
+              <span @click="saveAsImage()">{{ saveImage }}</span>
+            </li>
+          </template>
+        </ul>
       </div>
 
       <div class="tabs">
@@ -58,8 +69,7 @@
           </li>
         </ul>
       </div>
-
-      <div class="tabs-content">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -123,9 +133,10 @@
 import Vue from 'vue'
 import VueMarkdown from 'vue-markdown'
 import VueClipboard from 'vue-clipboard2'
+import html2canvas from 'html2canvas'
 import 'mdn-polyfills/CustomEvent'
 
-Vue.use(VueClipboard)
+Vue.use(VueClipboard, html2canvas)
 
 export default {
   name: 'ComponentView',
@@ -139,7 +150,11 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      labelRtl: 'RTL',
+      labelLtr: 'LTR',
+      rtl: false,
+      saveImage: 'saveImage'
     }
   },
 
@@ -166,7 +181,7 @@ export default {
 
     pageTitle () {
       const { type, view } = this.$route.params
-      let pageTitleParts = [ type, view ]
+      let pageTitleParts = [type, view]
 
       return pageTitleParts.reverse().join(' - ')
     }
@@ -228,6 +243,18 @@ export default {
       return {
         template
       }
+    },
+
+    saveAsImage () {
+      const findEl = document.querySelector('.tabs-content div')
+      html2canvas(findEl).then((canvas) => {
+        const link = document.createElement('a')
+        document.body.appendChild(link)
+        link.download = "cmp-image.jpg"
+        link.href = canvas.toDataURL()
+        link.click()
+        link.remove()
+      })
     }
   }
 }
@@ -246,6 +273,28 @@ export default {
 
 .modelSelection {
   padding: 20px 0;
+
+  .component-tools {
+      float: right;
+
+    li {
+      display: inline-block;
+
+      &:empty {
+        display: none;
+      }
+
+      &:hover {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      &:not(:last-child):after {
+        padding: 0 6px;
+        content: '|';
+      }
+    }
+  }
 }
 
 .dropdown-item {
