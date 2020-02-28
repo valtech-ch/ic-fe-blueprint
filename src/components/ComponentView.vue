@@ -24,6 +24,17 @@
             </div>
           </div>
         </div>
+        <ul class="component-tools">
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">{{ labelLtr }}</span>
+              <span v-else>{{ labelRtl }}</span>
+            </li>
+            <li>
+              <span @click="grid = !grid" :class="grid ? 'active' : ''">{{ labelGrid }}</span>
+            </li>
+          </template>
+        </ul>
       </div>
 
       <div class="tabs">
@@ -58,8 +69,21 @@
           </li>
         </ul>
       </div>
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content">
 
-      <div class="tabs-content">
+        <svg v-if="grid" class="svg-grid" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+              <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.5"/>
+            </pattern>
+            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+              <rect width="80" height="80" fill="url(#smallGrid)"/>
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -139,7 +163,12 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      labelRtl: 'RTL',
+      labelLtr: 'LTR',
+      labelGrid: 'Grid',
+      rtl: false,
+      grid: false,
     }
   },
 
@@ -244,8 +273,43 @@ export default {
   }
 }
 
+.tabs-content {
+  position: relative;
+
+  .svg-grid {
+    position: absolute;
+    pointer-events: none;
+  }
+}
+
 .modelSelection {
   padding: 20px 0;
+
+  .component-tools {
+      float: right;
+
+    .active {
+      font-weight: bold;
+    }
+
+    li {
+      display: inline-block;
+
+      &:empty {
+        display: none;
+      }
+
+      &:hover {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      &:not(:last-child):after {
+        padding: 0 6px;
+        content: '|';
+      }
+    }
+  }
 }
 
 .dropdown-item {
