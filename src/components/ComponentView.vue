@@ -24,6 +24,18 @@
             </div>
           </div>
         </div>
+        <ul class="component-tools">
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">LTR</span>
+              <span v-else>RTL</span>
+            </li>
+            <li class="background">
+              <span v-if="!hasBackground" @click="hasBackground=true">{{ labelBackground }}</span>
+              <input v-else type="text" v-model="backgroundValue" v-on:change.enter="hasBackground">
+            </li>
+          </template>
+        </ul>
       </div>
 
       <div class="tabs">
@@ -59,7 +71,7 @@
         </ul>
       </div>
 
-      <div class="tabs-content">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{ backgroundColor: backgroundValue }">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -139,7 +151,11 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      rtl: false,
+      hasBackground: false,
+      labelBackground: 'Background',
+      backgroundValue: '#fff'
     }
   },
 
@@ -222,12 +238,6 @@ export default {
       window.setTimeout(() => {
         this[`copied${pos}`] = false
       }, 2500)
-    },
-
-    insertRaw (template) {
-      return {
-        template
-      }
     }
   }
 }
@@ -246,10 +256,40 @@ export default {
 
 .modelSelection {
   padding: 20px 0;
+
+  .component-tools {
+    float: right;
+
+    li {
+      display: inline-block;
+
+      &:empty {
+        display: none;
+      }
+
+      &:hover {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      &:not(:last-child):after {
+        padding: 0 6px;
+        content: '|';
+      }
+    }
+  }
 }
 
 .dropdown-item {
   text-transform: capitalize;
+}
+
+.background {
+  input {
+    outline: none;
+    width: 70px;
+    padding: 0 4px;
+  }
 }
 
 .is-fullscreen-demo .tabs-content {
