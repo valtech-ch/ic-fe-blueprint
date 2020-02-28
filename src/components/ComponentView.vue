@@ -24,6 +24,18 @@
             </div>
           </div>
         </div>
+        <ul class="component-tools">
+          <template v-if="activeTab === 'view'">
+            <li @click="rtl = !rtl">
+              <span v-if="rtl">{{ labelLtr }}</span>
+              <span v-else>{{ labelRtl }}</span>
+            </li>
+            <li class="zooming">
+              <span @click="zoom('decrease')" :class="zoomLevel < 1 ? 'active' : ''">(-)</span>
+              <span @click="zoom('increase')" :class="zoomLevel > 1 ? 'active' : ''">(+)</span>
+            </li>
+          </template>
+        </ul>
       </div>
 
       <div class="tabs">
@@ -58,8 +70,7 @@
           </li>
         </ul>
       </div>
-
-      <div class="tabs-content">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content" :style="{zoom: zoomLevel}">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -139,7 +150,11 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      labelRtl: 'RTL',
+      labelLtr: 'LTR',
+      rtl: false,
+      zoomLevel: 1
     }
   },
 
@@ -228,6 +243,19 @@ export default {
       return {
         template
       }
+    },
+
+    zoom (operation) {
+      const step = 0.1
+      if (operation === 'decrease') {
+        if (this.zoomLevel >= 0.2) {
+          this.zoomLevel = this.zoomLevel - step
+        }
+      } else {
+        if (this.zoomLevel <= 2) {
+          this.zoomLevel = this.zoomLevel + step
+        }
+      }
     }
   }
 }
@@ -246,6 +274,51 @@ export default {
 
 .modelSelection {
   padding: 20px 0;
+
+  .component-tools {
+      float: right;
+
+    .zooming {
+      &:hover {
+        font-weight: normal;
+      }
+
+      span {
+        &:hover {
+          font-weight: bold;
+        }
+
+        &:not(:last-child):after {
+          padding: 0 6px;
+          content: '•';
+          pointer-events: none;
+        }
+
+        &.active {
+          color: #44453a;
+          font-weight: bold;
+        }
+      }
+    }
+
+    li {
+      display: inline-block;
+
+      &:empty {
+        display: none;
+      }
+
+      &:hover {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      &:not(:last-child):after {
+        padding: 0 6px;
+        content: '|';
+      }
+    }
+  }
 }
 
 .dropdown-item {

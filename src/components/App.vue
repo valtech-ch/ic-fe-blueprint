@@ -6,8 +6,8 @@
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
         <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
-              <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
-                 <span>{{ type.title }}</span>
+                <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
+                <span>{{ type.title }}</span>
                 <template v-if="type.children.length>0">
                  <span v-if="selectedMenuItem !== index"><b>+</b></span>
                  <span v-else><b>-</b></span>
@@ -163,6 +163,7 @@ html, body {
   color: white;
   z-index: 1;
   opacity: 0.7;
+  outline: none;
 }
 
 .menu {
@@ -217,7 +218,14 @@ html, body {
   }
 }
 
-.menu-element .menu-element{
+.is-fullscreen-demo {
+
+   & .modelSelection, .tabs {
+        display: none;
+    }
+}
+
+.menu-element .menu-element {
   padding-left: 20px;
 }
 </style>
