@@ -56,6 +56,11 @@
             <router-link
               :to="`/${rParams.type}/${rParams.view}/errors/${model}`">Errors</router-link>
           </li>
+          <li v-if="!data.cmsOnly" :class="{'is-active': activeTab === 'markup'}">
+            <router-link
+                    :to="`/${rParams.type}/${rParams.view}/markup/${model}`">Markup
+            </router-link>
+          </li>
         </ul>
       </div>
 
@@ -114,6 +119,19 @@
             </li>
           </ul>
         </template>
+        <template v-else-if="activeTab === 'markup'">
+            <div v-if="component" class="markup" v-markup>
+                <component :is="component" v-bind="models[model]"/>
+                <button
+                        class="button button1"
+                        type="button"
+                        v-clipboard:success="onCopy"
+                        v-clipboard:copy="markupData"
+                        :class="{ 'is-success': copied1 }">Copy!
+                </button>
+            </div>
+            <div v-else>No Vue component available</div>
+        </template>
       </div>
     </div>
   </section>
@@ -127,6 +145,25 @@ import 'mdn-polyfills/CustomEvent'
 
 Vue.use(VueClipboard)
 
+Vue.directive('markup',
+  {
+    bind: (el, binding, vnode) => {
+      const regEx = /(\sdata-v-\w+?="")/g
+      const markup = el.innerHTML.replace(regEx, '')
+      const node = document.createElement('code')
+      const markupNode = document.createTextNode(markup)
+      const firstChild = el.firstElementChild
+
+      if (firstChild) {
+        node.appendChild(markupNode)
+        el.appendChild(node)
+        firstChild.style.display = 'none'
+        vnode.context.markupData = markup
+      }
+    }
+  }
+)
+
 export default {
   name: 'ComponentView',
 
@@ -139,7 +176,8 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      markupData: ''
     }
   },
 
@@ -234,7 +272,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.usage {
+.usage, .markup {
   position: relative;
 
   button {
@@ -259,5 +297,14 @@ export default {
   width: 100%;
   height: 100%;
   background: #fff;
+}
+
+.markup {
+    padding: 20px;
+    background-color: white;
+
+    &:empty {
+        display: none;
+    }
 }
 </style>
