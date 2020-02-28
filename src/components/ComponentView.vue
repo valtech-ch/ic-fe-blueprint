@@ -24,6 +24,29 @@
             </div>
           </div>
         </div>
+        <ul class="component-tools">
+          <li v-if="activeTab === 'view'" @click="rtl = !rtl">
+            <span v-if="rtl">{{ labelLtr }}</span>
+            <span v-else>{{ labelRtl }}</span>
+          </li>
+          <li v-if="activeTab === 'view'" class="breakpoints">
+            <div class="viewport-dropdown">
+              <span>{{ labelViewport }}</span>
+              <div class="viewport-content">
+                <span v-if="viewport.width != '100%'" @click="landscape = !landscape" :class="landscape ? 'active' : ''">
+                  {{ labelRotate }}
+                </span>
+                <span v-for="(device, index) in devices" @click="setActive(index)"
+                      :class="device.viewportActive ? 'active' : ''"
+                      :key="index">{{device.name }}
+                  <span v-show="device.width != '100'">
+                    {{device.width}} x {{device.height}}
+                  </span>
+                </span>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
 
       <div class="tabs">
@@ -59,7 +82,9 @@
         </ul>
       </div>
 
-      <div class="tabs-content">
+      <div :dir="rtl ? 'rtl' : 'ltr'" class="tabs-content"
+           :class="!devices[0].viewportActive ? 'viewport' : ''"
+           :style="!landscape ? {height: viewport.height, width: viewport.width} : {height: viewport.width, width: viewport.height}">
         <template v-if="activeTab === 'view'">
           <component v-if="component" :is="component" v-bind="models[model]" />
           <div v-else>No Vue component available</div>
@@ -125,6 +150,8 @@ import VueMarkdown from 'vue-markdown'
 import VueClipboard from 'vue-clipboard2'
 import 'mdn-polyfills/CustomEvent'
 
+import listDevices from './devices.json'
+
 Vue.use(VueClipboard)
 
 export default {
@@ -139,7 +166,19 @@ export default {
       component: null,
       data: {},
       copied1: false,
-      copied2: false
+      copied2: false,
+      labelRtl: 'RTL',
+      labelLtr: 'LTR',
+      labelViewport: 'Viewport',
+      labelRotate: 'Rotate viewport',
+      rtl: false,
+      landscape: false,
+      viewportActive: false,
+      devices: listDevices.items,
+      viewport: {
+        height: '100%',
+        width: '100%'
+      }
     }
   },
 
@@ -228,6 +267,23 @@ export default {
       return {
         template
       }
+    },
+
+    setActive(index) {
+      for (let i = 0; i < this.devices.length; i++) {
+        if (i === index) {
+          this.devices[i].viewportActive = true
+          if (i !== 0) {
+            this.viewport.height = this.devices[index].height + 'px'
+            this.viewport.width = this.devices[index].width + 'px'
+          } else {
+            this.viewport.height = this.devices[index].height + '%'
+            this.viewport.width = this.devices[index].width + '%'
+          }
+        } else {
+          this.devices[i].viewportActive = false
+        }
+      }
     }
   }
 }
@@ -246,6 +302,45 @@ export default {
 
 .modelSelection {
   padding: 20px 0;
+
+  .component-tools {
+      float: right;
+
+    .breakpoints {
+      &:hover {
+        font-weight: normal;
+      }
+
+      span {
+        &:hover {
+          font-weight: bold;
+        }
+        &.active {
+          color: #44453a;
+          font-weight: bold;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    li {
+      display: inline-block;
+
+      &:empty {
+        display: none;
+      }
+
+      &:hover {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      &:not(:last-child):after {
+        padding: 0 6px;
+        content: '|';
+      }
+    }
+  }
 }
 
 .dropdown-item {
@@ -259,5 +354,42 @@ export default {
   width: 100%;
   height: 100%;
   background: #fff;
+}
+
+.viewport {
+  border: 2px dashed #757763;
+  overflow: auto;
+}
+
+.viewport-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.viewport-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  right: 0;
+  z-index: 1;
+  border-radius: 10px;
+  cursor: default;
+
+  span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    &:hover {
+      background-color: lightgray;
+      cursor: pointer;
+    }
+  }
+}
+
+.viewport-dropdown:hover .viewport-content {
+  display: block;
 }
 </style>

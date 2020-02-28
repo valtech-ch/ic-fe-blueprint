@@ -163,20 +163,21 @@ html, body {
   color: white;
   z-index: 1;
   opacity: 0.7;
+  outline: none;
 }
 
 .menu {
-  display: block;
-  background: $grey-light;
-  min-height: calc(100% + #{2 * $column-gap});
-  padding: $column-gap;
-  margin: - $column-gap;
+   display: block;
+   background: $grey-light;
+   min-height: calc(100% + #{2 * $column-gap});
+   padding: $column-gap;
+   margin: - $column-gap;
 
-  a {
-    text-decoration: none;
-  }
+   a {
+     text-decoration: none;
+   }
 
-  &-list {
+   &-list {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -200,13 +201,13 @@ html, body {
     }
   }
 
-    .menu-label {
-      display: flex;
-      justify-content: space-between;
-        &:hover {
-          color: black;
-        }
-    }
+   .menu-label {
+     display: flex;
+     justify-content: space-between;
+       &:hover {
+         color: black;
+       }
+   }
 
   .is-fullscreen-demo &,
   .is-wide-demo & {
@@ -217,7 +218,14 @@ html, body {
   }
 }
 
-.menu-element .menu-element{
+.is-fullscreen-demo {
+
+   & .modelSelection, .tabs {
+        display: none;
+    }
+}
+
+.menu-element .menu-element {
   padding-left: 20px;
 }
 </style>
