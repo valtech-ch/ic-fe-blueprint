@@ -9,6 +9,7 @@
   "pagesImportFile": "../dist/allPages.js",
   "directivesFile": "src/register/directives.js",
   "pluginsFile": "src/register/plugins.js",
+  "mixinsFile": "src/register/mixins.js",
   "filtersFile": "src/register/filters.js",
   "pathToPartials": "./preview/views/",
   "pathToComponentViews": "./dist/views/",

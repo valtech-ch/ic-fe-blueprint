@@ -10,6 +10,7 @@ const pagesPath = definePath(args.pagesPath, rootPath, config.pages)
 const assetsPath = definePath(args.assetsPath, rootPath, config.assets)
 const directivesFilePath = definePath(args.directivesFilePath, rootPath, config.directivesFile)
 const pluginsFilePath = definePath(args.pluginsFilePath, rootPath, config.pluginsFile)
+const mixinsFilePath = definePath(args.mixinsFilePath, rootPath, config.mixinsFile)
 const filtersFilePath = definePath(args.filtersFilePath, rootPath, config.filtersFile)
 
 module.exports = {
@@ -27,6 +28,7 @@ module.exports = {
                     options[0]['process.env'].DIRECTIVES = `"${directivesFilePath}"`
                     options[0]['process.env'].FILTERS = `"${filtersFilePath}"`
                     options[0]['process.env'].PLUGINS = `"${pluginsFilePath}"`
+                    options[0]['process.env'].MIXINS = `"${mixinsFilePath}"`
                     options[0]['process.env'].BLUEPRINT = `"true"`
                     options[0]['process.env'].BLUEPRINT_SET = `"${process.env.BLUEPRINT_SET || 'default'}"`
                     return options
@@ -47,6 +49,9 @@ module.exports = {
 
         config.resolve.alias
             .set('@plugins', pluginsFilePath)
+
+        config.resolve.alias
+            .set('@mixins', mixinsFilePath)
 
         config.resolve.alias
             .set('@filters', filtersFilePath)
