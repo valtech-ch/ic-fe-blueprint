@@ -1,4 +1,4 @@
-const myMixin = {
+export default {
     created: function() {
         this.hello();
     },
