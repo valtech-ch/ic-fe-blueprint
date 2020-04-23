@@ -88,12 +88,14 @@ export default {
     items () {
       let data = []
       if (this.selected) {
-        this.selected.children.forEach(component => {
-          data.push({
-            type: this.selected.title,
-            view: component.title
+        if (this.selected.children !== undefined) {
+          this.selected.children.forEach(component => {
+            data.push({
+              type: this.selected.title,
+              view: component.title
+            })
           })
-        })
+        }
       } else {
         this.data.forEach(type => {
           if (type.children) {
