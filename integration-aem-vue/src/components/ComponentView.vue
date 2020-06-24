@@ -209,7 +209,6 @@ export default {
         .then(res => {
           this.data = res
           this.component = res.cmsOnly ? false : componentName
-
           Vue.nextTick(() => {
             document.dispatchEvent(new CustomEvent('DOMContentLoaded'))
           })
@@ -251,7 +250,6 @@ export default {
 .dropdown-item {
   text-transform: capitalize;
 }
-
 .is-fullscreen-demo .tabs-content {
   position: absolute;
   top: 0;

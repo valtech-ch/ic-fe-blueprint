@@ -37,6 +37,7 @@
 import '@assets/blueprint/app.pcss'
 import logo from '@assets/blueprint/logo.svg'
 
+
 export default {
   name: 'App',
 
@@ -64,6 +65,7 @@ export default {
   mounted () {
     this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
+
     fetch('/api/structure')
       .then(res => res.json())
       .then(res => {
@@ -81,6 +83,7 @@ export default {
         this.isWideDemo = !this.isWideDemo
       }
     })
+
   },
 
   computed: {
@@ -135,6 +138,7 @@ $input-shadow: none;
 @import "bulma/sass/elements/title.sass";
 @import "bulma/sass/elements/other.sass";
 
+
 @import "bulma/sass/components/_all.sass";
 @import "bulma/sass/grid/_all.sass";
 @import "bulma/sass/layout/_all.sass";
@@ -185,6 +189,7 @@ html, body {
   &-image {
     width: 80%;
     max-height: 80px;
+
     margin-bottom: 50px;
   }
 
@@ -215,6 +220,7 @@ html, body {
     padding: 0;
     overflow: hidden;
   }
+
 }
 
 .menu-element .menu-element{
