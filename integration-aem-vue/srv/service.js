@@ -97,7 +97,6 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
             if (cmsTemplate) {
               const engine = require('./htl/engine')
               raw = await engine(vm.htl || {}, cmsTemplate, { useDir: pathToAemMocks, useOptions: { model: viewModel } })
-
               if (raw) {
                 raw = raw.body
               }
@@ -110,7 +109,6 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
             }
           } catch (e) {
             errors.push({ text: e.toString() })
-
           }
         }
 
@@ -119,7 +117,6 @@ module.exports = function (pathToComponents, pathToPages, pathToAemMocks, backen
         response.raw = raw
         response.html = cmsTemplate
         response.cms = backendTemplates
-
         response.cmsOnly = cmsOnly
         response.notifications = notifications
         response.errors = errors
