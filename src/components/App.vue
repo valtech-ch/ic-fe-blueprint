@@ -6,11 +6,11 @@
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
         <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
-              <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
-                 <span>{{ type.title }}</span>
+              <span class="menu-label">
+                <span>{{ type.title }}</span>
                 <template v-if="type.children.length>0">
-                 <span v-if="selectedMenuItem !== index"><b>+</b></span>
-                 <span v-else><b>-</b></span>
+                 <span v-show="selectedMenuItem !== index"><b>+</b></span>
+                 <span v-show="selectedMenuItem === index"><b>-</b></span>
                 </template>
               </span>
           </router-link>
@@ -18,7 +18,7 @@
             v-for="component in type.children"
             :key="component.title"
             class="menu-list">
-            <li v-if="selectedMenuItem === index" class="menu-element">
+            <li v-show="selectedMenuItem === index" class="menu-element">
               <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
             </li>
           </ul>
@@ -55,12 +55,16 @@ export default {
       this.isFullscreenDemo = !this.isFullscreenDemo
     },
 
-    menuCategory (index) {
-      if (this.selectedMenuItem === index) {
-        this.selectedMenuItem = null
-      } else this.selectedMenuItem = index
+    // this method is checking the url and based on that will open the correct menu item
+    selectMenuItem() {
+      for (let index = 0; index < this.navigation.length; index++) {
+        if (this.$route.params.type === this.navigation[index].title) {
+          this.selectedMenuItem = index
+        }
+      }
     }
   },
+
   mounted () {
     this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
@@ -81,6 +85,14 @@ export default {
         this.isWideDemo = !this.isWideDemo
       }
     })
+  },
+
+  watch: {
+    $route () {
+      if (this.$route.params.type !== '' || this.$route.params.pages !== '') {
+        this.selectMenuItem()
+      }
+    }
   },
 
   computed: {
@@ -197,6 +209,11 @@ html, body {
 
     .menu-element {
       padding-left: 20px;
+    }
+
+    .router-link-active {
+      color: black;
+      text-decoration: underline;
     }
   }
 
