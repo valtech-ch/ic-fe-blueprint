@@ -26,7 +26,8 @@
         <tbody>
           <tr v-for="item in items" :key="item.view">
             <td width="40%">
-              <router-link :to="`/${item.type}/${item.view}/view/default`">{{ item.view }}</router-link>
+              <router-link v-if="!isPages" :to="`/${item.type}/${item.view}/view/default`">{{ item.view }}</router-link>
+              <router-link v-else :to="`/${item.type}/${item.view}`">{{ item.view }}</router-link>
             </td>
             <td width="30%">{{ item.type }}</td>
             <td width="30%">{{ item.component }}</td>
@@ -64,6 +65,7 @@ export default {
 
   mounted () {
     this.loadData()
+    this.isPages()
   },
 
   methods: {
@@ -81,6 +83,9 @@ export default {
             this.response = res
           })
       }
+    },
+    isPages () {
+      return this.$route.params.type === 'pages'
     }
   },
 
