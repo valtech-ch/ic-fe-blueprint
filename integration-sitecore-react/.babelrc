@@ -1,0 +1,33 @@
+// {
+// 	"plugins": [
+// 		["@babel/plugin-transform-runtime",
+// 			{
+// 				"regenerator": true
+// 			}
+// 		]
+// 	],	
+// 	"presets": [
+// 		[
+// 		  "@babel/preset-env",
+// 		  {
+// 			"loose": true,
+// 			"shippedProposals": true
+// 		  }
+// 		],
+// 		"@babel/preset-react"
+// 	]
+// }
+
+{
+	"presets": [
+		[
+			"@babel/preset-env",
+			{
+				"loose": true,
+				"shippedProposals": true
+			}
+		],
+		"@babel/preset-react"
+	]
+}
+

@@ -1,0 +1,47 @@
+{
+  "name": "webpack-simple-boilerplate",
+  "version": "1.0.0",
+  "description": "Simple webpack boilerplate for single page applications",
+  "main": "app.js",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --hot --progress",
+    "build": "webpack -p --progress",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jazzbrotha/webpack-simple-boilerplate.git"
+  },
+  "keywords": [
+    "webpack",
+    "boilerplate",
+    "es6",
+    "babel",
+    "sass"
+  ],
+  "author": "Valtech",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jazzbrotha/webpack-simple-boilerplate/issues"
+  },
+  "homepage": "https://github.com/jazzbrotha/webpack-simple-boilerplate#readme",
+  "devDependencies": {
+    "@babel/core": "7.10.1",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "@babel/preset-env": "7.10.1",
+    "css-loader": "^0.28.0",
+    "html-loader": "^1.1.0",
+    "html-webpack-plugin": "^4.3.0",
+    "node-sass": "^4.5.2",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.16.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
