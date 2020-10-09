@@ -4,28 +4,30 @@
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
-        <template v-for="(type, index) in navigation">
-          <router-link :key="type.title" :to="`/${type.title}`">
-              <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
-                 <span>{{ type.title }}</span>
-                <template v-if="type.children.length>0">
-                 <span v-if="selectedMenuItem !== index"><b>+</b></span>
-                 <span v-else><b>-</b></span>
-                </template>
-              </span>
-          </router-link>
-          <ul
-            v-for="component in type.children"
-            :key="component.title"
-            class="menu-list">
-            <li v-if="selectedMenuItem === index" class="menu-element">
-              <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
-            </li>
-          </ul>
-        </template>
+          <div class="scroll-area">
+            <template v-for="(type, index) in navigation">
+              <router-link :key="type.title" :to="`/${type.title}`">
+                  <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
+                     <span>{{ type.title }}</span>
+                    <template v-if="type.children.length>0">
+                     <span v-if="selectedMenuItem !== index"><b>+</b></span>
+                     <span v-else><b>-</b></span>
+                    </template>
+                  </span>
+              </router-link>
+              <ul
+                v-for="component in type.children"
+                :key="component.title"
+                class="menu-list">
+                <li v-if="selectedMenuItem === index" class="menu-element">
+                  <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
+                </li>
+              </ul>
+            </template>
+          </div>
       </aside>
     </div>
-    <div class="column">
+    <div class="column component">
       <router-view
         :selected="selected"
         :data="navigation" />
@@ -168,9 +170,12 @@ html, body {
 .menu {
   display: block;
   background: $grey-light;
-  min-height: calc(100% + #{2 * $column-gap});
+  height: 100%;
   padding: $column-gap;
   margin: - $column-gap;
+  position: fixed;
+  top: 12px;
+  left: 12px;
 
   a {
     text-decoration: none;
@@ -215,9 +220,33 @@ html, body {
     padding: 0;
     overflow: hidden;
   }
+
+  .scroll-area {
+    overflow-y: auto;
+    height: calc(100% - 110px);
+    width: 300px;
+
+    &::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: silver;
+    }
+
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background: darkgray;
+      }
+    }
+  }
 }
 
 .menu-element .menu-element{
   padding-left: 20px;
+}
+
+.column.component {
+  margin-left: 300px;
 }
 </style>
