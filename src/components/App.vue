@@ -4,6 +4,16 @@
     <div class="column is-narrow">
       <aside class="menu">
         <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
+        <div class="componentFilter">
+          <input
+              autofocus
+              class="input"
+              :class="filter ? 'active' : '' "
+              type="search"
+              placeholder="Find component..."
+              v-model="filter"
+          >
+        </div>
         <template v-for="(type, index) in navigation">
           <router-link :key="type.title" :to="`/${type.title}`">
               <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
@@ -14,14 +24,15 @@
                 </template>
               </span>
           </router-link>
-          <ul
-            v-for="component in type.children"
-            :key="component.title"
-            class="menu-list">
-            <li v-if="selectedMenuItem === index" class="menu-element">
-              <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
-            </li>
-          </ul>
+            <ul
+                v-for="component in type.children"
+                :key="component.title"
+                class="menu-list"
+                v-show="search(filter, component.title)">
+                <li v-show="filter !== '' || selectedMenuItem === index" class="menu-element" :style="filter ? 'font-weight: bold' : ''">
+                    <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
+                </li>
+            </ul>
         </template>
       </aside>
     </div>
@@ -47,20 +58,33 @@ export default {
       isFullscreenDemo: false,
       isWideDemo: false,
       toggleFullscreen: 'toggle fullview',
-      selectedMenuItem: null
+      selectedMenuItem: null,
+      filter: ''
     }
   },
+
   methods: {
     toggleFullscreenView () {
       this.isFullscreenDemo = !this.isFullscreenDemo
     },
 
+    search (filter, title) {
+      let filterUpperCase = filter.charAt(0).toUpperCase()
+      let filterLowerCase = filter.charAt(0).toLowerCase()
+
+      if (title.startsWith(filterLowerCase) || title.startsWith(filterUpperCase)) {
+        return true
+      }
+    },
+
     menuCategory (index) {
+      this.filter = ''
       if (this.selectedMenuItem === index) {
         this.selectedMenuItem = null
       } else this.selectedMenuItem = index
     }
   },
+
   mounted () {
     this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
 
@@ -186,6 +210,23 @@ html, body {
     width: 80%;
     max-height: 80px;
     margin-bottom: 50px;
+  }
+
+  .componentFilter input {
+    background-color: whitesmoke;
+    outline: none;
+    padding: 6px;
+    border: 1px solid transparent;
+    margin-bottom: 10px;
+    width: 70%;
+
+    &:focus {
+      border: 1px solid #363636;
+    }
+
+    &.active {
+      border: 1px solid #99ca3c;
+    }
   }
 
   &-element {
