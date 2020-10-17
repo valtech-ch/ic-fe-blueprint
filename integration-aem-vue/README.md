@@ -25,3 +25,10 @@ yarn run test
 ```
 yarn run lint
 ```
+
+## Copy of 'Challenges and future work' from Virtual Retreat
+
+* caching file improvements
+* double reload to be fixe
+* add GraphQL support
+
