@@ -34,3 +34,10 @@ npm run build
 * `webpack.config.babel.js` - Your app's config file. More instructions of the set up in here.
 * `package.json` - All the dependencies for the project listed.
 * `.babelrc` - Babel set up. This file can be expanded to fit your needs.
+
+## Copy of 'Challenges and future work' from Virtual Retreat
+
+* Sitecore friendly Webpack React boilerplate 0.0.2
+* Add njk support (eg. Eleventy)
+* Add PostCss Tailwind
+
