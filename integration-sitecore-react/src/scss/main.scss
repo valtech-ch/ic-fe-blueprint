@@ -1,12 +1,2 @@
+@import 'vendors/tailwind.scss';
 @import 'variables';
-
-body {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: $awesomeColor;
-  color: $white;
-  font-size: 2em;
-  overflow: hidden;
-}

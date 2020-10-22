@@ -1,11 +1,12 @@
 // import HtmlWebpackPlugin from 'html-webpack-plugin';
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const globImporter = require('node-sass-glob-importer');
 
 module.exports = {
 	// Your main js file
 	entry: {
-		app: './src/js/app.js',
+		app: './src/js/app.js', 
 	},
 	// Production set up
 	output: {
@@ -23,13 +24,39 @@ module.exports = {
 				loader: 'babel-loader'
 			},
 			{
-				test: /\.scss?$/,
-				loader: 'style-loader!css-loader!sass-loader'
+				test: /\.(sa|sc|c)ss$/,
+				use: [
+					{
+            loader: "css-loader",
+            options: {
+              url: false
+            }
+          },
+          {
+            loader: 'postcss-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                importer: globImporter()
+              }
+            }
+          },
+				]
 			},
-			{
-				test: /\.html$/i,
-				loader: 'html-loader'
-			},
+      {
+        test: /\.(njk)$/i,
+        use: [
+          {
+            loader: 'ignore-loader'
+          }
+        ]
+      },
+      {
+        test: /\.html$/i,
+        loader: 'html-loader'
+      },
 		]
 	},
 
