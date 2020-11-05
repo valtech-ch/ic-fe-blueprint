@@ -1,2 +1,2 @@
-import './scss/main.scss';
-import './js/react-component';
+import './_scss/main.scss';
+import './_components/test-react-component/index';
