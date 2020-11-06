@@ -1,43 +1,35 @@
-# Webpack Simple Boilerplate
-This boilerplate sets up a development environment in `node.js`, `es6`, and `sass` as well as produces a browser-ready application.
+## Web technologies & patterns
 
-If you experience any issues, please [report](https://github.com/JazzBrotha/webpack-simple-boilerplate/issues/new).
+- Tailwind
 
-## Instructions
+> https://tailwindcss.com/docs/installation/
 
-* Clone this repository.
+- SASSDoc
 
-* Install all dependencies for your project:
+> http://sassdoc.com/
 
-```bash
-npm install
+### Install NPM dependencies
+
+Run in the CMD:
+
+```cmd
+npm i
 ```
 
-* For development:
+### Serve the site locally
 
-```bash
+```cmd
+npm start
+```
+
+### Build a development version of the site
+
+```cmd
 npm run dev
 ```
-* For production:
 
-```bash
+### Build a production version of the site
+
+```cmd
 npm run build
 ```
-
-## App set up
-
-* `dist` - Production folder. One root file in `index.html` linked to your entire app in form of `bundle.min.js`.
-* `src` - Development folder.
-    - `index.ejs` - Write all your html here.
-    - `js` - All unconverted `js`-files.
-    - `scss` - All unconverted `scss`-files.
-* `webpack.config.babel.js` - Your app's config file. More instructions of the set up in here.
-* `package.json` - All the dependencies for the project listed.
-* `.babelrc` - Babel set up. This file can be expanded to fit your needs.
-
-## Copy of 'Challenges and future work' from Virtual Retreat
-
-* Sitecore friendly Webpack React boilerplate 0.0.2
-* Add njk support (eg. Eleventy)
-* Add PostCss Tailwind
-
