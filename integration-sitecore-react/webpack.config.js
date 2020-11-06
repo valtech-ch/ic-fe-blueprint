@@ -14,6 +14,7 @@ module.exports = {
   },
   output: {
     filename: '[name].[contenthash].js',
+    publicPath: '/',
     path: path.resolve(__dirname, 'dist')
   },
   devServer: {
@@ -26,7 +27,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'webpack Boilerplate',
+      title: 'Webpack Boilerplate',
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html'
     }),
@@ -44,6 +45,10 @@ module.exports = {
   ],
   module: {
     rules: [
+      {
+        test: /\.html$/i,
+        use: 'html-loader'
+      },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
