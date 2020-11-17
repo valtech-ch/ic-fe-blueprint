@@ -1,6 +1,6 @@
 #test-react-component {
-  background-color: $awesomeColor;
-  color: $white;
+  background-color: var(--awesomeColor);
+  color: var(--white);
   width: 80%;
   border-radius: 1rem;
   padding: 2rem;

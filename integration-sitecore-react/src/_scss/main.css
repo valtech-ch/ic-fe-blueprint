@@ -1,0 +1,4 @@
+@import './vendors/tailwind.css';
+@import './_variables.css';
+
+@import-glob './../_components/**/*.css';
