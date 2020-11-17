@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const globImporter = require('node-sass-glob-importer');
 const path = require('path');
 require("@babel/polyfill");
 
@@ -50,35 +49,22 @@ module.exports = {
         use: 'html-loader'
       },
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            }
           },
           {
             loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                ident: 'postcss',
-                plugins: [
-                  require('tailwindcss'),
-                  require('autoprefixer'),
-                ],
-              },
-            }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sassOptions: {
-                importer: globImporter()
-              }
-            }
           }
-        ],
+        ]
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
