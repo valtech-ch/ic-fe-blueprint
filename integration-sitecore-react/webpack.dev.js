@@ -11,6 +11,11 @@ module.exports = merge(common, {
     filename: '[name].[contenthash].js',
     publicPath: '/'
   },
+  module: {
+    rules: [
+
+    ]
+  },
   plugins: [
     new BrowserSyncPlugin({
       host: 'localhost',

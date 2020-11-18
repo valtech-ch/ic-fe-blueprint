@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
-require("@babel/polyfill");
 
 module.exports = {
   entry: {
@@ -18,15 +19,11 @@ module.exports = {
         ]
       },
       {
-        test: /\.html$/i,
-        loader: 'html-loader'
-      },
-      {
         test: /\.css$/,
         exclude: /node_modules/,
         use: [
           {
-            loader: 'style-loader',
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
@@ -40,12 +37,44 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.html$/i,
+        loader: 'html-loader'
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 512, // in bytes,
+              fallback: require.resolve('file-loader'),
+              name: '[path][name].[ext]',
+              context: path.resolve(__dirname, "dist/"),
+              publicPath: '',
+              useRelativePaths: true
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true, // webpack@1.x
+              disable: true, // webpack@2.x and newer
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
             loader: 'file-loader',
-          },
-        ],
+            options: {
+              name: '[name].[ext]',
+              publicPath: '../fonts',
+              outputPath: 'fonts'
+            }
+          }
+        ]
       },
       {
         test: /\.m?js$/,
@@ -62,6 +91,21 @@ module.exports = {
       filename: 'index.html',
       inject: true,
       minify: false
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'dist/images',
+          to: 'images'
+        },
+        {
+          from: 'src/fonts',
+          to: 'fonts'
+        }
+      ]
     }),
   ],
 }
