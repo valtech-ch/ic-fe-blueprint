@@ -5,4 +5,8 @@
   border-radius: 1rem;
   padding: 2rem;
   margin: 4rem auto;
+
+  & > h1 {
+    color: red;
+  }
 }
