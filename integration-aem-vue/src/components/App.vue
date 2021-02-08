@@ -1,11 +1,14 @@
 <template>
   <div id="app" class="columns" :class="{ 'is-fullscreen-demo': isFullscreenDemo, 'is-wide-demo': isWideDemo }">
     <button class="fullscreen-toggle" v-on:click="toggleFullscreenView()">{{ toggleFullscreen }}</button>
-    <div class="column is-narrow">
+    <div class="column is-narrow blueprint__sidebar">
       <aside class="menu">
-        <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
-        <template v-for="(type, index) in navigation">
-          <router-link :key="type.title" :to="`/${type.title}`">
+        <div class="menu-logo">
+          <router-link :to="'/'"><img class="menu-image" :src="logo"></router-link>
+        </div>
+        <ul class="menu-navigation">
+          <li class="menu-navigation-item" v-for="(type, index) in navigation">
+            <router-link :key="type.title" :to="`/${type.title}`">
               <span @click="type.children.length>0 ? menuCategory(index) : ''" class="menu-label">
                  <span>{{ type.title }}</span>
                 <template v-if="type.children.length>0">
@@ -13,33 +16,31 @@
                  <span v-else><b>-</b></span>
                 </template>
               </span>
-          </router-link>
-          <ul
-            v-for="component in type.children"
-            :key="component.title"
-            class="menu-list">
-            <li v-if="selectedMenuItem === index" class="menu-element">
-              <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
-            </li>
-          </ul>
-        </template>
+            </router-link>
+            <ul
+                v-for="component in type.children"
+                :key="component.title"
+                class="menu-list">
+              <li v-if="selectedMenuItem === index" class="menu-element">
+                <router-link :to="`/${type.title}/${component.title}`">{{ component.title }}</router-link>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </aside>
     </div>
     <div class="column">
       <router-view
-        :selected="selected"
-        :data="navigation" />
+          :selected="selected"
+          :data="navigation" />
     </div>
   </div>
 </template>
-
 <script>
 import '@assets/blueprint/app.pcss'
 import logo from '@assets/blueprint/logo.svg'
-
 export default {
   name: 'App',
-
   data () {
     return {
       logo,
@@ -54,7 +55,6 @@ export default {
     toggleFullscreenView () {
       this.isFullscreenDemo = !this.isFullscreenDemo
     },
-
     menuCategory (index) {
       if (this.selectedMenuItem === index) {
         this.selectedMenuItem = null
@@ -63,26 +63,22 @@ export default {
   },
   mounted () {
     this.isFullscreenDemo = window.location.href.indexOf('#fullview') > -1
-
     fetch('/api/structure')
-      .then(res => res.json())
-      .then(res => {
-        this.navigation = res
-      })
-
+        .then(res => res.json())
+        .then(res => {
+          this.navigation = res
+        })
     document.addEventListener('keydown', (event) => {
       // cmd+f
       if (event.altKey && event.which === 70) {
         this.toggleFullscreenView()
       }
-
       // cmd+s
       if (event.altKey && event.which === 83) {
         this.isWideDemo = !this.isWideDemo
       }
     })
   },
-
   computed: {
     selected () {
       if (Array.isArray(this.navigation)) {
@@ -94,13 +90,10 @@ export default {
   }
 }
 </script>
-
 <style lang="scss">
 @charset "utf-8";
-
 // Import a Google Font
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
-
 // Set your brand colors
 $purple: #8A4D76;
 $pink: #FA7C91;
@@ -109,7 +102,6 @@ $beige-light: #D0D1CD;
 $beige-lighter: #EFF0EB;
 $ic-green: #afcb37;
 $ic-blue: #15444C;
-
 // Update Bulma's global variables
 $family-sans-serif: "Nunito", sans-serif;
 $grey-dark: $brown;
@@ -118,42 +110,34 @@ $primary: $purple;
 $link: $ic-blue;
 $widescreen-enabled: false;
 $fullhd-enabled: false;
-
 // Update some of Bulma's component variables
 $body-background-color: $beige-lighter;
 $control-border-width: 2px;
 $input-border-color: transparent;
 $input-shadow: none;
-
 // Import only what you need from Bulma
 @import "bulma/sass/utilities/_all.sass";
-
 // elements
 @import "bulma/sass/elements/button.sass";
 @import "bulma/sass/elements/icon.sass";
 @import "bulma/sass/elements/image.sass";
 @import "bulma/sass/elements/title.sass";
 @import "bulma/sass/elements/other.sass";
-
 @import "bulma/sass/components/_all.sass";
 @import "bulma/sass/grid/_all.sass";
 @import "bulma/sass/layout/_all.sass";
-
 *, *:before, *:after {
   box-sizing: border-box;
 }
-
 html, body {
   height: 100%;
   width: 100%;
 }
-
 #app {
   height: 100%;
   width: 100%;
   margin: 0;
 }
-
 .fullscreen-toggle {
   position: fixed;
   right: 0;
@@ -161,53 +145,63 @@ html, body {
   padding: 10px;
   background: black;
   color: white;
-  z-index: 1;
-  opacity: 0.7;
+  z-index: 9999;
+  opacity: 0.5;
+  cursor: pointer;
+  border: none;
 }
-
+.blueprint__sidebar {
+  width: 20vw;
+  padding: 0;
+}
 .menu {
   display: block;
   background: $grey-light;
   min-height: calc(100% + #{2 * $column-gap});
-  padding: $column-gap;
-  margin: - $column-gap;
-
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px 15px;
   a {
     text-decoration: none;
   }
-
+  &-logo {
+    margin-bottom: 50px;
+  }
+  &-image {
+    width: 100%;
+    height: auto;
+  }
+  &-navigation {
+    margin: 0;
+    padding: 0 0 0 15px;
+    list-style: none;
+  }
+  &-navigation-item {
+    margin-bottom: 10px;
+  }
   &-list {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-
-  &-image {
-    width: 80%;
-    max-height: 80px;
-    margin-bottom: 50px;
-  }
-
   &-element {
-    padding-left: 20px;
-
+    padding-left: 15px;
+    word-break: break-all;
     a {
       text-transform: capitalize;
     }
-
     .menu-element {
       padding-left: 20px;
     }
   }
-
-    .menu-label {
-      display: flex;
-      justify-content: space-between;
-        &:hover {
-          color: black;
-        }
+  .menu-label {
+    display: flex;
+    justify-content: space-between;
+    &:hover {
+      color: black;
     }
-
+  }
   .is-fullscreen-demo &,
   .is-wide-demo & {
     width: 0;
@@ -216,7 +210,6 @@ html, body {
     overflow: hidden;
   }
 }
-
 .menu-element .menu-element{
   padding-left: 20px;
 }
