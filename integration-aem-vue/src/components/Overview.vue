@@ -26,7 +26,7 @@
         <tbody>
           <tr v-for="item in items" :key="item.view">
             <td width="40%">
-              <router-link :to="`/${item.type}/${item.view}/view/default`">{{ item.view }}</router-link>
+              <router-link :to="`/${item.type}/${item.view}`">{{ item.view }}</router-link>
             </td>
             <td width="30%">{{ item.type }}</td>
             <td width="30%">{{ item.component }}</td>
