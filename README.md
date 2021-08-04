@@ -1,5 +1,5 @@
 # juice-plus/ic-fe-blueprint
-## forked from [valtech-ch/ic-fe-blueprint](https://github.com/valtech-ch/ic-fe-blueprint)
+forked from [valtech-ch/ic-fe-blueprint](https://github.com/valtech-ch/ic-fe-blueprint)
 
 ## Project setup
 ```
