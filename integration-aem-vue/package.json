@@ -21,7 +21,7 @@
     "lowdb": "^1.0.0",
     "marked": "^0.6.3",
     "mdn-polyfills": "^5.18.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "mkdirp": "^0.5.1",
     "raw-loader": "^1.0.0",
     "sass": "^1.22.9",
