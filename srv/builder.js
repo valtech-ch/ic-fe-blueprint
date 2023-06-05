@@ -1,5 +1,7 @@
 const fs = require('fs')
 const mkdirp = require('mkdirp')
+const path = require('path');
+const { mapPathToImportString } = require('./path')
 
 module.exports = {
 
@@ -24,7 +26,7 @@ module.exports = {
         const name = item.charAt(0).toUpperCase() + item.slice(1)
         if (fs.existsSync(`${_path}/${item}/${name}.vue`)) {
           data.push({
-            path: `${_path}/${item}/${name}.vue`,
+            path: mapPathToImportString(`${_path}/${item}/${name}.vue`),
             name
           })
         }
@@ -34,7 +36,7 @@ module.exports = {
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
     // Add global project stylesheets
     if (fs.existsSync(style)) {
-      internalString += `import '${style}'\n`
+      internalString += `import '${mapPathToImportString(style)}'\n`
     }
     // Add global project script
     if (fs.existsSync(script)) {
@@ -46,7 +48,7 @@ module.exports = {
       componentsString += `Vue.component('${module.name}', ${module.name})\n`
     })
 
-    const destArr = dest.split('/').slice(0, -1).join('/')
+    const destArr = path.resolve(dest, '..')
     mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString + componentsString)
   },
@@ -65,7 +67,7 @@ module.exports = {
       const name = page.slice(0, -4)
       if (fs.existsSync(`${src}/${page}`)) {
         data.push({
-          path: `${src}/${page}`,
+          path: mapPathToImportString(`${src}/${page}`),
           name
         })
       }
@@ -74,7 +76,7 @@ module.exports = {
     let internalString = `// created: ${new Date()}\nimport Vue from 'vue'\n`
     // Add global project stylesheets
     if (fs.existsSync(style)) {
-      internalString += `import '${style}'\n`
+      internalString += `import '${mapPathToImportString(style)}'\n`
     }
     // Add global project script
     if (fs.existsSync(script)) {
@@ -86,7 +88,7 @@ module.exports = {
       componentsString += `Vue.component('${module.name}', ${module.name})\n`
     })
 
-    const destArr = dest.split('/').slice(0, -1).join('/')
+    const destArr = path.resolve(dest, '..')
     mkdirp.sync(destArr)
     fs.writeFileSync(dest, internalString + componentsString)
   }

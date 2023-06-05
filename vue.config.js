@@ -1,7 +1,7 @@
 const configureAPI = require('./srv/configure')
 const minimist = require('minimist')
 const config = require('./srv/config.json')
-const { defineRootPath, definePath } = require('./srv/path')
+const { defineRootPath, definePath, mapPathToImportString } = require('./srv/path')
 
 const args = minimist(process.argv)
 const rootPath = defineRootPath(args.embedded)
@@ -23,12 +23,12 @@ module.exports = {
        config
             .plugin('define')
             .tap(options => {
-                    options[0]['process.env'].COMPONENTS_BASEPATH = `"${componentsPath}"`
-                    options[0]['process.env'].PAGES_BASEPATH = `"${pagesPath}"`
-                    options[0]['process.env'].DIRECTIVES = `"${directivesFilePath}"`
-                    options[0]['process.env'].FILTERS = `"${filtersFilePath}"`
-                    options[0]['process.env'].PLUGINS = `"${pluginsFilePath}"`
-                    options[0]['process.env'].MIXINS = `"${mixinsFilePath}"`
+                    options[0]['process.env'].COMPONENTS_BASEPATH = `"${mapPathToImportString(componentsPath)}"`
+                    options[0]['process.env'].PAGES_BASEPATH = `"${mapPathToImportString(pagesPath)}"`
+                    options[0]['process.env'].DIRECTIVES = `"${mapPathToImportString(directivesFilePath)}"`
+                    options[0]['process.env'].FILTERS = `"${mapPathToImportString(filtersFilePath)}"`
+                    options[0]['process.env'].PLUGINS = `"${mapPathToImportString(pluginsFilePath)}"`
+                    options[0]['process.env'].MIXINS = `"${mapPathToImportString(mixinsFilePath)}"`
                     options[0]['process.env'].BLUEPRINT = `"true"`
                     options[0]['process.env'].BLUEPRINT_SET = `"${process.env.BLUEPRINT_SET || 'default'}"`
                     return options

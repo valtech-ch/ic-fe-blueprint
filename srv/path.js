@@ -19,7 +19,14 @@ const defineRootPath = function (embedded) {
   return path.resolve(__dirname, '../cms.frontend')
 }
 
+const isWinOS = process.platform.startsWith('win')
+const mapPathToImportString = function (path) {
+  if (isWinOS) return path.replace(/\//g, '\\').replace(/\\/g, '\\\\')
+  return path
+}
+
 module.exports = {
   definePath,
-  defineRootPath
+  defineRootPath,
+  mapPathToImportString
 }
