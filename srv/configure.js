@@ -1,5 +1,5 @@
 const path = require('path')
-const fs require('fs')
+const fs = require('fs')
 const minimist = require('minimist')
 const bodyParser = require('body-parser')
 const config = require('./config.json')
