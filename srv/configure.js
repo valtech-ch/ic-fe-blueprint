@@ -1,4 +1,5 @@
 const path = require('path')
+const fs require('fs')
 const minimist = require('minimist')
 const bodyParser = require('body-parser')
 const config = require('./config.json')
@@ -92,6 +93,11 @@ builder.build(componentsPath, stylePath, scriptPath, path.resolve(__dirname, con
 builder.buildPages(pagesPath, stylePath, scriptPath, path.resolve(__dirname, config.pagesImportFile))
 
 module.exports = app => {
+  if (!fs.existsSync(stylePath)) {
+    fs.mkdirSync(path.dirname(stylePath), { recursive: true })
+    fs.closeSync(fs.openSync(stylePath, 'a'));
+  }
+  
   app.use('/assets', (req, res, next) => {
     // Rewrite POST to GET so `express.static` can handle it
     if (req.method === 'POST') {
